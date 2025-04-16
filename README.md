@@ -1,0 +1,1 @@
+Projeto para a disciplina de Programação Orientada a Objetos 2, cujo tema é o de um sistema de apostas (Bets) para eventos esportivos
