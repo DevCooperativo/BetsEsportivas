@@ -7,7 +7,7 @@ public class Cliente extends BaseEntity{
     private double _saldo;
     private String _email;
 
-    public Cliente(Integer id, String nome, double saldo, String email) {
+    public Cliente(int id, String nome, double saldo, String email) {
         super(id);
         _nome=nome;
         _saldo=saldo;

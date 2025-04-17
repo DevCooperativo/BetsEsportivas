@@ -4,10 +4,10 @@ import com.betsesportivas.Domain.Abstractions.BaseEntity;
 
 public class Atleta extends BaseEntity {
     private String _nome;
-    private Integer _vitorias = 0;
-    private Integer _participacoes = 0;
+    private int _vitorias = 0;
+    private int _participacoes = 0;
 
-    public Atleta(Integer id, String nome) {
+    public Atleta(int id, String nome) {
         super(id);
         _nome=nome;
     }
@@ -20,19 +20,19 @@ public class Atleta extends BaseEntity {
         _nome = nome;
     }
 
-    public Integer GetVitorias() {
+    public int GetVitorias() {
         return _vitorias;
     }
 
-    public void SetVitorias(Integer vitorias) {
+    public void SetVitorias(int vitorias) {
         _vitorias = vitorias;
     }
 
-    public Integer GetParticipacoes() {
+    public int GetParticipacoes() {
         return _participacoes;
     }
 
-    public void SetParticipacoes(Integer participacoes) {
+    public void SetParticipacoes(int participacoes) {
         _participacoes = participacoes;
     }
 

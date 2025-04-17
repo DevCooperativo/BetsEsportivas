@@ -6,7 +6,7 @@ import com.betsesportivas.App;
 
 import javafx.fxml.FXML;
 
-public class SecondaryController {
+public class RelatorioApostasController {
 
     @FXML
     private void switchToPrimary() throws IOException {

@@ -5,7 +5,7 @@ import com.betsesportivas.Domain.Abstractions.BaseEntity;
 public class Categoria extends BaseEntity {
     private String _nome;
 
-    public Categoria(Integer id, String nome) {
+    public Categoria(int id, String nome) {
         super(id);
         _nome = nome;
     }

@@ -1,20 +1,20 @@
 package com.betsesportivas.Domain;
 
 public class Competidor {
-    private final Integer _atletaId;
-    private final Integer _competicaoId;
+    private final int _atleta_id;
+    private final int _competicao_id;
 
-    public Competidor(Integer atletaId, Integer competicaoId) {
-        _atletaId = atletaId;
-        _competicaoId = competicaoId;
+    public Competidor(int atletaId, int competicaoId) {
+        _atleta_id = atletaId;
+        _competicao_id = competicaoId;
     }
 
-    public Integer GetAtletaId() {
-        return _atletaId;
+    public int GetAtletaId() {
+        return _atleta_id;
     }
 
-    public Integer GetCompeticaoId() {
-        return _competicaoId;
+    public int GetCompeticaoId() {
+        return _competicao_id;
     }
 
 }

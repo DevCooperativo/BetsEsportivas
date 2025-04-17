@@ -6,18 +6,18 @@ import com.betsesportivas.Domain.Abstractions.BaseEntity;
 
 public class Competicao extends BaseEntity {
     private String _nome;
-    private LocalDate _dataCadastro;
-    private LocalDate _dataAberturaApostas;
-    private LocalDate _dataFechamentoApostas;
+    private LocalDate _data_cadastro;
+    private LocalDate _data_abertura_apostas;
+    private LocalDate _data_fechamento_apostas;
     private Categoria _categoria;
 
-    public Competicao(Integer id, String nome, LocalDate dataCadastro, LocalDate dataAberturaApostas,
-            LocalDate dataFechamentoApostas, Categoria categoria) {
+    public Competicao(Integer id, String nome, LocalDate data_cadastro, LocalDate data_abertura_apostas,
+            LocalDate data_fechamento_apostas, Categoria categoria) {
         super(id);
         _nome = nome;
-        _dataCadastro = dataCadastro;
-        _dataAberturaApostas = dataAberturaApostas;
-        _dataFechamentoApostas = dataFechamentoApostas;
+        _data_cadastro = data_cadastro;
+        _data_abertura_apostas = data_abertura_apostas;
+        _data_fechamento_apostas = data_fechamento_apostas;
         _categoria = categoria;
     }
 
@@ -30,27 +30,27 @@ public class Competicao extends BaseEntity {
     }
 
     public LocalDate GetDataCadastro() {
-        return _dataCadastro;
+        return _data_cadastro;
     }
 
-    public void SetDataCadastro(LocalDate dataCadastro) {
-        _dataCadastro = dataCadastro;
+    public void SetDataCadastro(LocalDate data_cadastro) {
+        _data_cadastro = data_cadastro;
     }
 
     public LocalDate GetDataAberturaApostas() {
-        return _dataAberturaApostas;
+        return _data_abertura_apostas;
     }
 
-    public void SetDataAberturaApostas(LocalDate dataAberturaApostas) {
-        _dataAberturaApostas = dataAberturaApostas;
+    public void SetDataAberturaApostas(LocalDate data_abertura_apostas) {
+        _data_abertura_apostas = data_abertura_apostas;
     }
 
     public LocalDate GetDataFechamentoApostas() {
-        return _dataFechamentoApostas;
+        return _data_fechamento_apostas;
     }
 
-    public void SetDataFechamentoApostas(LocalDate dataFechamentoApostas) {
-        _dataFechamentoApostas = dataFechamentoApostas;
+    public void SetDataFechamentoApostas(LocalDate data_fechamento_apostas) {
+        _data_fechamento_apostas = data_fechamento_apostas;
     }
 
     public Categoria GetCategoria() {
