@@ -34,7 +34,7 @@ public class ClienteDAO implements IBaseDAO<Cliente> {
 
     @Override
     public Cliente BuscarPorId(Integer id) throws SQLException {
-        PreparedStatement sql = _conn.prepareStatement("SELECT * FROM aposta WHERE id = ?");
+        PreparedStatement sql = _conn.prepareStatement("SELECT * FROM cliente WHERE id = ?");
         sql.setInt(1, id);
         ResultSet result = sql.executeQuery();
         Integer resultId = result.getInt("id");
@@ -73,6 +73,7 @@ public class ClienteDAO implements IBaseDAO<Cliente> {
     @Override
     public void Excluir(Integer id) throws SQLException {
         PreparedStatement sql = _conn.prepareStatement("DELETE FROM cliente WHERE id = ?");
+        sql.setInt(1, id);
         sql.execute();
     }
 

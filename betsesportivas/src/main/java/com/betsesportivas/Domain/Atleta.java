@@ -9,7 +9,14 @@ public class Atleta extends BaseEntity {
 
     public Atleta(int id, String nome) {
         super(id);
-        _nome=nome;
+        _nome = nome;
+    }
+
+    public Atleta(int id, String nome, int vitorias, int participacoes) {
+        super(id);
+        _nome = nome;
+        _vitorias = vitorias;
+        _participacoes = participacoes;
     }
 
     public String GetNome() {
@@ -35,6 +42,5 @@ public class Atleta extends BaseEntity {
     public void SetParticipacoes(int participacoes) {
         _participacoes = participacoes;
     }
-
 
 }

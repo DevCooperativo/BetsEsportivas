@@ -77,6 +77,7 @@ public class ApostaDAO implements IBaseDAO<Aposta> {
     @Override
     public void Excluir(Integer id) throws SQLException {
         PreparedStatement sql = _conn.prepareStatement("DELETE FROM aposta WHERE id = ?");
+        sql.setInt(1, id);
         sql.execute();
     }
 

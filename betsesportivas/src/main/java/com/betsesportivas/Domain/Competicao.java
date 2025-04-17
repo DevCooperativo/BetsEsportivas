@@ -9,16 +9,16 @@ public class Competicao extends BaseEntity {
     private LocalDate _data_cadastro;
     private LocalDate _data_abertura_apostas;
     private LocalDate _data_fechamento_apostas;
-    private Categoria _categoria;
+    private int _categoria_id;
 
     public Competicao(Integer id, String nome, LocalDate data_cadastro, LocalDate data_abertura_apostas,
-            LocalDate data_fechamento_apostas, Categoria categoria) {
+            LocalDate data_fechamento_apostas, int categoria_id) {
         super(id);
         _nome = nome;
         _data_cadastro = data_cadastro;
         _data_abertura_apostas = data_abertura_apostas;
         _data_fechamento_apostas = data_fechamento_apostas;
-        _categoria = categoria;
+        _categoria_id = categoria_id;
     }
 
     public String GetNome() {
@@ -53,11 +53,11 @@ public class Competicao extends BaseEntity {
         _data_fechamento_apostas = data_fechamento_apostas;
     }
 
-    public Categoria GetCategoria() {
-        return _categoria;
+    public int GetCategoriaId() {
+        return _categoria_id;
     }
 
-    public void SetCategoria(Categoria categoria) {
-        _categoria = categoria;
+    public void SetCategoriaId(int categoria_id) {
+        _categoria_id = categoria_id;
     }
 }
