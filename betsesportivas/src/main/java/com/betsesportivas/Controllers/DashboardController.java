@@ -2,12 +2,12 @@ package com.betsesportivas.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import com.betsesportivas.App;
 import com.betsesportivas.Domain.Competicao;
 import com.betsesportivas.Domain.Enums.CompeticaoStatusEnum;
-import com.betsesportivas.Domain.Utils.Data;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,13 +28,13 @@ public class DashboardController implements Initializable {
     private TableColumn<Competicao, String> tblViewColumn_competicoes_categoria;
 
     @FXML
-    private TableColumn<Competicao, Data> tblViewColumn_competicoes_inicioApostas;
+    private TableColumn<Competicao, LocalDate> tblViewColumn_competicoes_inicioApostas;
 
     @FXML
-    private TableColumn<Competicao, Data> tblViewColumn_competicoes_terminoApostas;
+    private TableColumn<Competicao, LocalDate> tblViewColumn_competicoes_terminoApostas;
 
     @FXML
-    private TableColumn<Competicao, Data> tblViewColumn_competicoes_dataOcorrencia;
+    private TableColumn<Competicao, LocalDate> tblViewColumn_competicoes_dataOcorrencia;
 
     @FXML
     private TableColumn<Competicao, Integer> tblViewColumn_competicoes_qtdApostas;
