@@ -69,13 +69,16 @@ public class DashboardCompeticoesController implements Initializable {
     private Button btn_alterarStatusDoEvento;
 
     @FXML
-    private MenuItem menu_competicoes_competicoes;
+    private MenuItem menu_competicoes_dashboard;
 
     @FXML
-    private MenuItem menu_clientes_clientes;
+    private MenuItem menu_clientes_dashboard;
 
     @FXML
-    private MenuItem menu_apostas_apostas;
+    private MenuItem menu_apostas_dashboard;
+
+    @FXML
+    private MenuItem menu_categorias_dashboard;
 
     @FXML
     private void switchToSecondary() throws IOException {
@@ -107,28 +110,51 @@ public class DashboardCompeticoesController implements Initializable {
                 populateTable();
             }
         });
-        // menu_competicoes_competicoes.setOnAction(new EventHandler<ActionEvent>() {
-        // @Override
-        // public void handle(ActionEvent event) {
-        // System.out.println(".()");
-        // try {
-        // App.setNewScene("DashboardCompeticoes");
-        // } catch (IOException ex) {
-        // ex.getStackTrace();
-        // }
-        // }
-        // });
 
-        menu_apostas_apostas.setOnAction(new EventHandler<ActionEvent>() {
+        menu_categorias_dashboard.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    App.setNewScene("RelatorioApostas");
+                    App.setNewScene("DashboardCategorias");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        menu_competicoes_dashboard.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println(".()");
+                try {
+                    App.setNewScene("DashboardCompeticoes");
+                } catch (IOException ex) {
+                    ex.getStackTrace();
+                }
+            }
+        });
+
+        menu_apostas_dashboard.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    App.setNewScene("DashboardApostas");
                 } catch (IOException ex) {
                     ex.getStackTrace();
                 }
             }
 
+        });
+
+        menu_clientes_dashboard.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    App.setNewScene("DashboardClientes");
+                } catch (IOException ex) {
+                    ex.getStackTrace();
+                }
+            }
         });
 
     }

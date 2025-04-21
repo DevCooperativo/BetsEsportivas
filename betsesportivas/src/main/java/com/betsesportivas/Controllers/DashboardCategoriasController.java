@@ -12,8 +12,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Pane;
 
-public class DashboardClientesController implements Initializable {
+public class DashboardCategoriasController implements Initializable {
+
+    @FXML
+    private Pane pane_criar;
+
+    @FXML
+    private Button btn_criarCategoria;
+
+    @FXML
+    private Button btn_pane_criar_fechar;
 
     @FXML
     private MenuItem menu_categorias_dashboard;
@@ -23,6 +33,7 @@ public class DashboardClientesController implements Initializable {
     private MenuItem menu_apostas_dashboard;
     @FXML
     private MenuItem menu_clientes_dashboard;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -46,6 +57,7 @@ public class DashboardClientesController implements Initializable {
         menu_competicoes_dashboard.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                System.out.println(".()");
                 try {
                     App.setNewScene("DashboardCompeticoes");
                 } catch (IOException ex) {
