@@ -7,10 +7,8 @@ import java.util.ResourceBundle;
 import com.betsesportivas.App;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 
 public class DashboardClientesController implements Initializable {
@@ -32,50 +30,41 @@ public class DashboardClientesController implements Initializable {
     @FXML
     private void setEvents() {
 
-        menu_categorias_dashboard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    App.setNewScene("DashboardCategorias");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        setMenuEvents();
+    }
 
-        });
-        menu_competicoes_dashboard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    App.setNewScene("DashboardCompeticoes");
-                } catch (IOException ex) {
-                    ex.getStackTrace();
-                }
+    @FXML
+    private void setMenuEvents() {
+        menu_categorias_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardCategorias");
+            } catch (IOException e) {
+                e.getStackTrace();
             }
         });
-
-        menu_apostas_dashboard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    App.setNewScene("DashboardApostas");
-                } catch (IOException ex) {
-                    ex.getStackTrace();
-                }
-            }
-
-        });
-
-        menu_clientes_dashboard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    App.setNewScene("DashboardClientes");
-                } catch (IOException ex) {
-                    ex.getStackTrace();
-                }
+        menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
+            System.out.println(".()");
+            try {
+                App.setNewScene("DashboardCompeticoes");
+            } catch (IOException ex) {
+                ex.getStackTrace();
             }
         });
 
+        menu_apostas_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardApostas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+
+        menu_clientes_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardClientes");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
     }
 }

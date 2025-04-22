@@ -56,10 +56,10 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <TableView fx:id="tblView_competicoes" layoutY="40.0" prefHeight="487.0" prefWidth="800.0">
+            <TableView fx:id="tblView_categorias" layoutY="40.0" prefHeight="487.0" prefWidth="800.0">
               <columns>
                   <TableColumn fx:id="tblViewColumn_categorias_nome" prefWidth="401.0" style="-fx-font-size: 12;" text="Nome" />
-                  <TableColumn fx:id="tblViewColumn_categorias_vezesUtilizada" prefWidth="397.0" style="-fx-font-size: 12;" text="Vezes utilizada" />
+                  <TableColumn fx:id="tblViewColumn_categorias_vezesUtilizadas" prefWidth="397.0" style="-fx-font-size: 12;" text="Vezes utilizada" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

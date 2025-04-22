@@ -10,9 +10,10 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.betsesportivas.DTO.CompeticaoDTO;
 import com.betsesportivas.Domain.Competicao;
 
-public class CompeticaoDAO implements IBaseDAO<Competicao> {
+public class CompeticaoDAO implements IBaseDAO<Competicao, CompeticaoDTO> {
     private Connection _conn;
 
     @Override
@@ -95,7 +96,7 @@ public class CompeticaoDAO implements IBaseDAO<Competicao> {
     }
 
     @Override
-    public void Excluir(Integer id) throws SQLException {
+    public void Excluir(int id) throws SQLException {
         PreparedStatement sql = _conn.prepareStatement("DELETE FROM competicao WHERE id = ?");
         sql.setInt(1, id);
         sql.execute();

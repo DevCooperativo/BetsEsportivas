@@ -1,6 +1,9 @@
 package com.betsesportivas;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+import com.betsesportivas.Database.Db;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +20,9 @@ public class App extends Application {
     private static Stage _stage;
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, SQLException {
+        Db Database = new Db();
+        Database.initialize();
         _stage = stage;
         scene = new Scene(loadFXML("DashboardCompeticoes"), 800, 600);
         _stage.setScene(scene);

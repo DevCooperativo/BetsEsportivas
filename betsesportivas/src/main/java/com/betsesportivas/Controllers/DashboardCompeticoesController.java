@@ -10,7 +10,6 @@ import com.betsesportivas.Domain.Competicao;
 import com.betsesportivas.Domain.Enums.CompeticaoStatusEnum;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -104,59 +103,45 @@ public class DashboardCompeticoesController implements Initializable {
 
     @FXML
     private void setEvents() {
-        btn_refresh.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                populateTable();
-            }
+        btn_refresh.setOnAction((ActionEvent event) -> {
+            populateTable();
         });
 
-        menu_categorias_dashboard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    App.setNewScene("DashboardCategorias");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-        menu_competicoes_dashboard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println(".()");
-                try {
-                    App.setNewScene("DashboardCompeticoes");
-                } catch (IOException ex) {
-                    ex.getStackTrace();
-                }
-            }
-        });
-
-        menu_apostas_dashboard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    App.setNewScene("DashboardApostas");
-                } catch (IOException ex) {
-                    ex.getStackTrace();
-                }
-            }
-
-        });
-
-        menu_clientes_dashboard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    App.setNewScene("DashboardClientes");
-                } catch (IOException ex) {
-                    ex.getStackTrace();
-                }
-            }
-        });
-
+        setMenuEvents();
     }
 
+    @FXML
+    private void setMenuEvents() {
+        menu_categorias_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardCategorias");
+            } catch (IOException e) {
+                e.getStackTrace();
+            }
+        });
+        menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
+            System.out.println(".()");
+            try {
+                App.setNewScene("DashboardCompeticoes");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+
+        menu_apostas_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardApostas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+
+        menu_clientes_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardClientes");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+    }
 }

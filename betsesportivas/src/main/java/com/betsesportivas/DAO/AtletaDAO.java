@@ -7,9 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.betsesportivas.DTO.AtletaDTO;
 import com.betsesportivas.Domain.Atleta;
 
-public class AtletaDAO implements IBaseDAO<Atleta> {
+public class AtletaDAO implements IBaseDAO<Atleta, AtletaDTO> {
     private Connection _conn;
 
     @Override
@@ -71,7 +72,7 @@ public class AtletaDAO implements IBaseDAO<Atleta> {
     }
 
     @Override
-    public void Excluir(Integer id) throws SQLException {
+    public void Excluir(int id) throws SQLException {
         PreparedStatement sql = _conn.prepareStatement("DELETE FROM atleta WHERE id = ?");
         sql.setInt(1, id);
         sql.execute();
