@@ -10,22 +10,33 @@ public class Competicao extends BaseEntity {
     private LocalDate _data_abertura_apostas;
     private LocalDate _data_fechamento_apostas;
     private int _categoria_id;
+    private double _valor_limite_vencedor;
 
-    public Competicao(Integer id, String nome, LocalDate data_cadastro, LocalDate data_abertura_apostas,
-            LocalDate data_fechamento_apostas, int categoria_id) {
+    public Competicao(int id, int _categoria_id, LocalDate _data_abertura_apostas, LocalDate _data_fechamento_apostas, String _nome, double _valor_limite_vencedor) {
         super(id);
-        _nome = nome;
-        _data_cadastro = data_cadastro;
-        _data_abertura_apostas = data_abertura_apostas;
-        _data_fechamento_apostas = data_fechamento_apostas;
-        _categoria_id = categoria_id;
+        this._categoria_id = _categoria_id;
+        this._data_abertura_apostas = _data_abertura_apostas;
+        this._data_cadastro = LocalDate.now();
+        this._data_fechamento_apostas = _data_fechamento_apostas;
+        this._nome = _nome;
+        this._valor_limite_vencedor = _valor_limite_vencedor;
     }
 
-    public String GetNome() {
+    public Competicao(int id, int _categoria_id, LocalDate _data_abertura_apostas, LocalDate _data_cadastro, LocalDate _data_fechamento_apostas, String _nome, double _valor_limite_vencedor) {
+        super(id);
+        this._categoria_id = _categoria_id;
+        this._data_abertura_apostas = _data_abertura_apostas;
+        this._data_cadastro = _data_cadastro;
+        this._data_fechamento_apostas = _data_fechamento_apostas;
+        this._nome = _nome;
+        this._valor_limite_vencedor = _valor_limite_vencedor;
+    }
+
+    public String getNome() {
         return _nome;
     }
 
-    public void SetNome(String nome) {
+    public void setNome(String nome) {
         _nome = nome;
     }
 
@@ -59,5 +70,13 @@ public class Competicao extends BaseEntity {
 
     public void SetCategoriaId(int categoria_id) {
         _categoria_id = categoria_id;
+    }
+
+    public double getValor_limite_vencedor() {
+        return _valor_limite_vencedor;
+    }
+
+    public void setValor_limite_vencedor(double _valor_limite_vencedor) {
+        this._valor_limite_vencedor = _valor_limite_vencedor;
     }
 }

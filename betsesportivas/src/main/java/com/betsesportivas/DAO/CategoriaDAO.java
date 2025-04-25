@@ -11,7 +11,7 @@ import java.util.List;
 import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.Domain.Categoria;
 
-public class CategoriaDAO implements ICategoriaDAO<Categoria, CategoriaDTO> {
+public class CategoriaDAO implements IBaseDAO<Categoria, CategoriaDTO> {
     private Connection _conn;
 
     public CategoriaDAO(){}
@@ -53,7 +53,7 @@ public class CategoriaDAO implements ICategoriaDAO<Categoria, CategoriaDTO> {
     public Categoria Criar(Categoria valor) throws SQLException {
         PreparedStatement sql = _conn
                 .prepareStatement("INSERT INTO categoria(nome) VALUES(?)");
-        sql.setString(1, valor.GetNome());
+        sql.setString(1, valor.getNome());
         sql.execute();
         return valor;
     }
@@ -63,7 +63,7 @@ public class CategoriaDAO implements ICategoriaDAO<Categoria, CategoriaDTO> {
         PreparedStatement sql = _conn
                 .prepareStatement(
                         "UPDATE categoria SET nome = ? WHERE id=?");
-        sql.setString(1, valor.GetNome());
+        sql.setString(1, valor.getNome());
         sql.setInt(2, valor.GetId());
         sql.execute();
         return valor;
@@ -79,9 +79,10 @@ public class CategoriaDAO implements ICategoriaDAO<Categoria, CategoriaDTO> {
     @Override
     public CategoriaDTO BuscarDTOPorId(int id) throws SQLException {
         PreparedStatement sql = _conn.prepareStatement(
-                "SELECT cat.*, COUNT(com.id) as vezesUtilizada FROM categoria cat JOIN competicao as com ON com.categoria_id = cat.id GROUP BY cat.id WHERE cat.id=?");
+                "SELECT cat.*, COUNT(com.id) as vezesUtilizada FROM categoria cat JOIN competicao as com ON com.categoria_id = cat.id WHERE cat.id= ? GROUP BY cat.id ");
         sql.setInt(1, id);
         ResultSet result = sql.executeQuery();
+        result.next();
         int resultId = result.getInt("id");
         String nome = result.getString("nome");
         int vezesUtilizada = result.getInt("vezesUtilizada");
@@ -112,6 +113,11 @@ public class CategoriaDAO implements ICategoriaDAO<Categoria, CategoriaDTO> {
         sql.setInt(2, valor.getId());
         sql.execute();
         return valor;
+    }
+
+    @Override
+    public CategoriaDTO CriarPorDTO(CategoriaDTO valor) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

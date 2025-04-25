@@ -4,13 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.betsesportivas.DTO.ClienteDTO;
 import com.betsesportivas.Domain.Cliente;
 
-public class ClienteDAO implements IBaseDAO<Cliente,ClienteDTO> {
+public class ClienteDAO implements IBaseDAO<Cliente, ClienteDTO> {
     private Connection _conn;
 
     @Override
@@ -28,7 +29,9 @@ public class ClienteDAO implements IBaseDAO<Cliente,ClienteDTO> {
             double saldo = result.getDouble("saldo");
             String nome = result.getString("nome");
             String email = result.getString("email");
-            clientes.add(new Cliente(id, nome, saldo, email));
+            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            String isAtivado = result.getString("is_ativado");
+            clientes.add(new Cliente(id, nome, nascimento, saldo, email, isAtivado));
         }
         return clientes;
     }
@@ -42,8 +45,10 @@ public class ClienteDAO implements IBaseDAO<Cliente,ClienteDTO> {
         double saldo = result.getDouble("saldo");
         String nome = result.getString("nome");
         String email = result.getString("email");
+        LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+        String isAtivado = result.getString("is_ativado");
 
-        return new Cliente(resultId, nome, saldo, email);
+        return new Cliente(resultId, nome, nascimento, saldo, email, isAtivado);
 
     }
 
@@ -51,7 +56,7 @@ public class ClienteDAO implements IBaseDAO<Cliente,ClienteDTO> {
     public Cliente Criar(Cliente valor) throws SQLException {
         PreparedStatement sql = _conn
                 .prepareStatement("INSERT INTO cliente(nome, saldo, email) VALUES(?,?,?)");
-        sql.setString(1, valor.GetNome());
+        sql.setString(1, valor.getNome());
         sql.setDouble(2, valor.GetSaldo());
         sql.setString(3, valor.GetEmail());
         sql.execute();
@@ -63,7 +68,7 @@ public class ClienteDAO implements IBaseDAO<Cliente,ClienteDTO> {
         PreparedStatement sql = _conn
                 .prepareStatement(
                         "UPDATE cliente SET nome = ?, saldo=?, email = ? WHERE id=?");
-        sql.setString(1, valor.GetNome());
+        sql.setString(1, valor.getNome());
         sql.setDouble(2, valor.GetSaldo());
         sql.setString(3, valor.GetEmail());
         sql.setInt(4, valor.GetId());
@@ -76,6 +81,29 @@ public class ClienteDAO implements IBaseDAO<Cliente,ClienteDTO> {
         PreparedStatement sql = _conn.prepareStatement("DELETE FROM cliente WHERE id = ?");
         sql.setInt(1, id);
         sql.execute();
+    }
+
+    @Override
+    public ClienteDTO BuscarDTOPorId(int id) throws SQLException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'BuscarDTOPorId'");
+    }
+
+    @Override
+    public List<ClienteDTO> BuscarTodosOsDTO() throws SQLException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'BuscarTodosOsDTO'");
+    }
+
+    @Override
+    public ClienteDTO EditarPorDTO(ClienteDTO valor) throws SQLException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'EditarPorDTO'");
+    }
+
+    @Override
+    public ClienteDTO CriarPorDTO(ClienteDTO valor) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

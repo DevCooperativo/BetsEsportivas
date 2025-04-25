@@ -36,5 +36,4 @@ public class CategoriaDTO {
     public void setVezesUtilizada(int VezesUtilizada) {
         this.VezesUtilizada = VezesUtilizada;
     }
-    
 }

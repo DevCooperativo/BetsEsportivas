@@ -30,9 +30,10 @@ public class DashboardCategoriasController implements Initializable {
     private final Db Database = new Db();
     private final CategoriaDAO categoriaDAO = new CategoriaDAO();
 
-    public DashboardCategoriasController() throws SQLException{
+    public DashboardCategoriasController() throws SQLException {
         categoriaDAO.Connect(Database.Connect());
     }
+
     @FXML
     private TableView<CategoriaDTO> tblView_categorias;
     @FXML
@@ -104,10 +105,9 @@ public class DashboardCategoriasController implements Initializable {
     }
 
     @FXML
-    private void openEditPane(CategoriaDTO categoriaDTO) {
+    private void openEditPane() {
         pane_editar.setVisible(true);
-        textField_pane_editar_nome.setText(categoriaDTO.getNome());
-        onEditCategoriaDTO = categoriaDTO;
+        textField_pane_editar_nome.setText(onEditCategoriaDTO.getNome());
     }
 
     @FXML
@@ -125,8 +125,9 @@ public class DashboardCategoriasController implements Initializable {
         closeEditPane();
         populateTableViewData();
     }
+
     @FXML
-    private void excludeEdition() throws SQLException{
+    private void excludeEdition() throws SQLException {
         try {
             categoriaDAO.Excluir(onEditCategoriaDTO.getId());
         } catch (Exception e) {
@@ -156,7 +157,7 @@ public class DashboardCategoriasController implements Initializable {
             } catch (SQLException ex) {
             }
         });
-        btn_pane_editar_excluir.setOnAction((ActionEvent event)->{
+        btn_pane_editar_excluir.setOnAction((ActionEvent event) -> {
             try {
                 excludeEdition();
             } catch (Exception e) {
@@ -164,8 +165,9 @@ public class DashboardCategoriasController implements Initializable {
         });
 
         tblView_categorias.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-            if(newValue != null){
-                openEditPane(newValue);
+            if (newValue != null) {
+                onEditCategoriaDTO = newValue;
+                openEditPane();
             }
         });
 

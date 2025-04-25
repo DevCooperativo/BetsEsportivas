@@ -82,4 +82,27 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
         sql.execute();
     }
 
+    @Override
+    public ApostaDTO BuscarDTOPorId(int id) throws SQLException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'BuscarDTOPorId'");
+    }
+
+    @Override
+    public List<ApostaDTO> BuscarTodosOsDTO() throws SQLException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'BuscarTodosOsDTO'");
+    }
+
+    @Override
+    public ApostaDTO EditarPorDTO(ApostaDTO valor) throws SQLException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'EditarPorDTO'");
+    }
+
+    @Override
+    public ApostaDTO CriarPorDTO(ApostaDTO valor) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

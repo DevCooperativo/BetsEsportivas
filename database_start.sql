@@ -1,46 +1,70 @@
-CREATE TABLE categoria (
+CREATE TABLE IF NOT EXISTS categoria (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL
+
+    nome VARCHAR(255) NOT NULL,
+    descricao VARCHAR(400) NOT NULL,
+    cor VARCHAR(8) NOT NULL DEFAULT('A1A1A1'),
+    is_ativada CHARACTER(1) NOT NULL DEFAULT('S'),
+    limite_participantes INTEGER
+
 );
 
-CREATE TABLE cliente (
+CREATE TABLE IF NOT EXISTS cliente (
     id SERIAL PRIMARY KEY,
+
     nome VARCHAR(255) NOT NULL,
     saldo NUMERIC(10, 2) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE
+    email VARCHAR(255) NOT NULL UNIQUE,
+    nascimento DATE NOT NULL,
+    is_ativado CHARACTER(1) NOT NULL DEFAULT('S')
 );
 
-CREATE TABLE atleta (
+CREATE TABLE IF NOT EXISTS atleta (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
+
+    nome VARCHAR(50) NOT NULL,
+    sobrenome VARCHAR(100) NOT NULL,
+    nascimento DATE NOT NULL,
+    sexo CHARACTER(1) NOT NULL,
+
     vitorias INTEGER NOT NULL DEFAULT 0,
     participacoes INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE competicao (
+CREATE TABLE IF NOT EXISTS competicao (
     id SERIAL PRIMARY KEY,
+
     nome VARCHAR(255) NOT NULL,
-    data_cadastro DATE NOT NULL,
     data_abertura_apostas DATE NOT NULL,
     data_fechamento_apostas DATE NOT NULL,
     categoria_id INTEGER NOT NULL,
+    valor_limite_vencedor NUMERIC(11,2) NOT NULL,
+
+    data_cadastro DATE NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categoria (id)
 );
 
-CREATE TABLE competidor (
+CREATE TABLE IF NOT EXISTS competidor (
     atleta_id INTEGER NOT NULL,
     competicao_id INTEGER NOT NULL,
+    numero INTEGER NOT NULL,
+    posicao_inicial INTEGER,
+    posicao_final INTEGER,    
+
     PRIMARY KEY (atleta_id, competicao_id),
     FOREIGN KEY (atleta_id) REFERENCES atleta (id),
     FOREIGN KEY (competicao_id) REFERENCES competicao (id)
 );
 
-CREATE TABLE aposta (
+CREATE TABLE IF NOT EXISTS aposta (
     id SERIAL PRIMARY KEY,
+    
     cliente_id INTEGER NOT NULL,
     valor NUMERIC(10, 2) NOT NULL,
     atleta_id INTEGER NOT NULL,
     competicao_id INTEGER NOT NULL,
+    odd NUMERIC(5,2) NOT NULL DEFAULT 1.00,
+
     FOREIGN KEY (cliente_id) REFERENCES cliente (id),
     FOREIGN KEY (atleta_id, competicao_id) REFERENCES competidor (atleta_id, competicao_id)
 );
