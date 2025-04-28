@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS cliente (
     nome VARCHAR(255) NOT NULL,
     saldo NUMERIC(10, 2) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    nascimento DATE NOT NULL,
+    nascimento TIMESTAMP NOT NULL,
     is_ativado CHARACTER(1) NOT NULL DEFAULT('S')
 );
 
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS atleta (
 
     nome VARCHAR(50) NOT NULL,
     sobrenome VARCHAR(100) NOT NULL,
-    nascimento DATE NOT NULL,
+    nascimento TIMESTAMP NOT NULL,
     sexo CHARACTER(1) NOT NULL,
 
     vitorias INTEGER NOT NULL DEFAULT 0,
@@ -35,12 +35,13 @@ CREATE TABLE IF NOT EXISTS competicao (
     id SERIAL PRIMARY KEY,
 
     nome VARCHAR(255) NOT NULL,
-    data_abertura_apostas DATE NOT NULL,
-    data_fechamento_apostas DATE NOT NULL,
+    data_abertura_apostas TIMESTAMP NOT NULL,
+    data_fechamento_apostas TIMESTAMP NOT NULL,
+    data_ocorrencia_evento TIMESTAMP NOT NULL,
     categoria_id INTEGER NOT NULL,
     valor_limite_vencedor NUMERIC(11,2) NOT NULL,
 
-    data_cadastro DATE NOT NULL,
+    data_cadastro TIMESTAMP NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categoria (id)
 );
 

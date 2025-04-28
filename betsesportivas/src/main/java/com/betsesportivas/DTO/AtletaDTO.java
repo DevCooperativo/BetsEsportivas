@@ -1,6 +1,6 @@
 package com.betsesportivas.DTO;
 
-public class AtletaDTO {
+public class AtletaDTO implements IBaseDTO {
     public int Id;
     public String Nome;
     public int Vitorias;

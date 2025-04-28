@@ -1,6 +1,6 @@
 package com.betsesportivas.DTO;
 
-public class CategoriaDTO {
+public class CategoriaDTO implements IBaseDTO{
     private int Id;
     private String Nome;
     private int VezesUtilizada;
@@ -35,5 +35,10 @@ public class CategoriaDTO {
 
     public void setVezesUtilizada(int VezesUtilizada) {
         this.VezesUtilizada = VezesUtilizada;
+    }
+
+    @Override
+    public String toString(){
+        return this.Nome;
     }
 }
