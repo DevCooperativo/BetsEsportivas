@@ -173,9 +173,10 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             while (innerResult.next()) {
                 int innerId = innerResult.getInt("id");
                 String innerNome = innerResult.getString("nome");
+                String innerSobrenome = innerResult.getString("sobrenome");
                 int innerVitorias = innerResult.getInt("vitorias");
                 int innerParticipacoes = innerResult.getInt("participacoes");
-                atletaDTO.add(new AtletaDTO(innerId, innerNome, innerVitorias, innerParticipacoes));
+                atletaDTO.add(new AtletaDTO(innerId, innerNome, innerSobrenome, innerVitorias, innerParticipacoes));
             }
             competicoes.add(new CompeticaoDTO(id, nome, categoriaDTO, data_cadastro, data_abertura_apostas,
                     data_fechamento_apostas, data_ocorrencia_evento, quantidadeDeApostas, valorEmJogo, status, atletaDTO));
