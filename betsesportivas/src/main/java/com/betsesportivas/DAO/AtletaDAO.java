@@ -105,6 +105,24 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
     }
 
     @Override
+    public List<AtletaDTO> BuscarAtletasDisponiveisDTO() throws SQLException {
+        List<AtletaDTO> atletaDTO = new LinkedList<>();
+        PreparedStatement sql = _conn
+                .prepareStatement(
+                        "SELECT atle.* FROM atleta AS atle;");
+        ResultSet result = sql.executeQuery();
+        while (result.next()) {
+            int resultId = result.getInt("id");
+            String resultNome = result.getString("nome");
+            String resultSobrenome = result.getString("sobrenome");
+            int resultVitorias = result.getInt("vitorias");
+            int resultParticipacoes = result.getInt("participacoes");
+            atletaDTO.add(new AtletaDTO(resultId, resultNome, resultSobrenome, resultVitorias, resultParticipacoes));
+        }
+        return atletaDTO;
+    }
+
+    @Override
     public List<AtletaDTO> BuscarAtletasDisponiveisDTO(int idCompeticao) throws SQLException {
         List<AtletaDTO> atletaDTO = new LinkedList<>();
         PreparedStatement sql = _conn
@@ -115,9 +133,10 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
         while (result.next()) {
             int resultId = result.getInt("id");
             String resultNome = result.getString("nome");
+            String resultSobrenome = result.getString("sobrenome");
             int resultVitorias = result.getInt("vitorias");
             int resultParticipacoes = result.getInt("participacoes");
-            atletaDTO.add(new AtletaDTO(resultId, resultNome, resultVitorias, resultParticipacoes));
+            atletaDTO.add(new AtletaDTO(resultId, resultNome, resultSobrenome, resultVitorias, resultParticipacoes));
         }
         return atletaDTO;
     }

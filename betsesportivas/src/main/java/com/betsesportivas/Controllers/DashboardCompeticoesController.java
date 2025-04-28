@@ -3,8 +3,14 @@ package com.betsesportivas.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -82,6 +88,15 @@ public class DashboardCompeticoesController implements Initializable {
     private ObservableList<CompeticaoDTO> observableCompeticaoDTO;
 
     @FXML
+    private List<AtletaDTO> atletasDisponiveisCriacao;
+    @FXML
+    private ObservableList<AtletaDTO> atletasDisponiveisCriacaoObservable;
+    @FXML
+    private List<AtletaDTO> atletasParticipandoCriacao;
+    @FXML
+    private ObservableList<AtletaDTO> atletasParticipandoCriacaoObservable;
+
+    @FXML
     private List<AtletaDTO> atletasDisponiveis;
     @FXML
     private ObservableList<AtletaDTO> atletasDisponiveisObservable;
@@ -92,7 +107,7 @@ public class DashboardCompeticoesController implements Initializable {
 
     @FXML
     private ObservableList<CategoriaDTO> observable_CategoriaDTOs;
-    
+
     @FXML
     private CompeticaoDTO onEditCompeticaoDTO;
     @FXML
@@ -149,6 +164,8 @@ public class DashboardCompeticoesController implements Initializable {
     private TextField textField_criar_terminoApostas;
     @FXML
     private ComboBox<CategoriaDTO> comboBox_criar_categoria;
+    @FXML
+    private Pane pane_criar_competidores;
     @FXML
     private ListView<AtletaDTO> pane_criar_competidores_participando;
     @FXML
@@ -222,9 +239,12 @@ public class DashboardCompeticoesController implements Initializable {
 
     // #region create
     @FXML
-    private void openCreatePane() {
+    private void openCreatePane() throws SQLException {
         pane_criar.setVisible(true);
-        textField_editar_nome.setText(onCreateCompeticaoDTO.getNome());
+        List<CategoriaDTO> catDTO = categoriaDAO.BuscarTodosOsDTO();
+        observable_CategoriaDTOs = FXCollections.observableArrayList(catDTO);
+        comboBox_criar_categoria.setItems(observable_CategoriaDTOs);
+        popularCompetidoresCriacaoCompeticao();
     }
 
     @FXML
@@ -257,6 +277,81 @@ public class DashboardCompeticoesController implements Initializable {
         pane_criar_competidores_disponiveis.setItems(null);
     }
 
+    @FXML
+    private void abrirSelecaoCompetidoresCriar() {
+        pane_criar_competidores.setVisible(true);
+    }
+
+    @FXML
+    private void salvarAdicaoCompetidoresCriacao() {
+        pane_criar_competidores.setVisible(false);
+    }
+
+    private void popularCompetidoresCriacaoCompeticao() throws SQLException {
+        atletasDisponiveisCriacao = atletaDAO.BuscarAtletasDisponiveisDTO();
+        atletasDisponiveisCriacaoObservable = FXCollections.observableArrayList(atletasDisponiveisCriacao);
+        atletasParticipandoCriacao = new LinkedList<>();
+        atletasParticipandoCriacaoObservable = FXCollections.observableArrayList(atletasParticipandoCriacao);
+        pane_criar_competidores_disponiveis.setItems(atletasDisponiveisCriacaoObservable);
+        pane_criar_competidores_participando.setItems(atletasParticipandoCriacaoObservable);
+    }
+
+    @FXML
+    private void adicionarCompetidorCompeticaoCriacao() {
+        pane_criar_competidores_disponiveis.getItems();
+        AtletaDTO atletaSelecionado = pane_criar_competidores_disponiveis.getSelectionModel().getSelectedItem();
+        if (atletaSelecionado == null)
+            return;
+        atletasDisponiveisCriacaoObservable.remove(atletaSelecionado);
+        atletasParticipandoCriacaoObservable.add(atletaSelecionado);
+        ordenarListasCompetidoresCriacao();
+    }
+
+    @FXML
+    private void removerCompetidorCompeticaoCriacao() {
+        pane_criar_competidores_participando.getItems();
+        AtletaDTO atletaSelecionado = pane_criar_competidores_participando.getSelectionModel().getSelectedItem();
+        if (atletaSelecionado == null)
+            return;
+        atletasParticipandoCriacaoObservable.remove(atletaSelecionado);
+        atletasDisponiveisCriacaoObservable.add(atletaSelecionado);
+        ordenarListasCompetidoresCriacao();
+    }
+
+    private void ordenarListasCompetidoresCriacao() {
+        atletasParticipandoCriacaoObservable.sort(Comparator.comparing(a -> a.Nome));
+        atletasDisponiveisCriacaoObservable.sort(Comparator.comparing(a -> a.Nome));
+    }
+
+    @FXML
+    private void salvarCriacaoCompeticao() {
+        String nomeCompeticao = textField_criar_nome.getText();
+        CategoriaDTO categoriaSelecionada = comboBox_criar_categoria.getSelectionModel().getSelectedItem();
+
+        String dataAberturaApostasString = datePicker_criar_inicioApostas.getValue().toString() + " "
+                + textField_criar_inicioApostas.getText();
+        LocalDateTime dataAberturaApostas = DateConverterHelper.ConvertStringToLocalDateTime(dataAberturaApostasString);
+
+        String dataOcorrenciaApostasString = datePicker_criar_dataOcorrencia.getValue().toString() + " "
+                + textField_criar_dataOcorrencia.getText();
+        LocalDateTime dataOcorrenciaApostas = DateConverterHelper
+                .ConvertStringToLocalDateTime(dataOcorrenciaApostasString);
+
+        String dataTerminoApostasString = datePicker_criar_terminoApostas.getValue().toString() + " "
+                + textField_criar_terminoApostas.getText();
+        LocalDateTime dataTeminoApostas = DateConverterHelper.ConvertStringToLocalDateTime(dataTerminoApostasString);
+
+        List<AtletaDTO> atletasSelecionados = atletasParticipandoCriacaoObservable;
+
+        CompeticaoDTO competicao = new CompeticaoDTO(0, nomeCompeticao, categoriaSelecionada, LocalDateTime.now(),
+                dataAberturaApostas, dataTeminoApostas, dataOcorrenciaApostas, 0, atletasSelecionados);
+
+        //falta implemetnar o método de criar no dao
+        // competicaoDAO.CriarPorDTO();
+
+        pane_criar.setVisible(false);
+    }
+
     // #endregion
 
     // #region edit
@@ -266,16 +361,21 @@ public class DashboardCompeticoesController implements Initializable {
         textField_editar_nome.setText(onEditCompeticaoDTO.getNome());
         textField_editar_inicioApostas.setText(
                 DateConverterHelper.ConvertTimestampsToFormated(onEditCompeticaoDTO.getData_abertura_apostas()));
-        datePicker_editar_inicioApostas.setValue(DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_abertura_apostas()));
-        textField_editar_dataOcorrencia.setText(DateConverterHelper.ConvertTimestampsToFormated(onEditCompeticaoDTO.getData_ocorrencia_evento()));
-        datePicker_editar_dataOcorrencia.setValue(DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_ocorrencia_evento()));
-        textField_editar_terminoApostas.setText(DateConverterHelper.ConvertTimestampsToFormated(onEditCompeticaoDTO.getData_fechamento_apostas()));
-        datePicker_editar_terminoApostas.setValue(DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_fechamento_apostas()));
-        datePicker_editar_inicioApostas.setValue(DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_abertura_apostas()));
-
+        datePicker_editar_inicioApostas.setValue(
+                DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_abertura_apostas()));
+        textField_editar_dataOcorrencia.setText(
+                DateConverterHelper.ConvertTimestampsToFormated(onEditCompeticaoDTO.getData_ocorrencia_evento()));
+        datePicker_editar_dataOcorrencia.setValue(
+                DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_ocorrencia_evento()));
+        textField_editar_terminoApostas.setText(
+                DateConverterHelper.ConvertTimestampsToFormated(onEditCompeticaoDTO.getData_fechamento_apostas()));
+        datePicker_editar_terminoApostas.setValue(
+                DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_fechamento_apostas()));
+        datePicker_editar_inicioApostas.setValue(
+                DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_abertura_apostas()));
 
         List<CategoriaDTO> catDTO = categoriaDAO.BuscarTodosOsDTO();
-        observable_CategoriaDTOs=FXCollections.observableArrayList(catDTO);
+        observable_CategoriaDTOs = FXCollections.observableArrayList(catDTO);
         comboBox_editar_categoria.setItems(observable_CategoriaDTOs);
         comboBox_editar_categoria.setValue(onEditCompeticaoDTO.getCategoria());
 
@@ -354,8 +454,13 @@ public class DashboardCompeticoesController implements Initializable {
         });
 
         btn_criarEvento.setOnAction((ActionEvent event) -> {
-            onCreateCompeticaoDTO = new CompeticaoDTO();
-            openCreatePane();
+            try {
+
+                onCreateCompeticaoDTO = new CompeticaoDTO();
+                openCreatePane();
+            } catch (SQLException ex) {
+                System.out.println(ex);
+            }
         });
 
         btn_criar_fechar.setOnAction((ActionEvent event) -> {

@@ -14,4 +14,8 @@ public class DateConverterHelper {
         return value.format(DateTimeFormatter.ofPattern("HH-mm"));
     }
 
+    public static LocalDateTime ConvertStringToLocalDateTime(String value) {
+        return LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm"));
+    }
+
 }

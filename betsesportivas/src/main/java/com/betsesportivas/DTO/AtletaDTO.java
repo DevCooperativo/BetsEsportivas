@@ -3,12 +3,14 @@ package com.betsesportivas.DTO;
 public class AtletaDTO implements IBaseDTO {
     public int Id;
     public String Nome;
+    public String Sobrenome;
     public int Vitorias;
     public int Participacoes;
 
-    public AtletaDTO(int Id, String Nome, int Participacoes, int Vitorias) {
+    public AtletaDTO(int Id, String Nome, String Sobrenome, int Participacoes, int Vitorias) {
         this.Id = Id;
         this.Nome = Nome;
+        this.Sobrenome = Sobrenome;
         this.Participacoes = Participacoes;
         this.Vitorias = Vitorias;
     }
@@ -29,6 +31,14 @@ public class AtletaDTO implements IBaseDTO {
         this.Nome = Nome;
     }
 
+    public String getSobrenome() {
+        return Sobrenome;
+    }
+
+    public void setSobrenome(String sobrenome) {
+        Sobrenome = sobrenome;
+    }
+
     public int getVitorias() {
         return Vitorias;
     }
@@ -43,5 +53,10 @@ public class AtletaDTO implements IBaseDTO {
 
     public void setParticipacoes(int Participacoes) {
         this.Participacoes = Participacoes;
+    }
+
+    @Override
+    public String toString() {
+        return this.Nome + " " + this.Sobrenome;
     }
 }

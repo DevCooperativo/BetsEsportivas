@@ -176,6 +176,12 @@ public class DashboardCategoriasController implements Initializable {
     }
 
     @FXML
+    private void criarCategoriaHandler()
+    {
+        //todo
+    }
+
+    @FXML
     private void setMenuEvents() {
         menu_categorias_dashboard.setOnAction((ActionEvent event) -> {
             try {

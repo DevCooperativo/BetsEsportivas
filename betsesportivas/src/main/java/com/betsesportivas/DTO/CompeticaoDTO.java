@@ -40,6 +40,21 @@ public class CompeticaoDTO implements IBaseDTO {
         Competidores = competidores;
     }
 
+    public CompeticaoDTO(int id, String nome, CategoriaDTO categoria, LocalDateTime data_cadastro,
+            LocalDateTime data_abertura_apostas,
+            LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento, int quantidadeDeApostas,
+            List<AtletaDTO> competidores) {
+        Id = id;
+        Nome = nome;
+        Categoria = categoria;
+        Data_cadastro = data_cadastro;
+        Data_abertura_apostas = data_abertura_apostas;
+        Data_fechamento_apostas = data_fechamento_apostas;
+        Data_ocorrencia_evento = data_ocorrencia_evento;
+        QuantidadeDeApostas = quantidadeDeApostas;
+        Competidores = competidores;
+    }
+
     public int getId() {
         return Id;
     }
