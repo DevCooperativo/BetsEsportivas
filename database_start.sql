@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS categoria (
 
     nome VARCHAR(255) NOT NULL,
     descricao VARCHAR(400) NOT NULL,
-    cor VARCHAR(8) NOT NULL DEFAULT('A1A1A1'),
-    is_ativada CHARACTER(1) NOT NULL DEFAULT('S'),
+    cor VARCHAR(9) NOT NULL DEFAULT('#A1A1A111'),
+    is_ativada BOOLEAN NOT NULL DEFAULT(TRUE),
     limite_participantes INTEGER
 
 );
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS cliente (
     saldo NUMERIC(10, 2) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     nascimento TIMESTAMP NOT NULL,
-    is_ativado CHARACTER(1) NOT NULL DEFAULT('S')
+    is_ativado BOOLEAN NOT NULL DEFAULT(TRUE)
 );
 
 CREATE TABLE IF NOT EXISTS atleta (

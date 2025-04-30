@@ -1,12 +1,12 @@
-INSERT INTO categoria (nome, descricao, cor, is_ativada, limite_participantes) VALUES ('Futebol', 'Competições de futebol nacionais e internacionais.', 'FF5733', 'S',32);
-INSERT INTO categoria (nome, descricao, cor, is_ativada, limite_participantes) VALUES('Basquete', 'Competição de basquete em nível nacional e internacional.', '33FF57', 'S', 16);
-INSERT INTO categoria (nome, descricao, cor, is_ativada, limite_participantes) VALUES ('Correr', 'Corridas de atletismo de diferentes distâncias.', '3399FF', 'S', 8);
-INSERT INTO categoria (nome, descricao, cor, is_ativada, limite_participantes) VALUES ('Tênis', 'Competições de tênis entre atletas individuais.', 'F1C40F', 'S', 64);
+INSERT INTO categoria (nome, descricao, cor, is_ativada, limite_participantes) VALUES ('Futebol', 'Competições de futebol nacionais e internacionais.', 'FF5733', TRUE,32);
+INSERT INTO categoria (nome, descricao, cor, is_ativada, limite_participantes) VALUES('Basquete', 'Competição de basquete em nível nacional e internacional.', '33FF57', TRUE, 16);
+INSERT INTO categoria (nome, descricao, cor, is_ativada, limite_participantes) VALUES ('Correr', 'Corridas de atletismo de diferentes distâncias.', '3399FF', TRUE, 8);
+INSERT INTO categoria (nome, descricao, cor, is_ativada, limite_participantes) VALUES ('Tênis', 'Competições de tênis entre atletas individuais.', 'F1C40F', TRUE, 64);
 
-INSERT INTO cliente (nome, saldo, email, nascimento, is_ativado) VALUES ('Lucas Mazioli', 1500.00, 'lucas@example.com', '1994-07-10 00:00:00', 'S');
-INSERT INTO cliente (nome, saldo, email, nascimento, is_ativado) VALUES ('Carlos Silva', 800.50, 'carlos@example.com', '1987-02-20 00:00:00', 'S');
-INSERT INTO cliente (nome, saldo, email, nascimento, is_ativado) VALUES ('João Pereira', 250.75, 'joao@example.com', '1992-11-15 00:00:00', 'S');
-INSERT INTO cliente (nome, saldo, email, nascimento, is_ativado) VALUES ('Maria Oliveira', 100.00, 'maria@example.com', '1990-05-25 00:00:00', 'S');
+INSERT INTO cliente (nome, saldo, email, nascimento, is_ativado) VALUES ('Lucas Mazioli', 1500.00, 'lucas@example.com', '1994-07-10 00:00:00', TRUE);
+INSERT INTO cliente (nome, saldo, email, nascimento, is_ativado) VALUES ('Carlos Silva', 800.50, 'carlos@example.com', '1987-02-20 00:00:00', TRUE);
+INSERT INTO cliente (nome, saldo, email, nascimento, is_ativado) VALUES ('João Pereira', 250.75, 'joao@example.com', '1992-11-15 00:00:00', TRUE);
+INSERT INTO cliente (nome, saldo, email, nascimento, is_ativado) VALUES ('Maria Oliveira', 100.00, 'maria@example.com', '1990-05-25 00:00:00', TRUE);
 
 INSERT INTO atleta (nome, sobrenome, nascimento, sexo, vitorias, participacoes) VALUES ('Neymar', 'Silva Santos', '1992-02-05 00:00:00', 'M', 100, 150);
 INSERT INTO atleta (nome, sobrenome, nascimento, sexo, vitorias, participacoes) VALUES ('LeBron', 'James', '1984-12-30 00:00:00', 'M', 200, 250);
