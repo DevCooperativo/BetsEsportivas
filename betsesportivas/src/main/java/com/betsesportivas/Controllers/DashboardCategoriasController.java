@@ -10,6 +10,7 @@ import com.betsesportivas.App;
 import com.betsesportivas.DAO.CategoriaDAO;
 import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.Database.Db;
+import com.betsesportivas.Helpers.ColorHelper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,12 +19,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class DashboardCategoriasController implements Initializable {
 
@@ -48,6 +52,12 @@ public class DashboardCategoriasController implements Initializable {
     @FXML
     private TextField textField_pane_criar_nome;
     @FXML
+    private TextField textField_pane_criar_descricao;
+    @FXML
+    private TextField textField_pane_criar_max_participantes;
+    @FXML
+    private ColorPicker colorPicker_pane_criar_max_participantes;
+    @FXML
     private Button btn_pane_criar_criar;
     @FXML
     private Button btn_pane_criar_fechar;
@@ -58,6 +68,14 @@ public class DashboardCategoriasController implements Initializable {
     private Pane pane_editar;
     @FXML
     private TextField textField_pane_editar_nome;
+    @FXML
+    private TextField textField_pane_editar_descricao;
+    @FXML
+    private TextField textField_pane_editar_max_participantes;
+    @FXML
+    private ColorPicker colorPicker_pane_editar_max_participantes;
+    @FXML
+    private CheckBox checkBoxAtivoEditar;
     @FXML
     private Button btn_pane_editar_salvar;
     @FXML
@@ -106,8 +124,12 @@ public class DashboardCategoriasController implements Initializable {
 
     @FXML
     private void openEditPane() {
-        pane_editar.setVisible(true);
         textField_pane_editar_nome.setText(onEditCategoriaDTO.getNome());
+        textField_pane_editar_descricao.setText(onEditCategoriaDTO.getDescricao());
+        textField_pane_editar_max_participantes.setText(Integer.toString(onEditCategoriaDTO.getMaxParticipantes()));
+        colorPicker_pane_editar_max_participantes.setValue(ColorHelper.fromHexString(onEditCategoriaDTO.getCor()));
+        checkBoxAtivoEditar.setSelected(onEditCategoriaDTO.isAtiva());
+        pane_editar.setVisible(true);
     }
 
     @FXML
@@ -151,12 +173,6 @@ public class DashboardCategoriasController implements Initializable {
         btn_pane_editar_fechar.setOnAction((ActionEvent event) -> {
             closeEditPane();
         });
-        btn_pane_editar_salvar.setOnAction((ActionEvent event) -> {
-            try {
-                saveEdition();
-            } catch (SQLException ex) {
-            }
-        });
         btn_pane_editar_excluir.setOnAction((ActionEvent event) -> {
             try {
                 excludeEdition();
@@ -176,9 +192,40 @@ public class DashboardCategoriasController implements Initializable {
     }
 
     @FXML
-    private void criarCategoriaHandler()
-    {
-        //todo
+    private void criarCategoriaHandler() {
+        try {
+            String nome = textField_pane_criar_nome.getText();
+            String descricao = textField_pane_criar_descricao.getText();
+            int maxParticipantes = Integer.parseInt(textField_pane_criar_max_participantes.getText());
+            String cor = ColorHelper.toHexString(colorPicker_pane_criar_max_participantes.getValue());
+
+            CategoriaDTO categoriaDTO = new CategoriaDTO(0, nome, descricao, cor, 0, maxParticipantes, true);
+
+            categoriaDAO.CriarPorDTO(categoriaDTO);
+            populateTableViewData();
+            pane_criar.setVisible(false);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    @FXML
+    private void editarCategoriaHandler() {
+        try {
+            String nome = textField_pane_editar_nome.getText();
+            String descricao = textField_pane_editar_descricao.getText();
+            int maxParticipantes = Integer.parseInt(textField_pane_editar_max_participantes.getText());
+            String cor = ColorHelper.toHexString(colorPicker_pane_editar_max_participantes.getValue());
+            boolean isAtiva = checkBoxAtivoEditar.isSelected();
+
+            CategoriaDTO categoriaDTO = new CategoriaDTO(onEditCategoriaDTO.getId(), nome, descricao, cor, onEditCategoriaDTO.getVezesUtilizada(), maxParticipantes, isAtiva);
+
+            categoriaDAO.EditarPorDTO(categoriaDTO);
+            populateTableViewData();
+            pane_editar.setVisible(false);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @FXML
