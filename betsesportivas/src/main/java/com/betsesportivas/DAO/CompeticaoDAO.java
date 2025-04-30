@@ -1,5 +1,6 @@
 package com.betsesportivas.DAO;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,12 +12,15 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.betsesportivas.DTO.AtletaDTO;
 import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.DTO.CompeticaoDTO;
+import com.betsesportivas.DTO.CompetidorDTO;
 import com.betsesportivas.Domain.Categoria;
 import com.betsesportivas.Domain.Competicao;
+import com.betsesportivas.Helpers.DateConverterHelper;
 
 public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> {
     private Connection _conn;
@@ -151,35 +155,38 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             Integer id = result.getInt("id");
             String nome = result.getString("nome");
             LocalDateTime data_cadastro = result.getTimestamp("data_cadastro").toLocalDateTime();
-            LocalDateTime data_abertura_apostas = result.getTimestamp("data_abertura_apostas").toLocalDateTime();
-            LocalDateTime data_fechamento_apostas = result.getTimestamp("data_fechamento_apostas").toLocalDateTime();
-            LocalDateTime data_ocorrencia_evento = result.getTimestamp("data_ocorrencia_evento").toLocalDateTime();
+            LocalDateTime data_abertura_apostas = result.getTimestamp("data_abertura_apostas")
+                    .toLocalDateTime();
+            LocalDateTime data_fechamento_apostas = result.getTimestamp("data_fechamento_apostas")
+                    .toLocalDateTime();
+            LocalDateTime data_ocorrencia_evento = result.getTimestamp("data_ocorrencia_evento")
+                    .toLocalDateTime();
             int quantidadeDeApostas = result.getInt("quantidadeDeApostas");
             CategoriaDTO categoriaDTO = _categoriaDAO.BuscarDTOPorId(result.getInt("categoria_id"));
             double valorEmJogo = result.getDouble("valorEmJogo");
             String status = result.getString("Status");
-            PreparedStatement innerSql = _conn.prepareStatement("SELECT\r\n" + //
-                    "\tatle.*,\r\n" + //
-                    "\tcomp.*\r\n" + //
-                    "\tFROM atleta atle\r\n" + //
-                    "\tJOIN competidor comp\r\n" + //
-                    "\t\tON comp.atleta_id = atle.id\r\n" + //
-                    "\tJOIN competicao com \r\n" + //
-                    "\t\tON com.id = comp.competicao_id\r\n" + //
-                    "\tWHERE com.id = ?;");
+            PreparedStatement innerSql = _conn.prepareStatement(
+                    "SELECT comp.*, atle.* FROM competidor as comp JOIN atleta atle ON atle.id = comp.atleta_id WHERE comp.competicao_id =?");
             innerSql.setInt(1, id);
             ResultSet innerResult = innerSql.executeQuery();
-            List<AtletaDTO> atletaDTO = new LinkedList<>();
+            List<CompetidorDTO> competidorDTO = new LinkedList<>();
             while (innerResult.next()) {
+                int innerCompeticao_id = innerResult.getInt("competicao_id");
+                int innerNumero = innerResult.getInt("numero");
+                int innerPosicao_inicial = innerResult.getInt("posicao_inicial");
+                int innerPosicao_final = innerResult.getInt("posicao_final");
                 int innerId = innerResult.getInt("id");
                 String innerNome = innerResult.getString("nome");
                 String innerSobrenome = innerResult.getString("sobrenome");
                 int innerVitorias = innerResult.getInt("vitorias");
                 int innerParticipacoes = innerResult.getInt("participacoes");
-                atletaDTO.add(new AtletaDTO(innerId, innerNome, innerSobrenome, innerVitorias, innerParticipacoes));
+                competidorDTO.add(new CompetidorDTO(
+                        new AtletaDTO(innerId, innerNome, innerSobrenome, innerVitorias, innerParticipacoes),
+                        innerCompeticao_id, innerNumero, innerPosicao_inicial, innerPosicao_final));
             }
             competicoes.add(new CompeticaoDTO(id, nome, categoriaDTO, data_cadastro, data_abertura_apostas,
-                    data_fechamento_apostas, data_ocorrencia_evento, quantidadeDeApostas, valorEmJogo, status, atletaDTO));
+                    data_fechamento_apostas, data_ocorrencia_evento, quantidadeDeApostas,
+                    valorEmJogo, status, competidorDTO));
         }
 
         return competicoes;
@@ -188,7 +195,50 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
     @Override
     public CompeticaoDTO EditarPorDTO(CompeticaoDTO valor) throws SQLException {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'EditarPorDTO'");
+        try {
+            _conn.setAutoCommit(false);
+            // #region atleta/competidor
+            List<Integer> participando = new ArrayList<>(
+                    valor.Competidores.stream().map(x -> x.AtletaDTO.getId()).collect(Collectors.toList()));
+            PreparedStatement sql = _conn
+                    .prepareStatement("DELETE FROM competidor WHERE NOT atleta_id IN (?) AND competicao_id = ?");
+            Array array = _conn.createArrayOf("INTEGER", participando.toArray());
+            if (participando.isEmpty()) {
+                sql.setNull(1, java.sql.Types.ARRAY);
+            } else {
+                sql.setArray(1, array);
+            }
+            sql.setInt(2, valor.getId());
+            sql.execute();
+            for (int i : participando) {
+                sql = _conn.prepareStatement(
+                        "INSERT INTO competidor(atleta_id, competicao_id, posicao_inicial, numero) values(?,?,?,?)");
+                sql.setInt(1, i);
+                sql.setInt(2, valor.getId());
+                // sql.
+
+            }
+            // #endregion
+            sql = _conn.prepareStatement(
+                    "UPDATE competicao SET nome=?, data_abertura_apostas = ?, data_fechamento_apostas = ?, data_ocorrencia_evento = ?, categoria_id = ?, valor_limite_vencedor = ? WHERE id = ?");
+            sql.setString(1, valor.getNome());
+            sql.setTimestamp(2, DateConverterHelper
+                    .ConvertLocalDateTimeToTimestamp(valor.getData_abertura_apostas()));
+            sql.setTimestamp(3,
+                    DateConverterHelper.ConvertLocalDateTimeToTimestamp(
+                            valor.getData_fechamento_apostas()));
+            sql.setTimestamp(4, DateConverterHelper
+                    .ConvertLocalDateTimeToTimestamp(valor.getData_ocorrencia_evento()));
+            sql.setInt(5, valor.getCategoria().getId());
+            sql.setDouble(6, valor.getValorEmJogo());
+            sql.setInt(7, valor.getId());
+            sql.execute();
+            _conn.commit();
+        } catch (Exception e) {
+            _conn.rollback();
+            e.getStackTrace();
+        }
+        return valor;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class CompeticaoDTO implements IBaseDTO {
     public int QuantidadeDeApostas;
     public double ValorEmJogo;
     public String Status;
-    public List<AtletaDTO> Competidores;
+    public List<CompetidorDTO> Competidores;
 
     public CompeticaoDTO() {
     }
@@ -26,7 +26,7 @@ public class CompeticaoDTO implements IBaseDTO {
             LocalDateTime data_abertura_apostas,
             LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento, int quantidadeDeApostas,
             double valorEmJogo, String status,
-            List<AtletaDTO> competidores) {
+            List<CompetidorDTO> competidores) {
         Id = id;
         Nome = nome;
         Categoria = categoria;
@@ -43,7 +43,7 @@ public class CompeticaoDTO implements IBaseDTO {
     public CompeticaoDTO(int id, String nome, CategoriaDTO categoria, LocalDateTime data_cadastro,
             LocalDateTime data_abertura_apostas,
             LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento, int quantidadeDeApostas,
-            List<AtletaDTO> competidores) {
+            List<CompetidorDTO> competidores) {
         Id = id;
         Nome = nome;
         Categoria = categoria;
@@ -127,11 +127,11 @@ public class CompeticaoDTO implements IBaseDTO {
         this.QuantidadeDeApostas = QuantidadeDeApostas;
     }
 
-    public List<AtletaDTO> getCompetidores() {
+    public List<CompetidorDTO> getCompetidores() {
         return Competidores;
     }
 
-    public void setCompetidores(List<AtletaDTO> Competidores) {
+    public void setCompetidores(List<CompetidorDTO> Competidores) {
         this.Competidores = Competidores;
     }
 

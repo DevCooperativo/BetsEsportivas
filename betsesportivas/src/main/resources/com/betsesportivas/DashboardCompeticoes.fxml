@@ -115,40 +115,46 @@
             <Button fx:id="btn_criar_competidores" layoutX="368.0" layoutY="169.0" mnemonicParsing="false" onAction="#abrirSelecaoCompetidoresCriar" prefHeight="25.0" prefWidth="141.0" text="Competidores" />
          </children>
       </Pane>
-      <Pane fx:id="pane_criar_competidores" layoutX="95.0" layoutY="47.0" prefHeight="505.0" prefWidth="633.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
+      <Pane fx:id="pane_criar_competidores" layoutX="78.0" layoutY="54.0" prefHeight="489.0" prefWidth="633.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
          <children>
-            <SplitPane dividerPositions="0.4500792393026941, 0.5499207606973059" prefHeight="440.0" prefWidth="633.0">
+            <SplitPane dividerPositions="0.45, 0.55" prefHeight="343.0" prefWidth="633.0">
                <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="294.0">
                      <children>
-                        <ListView fx:id="pane_criar_competidores_disponiveis" layoutY="43.0" prefHeight="395.0" prefWidth="285.0" />
+                        <ListView fx:id="pane_criar_competidores_disponiveis" layoutY="43.0" prefHeight="338.0" prefWidth="285.0" />
                         <Text layoutX="93.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Atletas disponíveis" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="514.0" prefWidth="57.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="57.0">
                      <children>
-                        <Button fx:id="pane_criar_competidores_remover" layoutX="14.0" layoutY="229.0" mnemonicParsing="false" onAction="#removerCompetidorCompeticaoCriacao" prefHeight="25.0" prefWidth="26.0" text="&lt;" />
-                        <Button fx:id="pane_criar_competidores_adicionar" layoutX="14.0" layoutY="184.0" mnemonicParsing="false" onAction="#adicionarCompetidorCompeticaoCriacao" prefHeight="25.0" prefWidth="26.0" text="&gt;" />
+                        <Button fx:id="pane_criar_competidores_remover" layoutX="16.0" layoutY="181.0" mnemonicParsing="false" onAction="#removeCompetidorEdit" prefHeight="25.0" prefWidth="26.0" text="&lt;" />
+                        <Button fx:id="pane_criar_competidores_adicionar" layoutX="16.0" layoutY="136.0" mnemonicParsing="false" onAction="#addCompetidorEdit" prefHeight="25.0" prefWidth="26.0" text="&gt;" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="253.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="375.0" prefWidth="509.0">
                      <children>
-                        <ListView fx:id="pane_criar_competidores_participando" layoutY="43.0" prefHeight="395.0" prefWidth="312.0" />
+                        <ListView fx:id="pane_criar_competidores_participando" layoutX="-2.0" layoutY="41.0" prefHeight="304.0" prefWidth="285.0" />
                         <Text layoutX="87.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Atletas participando" />
                      </children>
                   </AnchorPane>
                </items>
             </SplitPane>
+            <Pane layoutX="1.0" layoutY="343.0" prefHeight="105.0" prefWidth="633.0" style="-fx-background-color: #f4f4f4;">
+               <children>
+                  <Label layoutX="248.0" layoutY="44.0" text="Posição Inicial" />
+                  <TextField fx:id="pane_criar_competidores_posicao" layoutX="335.0" layoutY="40.0" prefHeight="25.0" prefWidth="51.0" />
+               </children>
+            </Pane>
             <ButtonBar layoutX="419.0" layoutY="451.0" prefHeight="40.0" prefWidth="200.0">
                <buttons>
-                  <Button fx:id="pane_criar_competidores_salvar" mnemonicParsing="false" onAction="#salvarAdicaoCompetidoresCriacao" text="Concluir" />
+                  <Button fx:id="pane_criar_competidores_concluir" mnemonicParsing="false" onAction="#closeEditCompetidoresPane" text="Concluir" />
                </buttons>
             </ButtonBar>
          </children>
       </Pane>
       <Pane fx:id="pane_editar" layoutX="106.0" layoutY="91.0" prefHeight="297.0" prefWidth="593.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
          <children>
-            <Button fx:id="btn_editar_fechar" cancelButton="true" layoutX="558.0" layoutY="7.0" mnemonicParsing="false" style="-fx-background-color: red;" text="X" textFill="WHITE">
+            <Button fx:id="btn_editar_fechar" cancelButton="true" layoutX="558.0" layoutY="7.0" mnemonicParsing="false" onAction="#closeEditPane" style="-fx-background-color: red;" text="X" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
@@ -168,44 +174,49 @@
             <Label layoutX="292.0" layoutY="132.0" text="Término das apostas" />
             <DatePicker fx:id="datePicker_editar_dataOcorrencia" layoutX="120.0" layoutY="165.0" prefHeight="25.0" prefWidth="103.0" />
             <Label layoutX="26.0" layoutY="169.0" text="Data ocorrência" />
-            <Button fx:id="btn_editar_salvar" layoutX="319.0" layoutY="258.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Salvar" />
+            <Button fx:id="btn_editar_salvar" layoutX="319.0" layoutY="258.0" mnemonicParsing="false" onAction="#saveEdition" prefHeight="25.0" prefWidth="97.0" text="Salvar" />
             <TextField fx:id="textField_editar_inicioApostas" layoutX="223.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
             <TextField fx:id="textField_editar_dataOcorrencia" layoutX="223.0" layoutY="165.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
             <TextField fx:id="textField_editar_terminoApostas" layoutX="505.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
             <Button fx:id="btn_editar_excluir" layoutX="176.0" layoutY="258.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: rgb(250, 91, 12);" text="Excluir" textFill="WHITE" />
             <Button fx:id="btn_editar_competidores" layoutX="383.0" layoutY="165.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="141.0" text="Competidores" />
-            <Pane fx:id="pane_editar_competidores" layoutX="-19.0" layoutY="-61.0" prefHeight="505.0" prefWidth="633.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
+         </children>
+      </Pane>
+      <Pane fx:id="pane_editar_competidores" layoutX="78.0" layoutY="53.0" prefHeight="496.0" prefWidth="633.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
+         <children>
+            <SplitPane dividerPositions="0.45, 0.55" prefHeight="343.0" prefWidth="633.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="294.0">
+                     <children>
+                        <ListView fx:id="pane_editar_competidores_disponiveis" layoutY="43.0" prefHeight="338.0" prefWidth="285.0" />
+                        <Text layoutX="93.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Atletas disponíveis" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="57.0">
+                     <children>
+                        <Button fx:id="pane_editar_competidores_remover" layoutX="16.0" layoutY="181.0" mnemonicParsing="false" onAction="#removeCompetidorEdit" prefHeight="25.0" prefWidth="26.0" text="&lt;" />
+                        <Button fx:id="pane_editar_competidores_adicionar" layoutX="16.0" layoutY="136.0" mnemonicParsing="false" onAction="#addCompetidorEdit" prefHeight="25.0" prefWidth="26.0" text="&gt;" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="375.0" prefWidth="509.0">
+                     <children>
+                        <ListView fx:id="pane_editar_competidores_participando" layoutX="-2.0" layoutY="41.0" prefHeight="304.0" prefWidth="285.0" />
+                        <Text layoutX="87.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Atletas participando" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+            <Pane layoutX="1.0" layoutY="343.0" prefHeight="105.0" prefWidth="633.0" style="-fx-background-color: #f4f4f4;">
                <children>
-                  <SplitPane dividerPositions="0.45, 0.55" prefHeight="440.0" prefWidth="633.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="294.0">
-                           <children>
-                              <ListView fx:id="pane_editar_competidores_disponiveis" layoutY="43.0" prefHeight="395.0" prefWidth="285.0" />
-                              <Text layoutX="93.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Atletas disponíveis" />
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="514.0" prefWidth="57.0">
-                           <children>
-                              <Button fx:id="pane_editar_competidores_remover" layoutX="14.0" layoutY="229.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="26.0" text="&lt;" />
-                              <Button fx:id="pane_editar_competidores_adicionar" layoutX="14.0" layoutY="184.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="26.0" text="&gt;" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="375.0" prefWidth="509.0">
-                           <children>
-                              <ListView fx:id="pane_editar_competidores_participando" layoutX="-4.0" layoutY="43.0" prefHeight="395.0" prefWidth="285.0" />
-                              <Text layoutX="87.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Atletas participando" />
-                           </children>
-                        </AnchorPane>
-                    </items>
-                  </SplitPane>
-                  <ButtonBar layoutX="419.0" layoutY="451.0" prefHeight="40.0" prefWidth="200.0">
-                    <buttons>
-                      <Button fx:id="pane_editar_competidores_cancelar" mnemonicParsing="false" style="-fx-background-color: rgb(250, 91, 12);" text="Cancelar" textFill="WHITE" />
-                        <Button fx:id="pane_editar_competidores_salvar" mnemonicParsing="false" text="Salvar" />
-                    </buttons>
-                  </ButtonBar>
+                  <Label layoutX="248.0" layoutY="44.0" text="Posição Inicial" />
+                  <TextField fx:id="pane_editar_competidores_posicao" disable="true" layoutX="335.0" layoutY="40.0" prefHeight="25.0" prefWidth="51.0" />
                </children>
             </Pane>
+            <ButtonBar layoutX="419.0" layoutY="451.0" prefHeight="40.0" prefWidth="200.0">
+              <buttons>
+                  <Button fx:id="pane_editar_competidores_concluir" mnemonicParsing="false" onAction="#closeEditCompetidoresPane" text="Concluir" />
+              </buttons>
+            </ButtonBar>
          </children>
       </Pane>
    </children>
