@@ -66,7 +66,7 @@ public class CategoriaDAO implements IBaseDAO<Categoria, CategoriaDTO> {
                 .prepareStatement(
                         "UPDATE categoria SET nome = ? WHERE id=?");
         sql.setString(1, valor.getNome());
-        sql.setInt(2, valor.GetId());
+        sql.setInt(2, valor.getId());
         sql.execute();
         return valor;
     }

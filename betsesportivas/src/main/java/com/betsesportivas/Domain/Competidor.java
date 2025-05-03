@@ -10,7 +10,7 @@ public class Competidor {
 
     public Competidor(Atleta _atleta, int _competicao_id, int _numero, int _posicao_final, int _posicao_inicial) {
         this._atleta = _atleta;
-        this._atleta_id = _atleta.GetId();
+        this._atleta_id = _atleta.getId();
         this._competicao_id = _competicao_id;
         this._numero = _numero;
         this._posicao_final = _posicao_final;

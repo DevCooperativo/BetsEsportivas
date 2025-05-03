@@ -4,44 +4,44 @@ import java.time.LocalDate;
 
 import com.betsesportivas.Domain.Abstractions.BaseEntity;
 
-public class Cliente extends BaseEntity{
+public class Jogador extends BaseEntity {
     private String _nome;
     private LocalDate _nascimento;
     private double _saldo;
     private String _email;
-    private String _is_ativado;
+    private boolean _isAtivado;
 
-    public Cliente(int id, String _nome, LocalDate _nascimento, double _saldo, String _email, String _is_ativado) {
+    public Jogador(int id, String _nome, LocalDate _nascimento, double _saldo, String _email, boolean _isAtivado) {
         super(id);
         this._nome = _nome;
         this._nascimento = _nascimento;
         this._saldo = _saldo;
         this._email = _email;
-        this._is_ativado = _is_ativado;
+        this._isAtivado = _isAtivado;
     }
 
-    public String getNome(){
+    public String getNome() {
         return _nome;
     }
 
-    public void setNome(String nome){
-        _nome=nome;
+    public void setNome(String nome) {
+        _nome = nome;
     }
 
-    public double GetSaldo(){
+    public double GetSaldo() {
         return _saldo;
     }
 
-    public void SetSaldo(double saldo){
-        _saldo=saldo;
+    public void SetSaldo(double saldo) {
+        _saldo = saldo;
     }
 
-    public String GetEmail(){
+    public String GetEmail() {
         return _email;
     }
 
-    public void SetEmail(String email){
-        _email=email;
+    public void SetEmail(String email) {
+        _email = email;
     }
 
     public LocalDate getNascimento() {
@@ -52,11 +52,11 @@ public class Cliente extends BaseEntity{
         this._nascimento = _nascimento;
     }
 
-    public String getIs_ativado() {
-        return _is_ativado;
+    public boolean isAtivado() {
+        return _isAtivado;
     }
 
-    public void setIs_ativado(String _is_ativado) {
-        this._is_ativado = _is_ativado;
+    public void setAtivado(boolean isAtivado) {
+        this._isAtivado = isAtivado;
     }
 }

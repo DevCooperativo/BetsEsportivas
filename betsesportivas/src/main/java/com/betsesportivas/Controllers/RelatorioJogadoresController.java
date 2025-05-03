@@ -11,12 +11,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 
-public class RelatorioClientesController implements Initializable {
+public class RelatorioJogadoresController implements Initializable {
     @FXML
     private MenuItem menu_competicoes_dashboard;
 
     @FXML
-    private MenuItem menu_clientes_dashboard;
+    private MenuItem menu_jogadores_dashboard;
 
     @FXML
     private MenuItem menu_apostas_dashboard;
@@ -65,9 +65,9 @@ public class RelatorioClientesController implements Initializable {
             }
         });
 
-        menu_clientes_dashboard.setOnAction((ActionEvent event) -> {
+        menu_jogadores_dashboard.setOnAction((ActionEvent event) -> {
             try {
-                App.setNewScene("DashboardClientes");
+                App.setNewScene("DashboardJogadores");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }

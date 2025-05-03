@@ -20,7 +20,7 @@
                   <MenuItem fx:id="menu_competicoes_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
-            <Menu fx:id="menu_clientes1" mnemonicParsing="false" text="Categorias">
+            <Menu fx:id="menu_jogadores1" mnemonicParsing="false" text="Categorias">
                <items>
                   <MenuItem fx:id="menu_categorias_dashboard" mnemonicParsing="false" text="Dashboard" />
                   <MenuItem fx:id="menu_categorias_relatorio" mnemonicParsing="false" text="Relatório" />
@@ -38,10 +38,10 @@
                   <MenuItem fx:id="menu_apostas_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
-            <Menu fx:id="menu_clientes" mnemonicParsing="false" text="Clientes">
+            <Menu fx:id="menu_jogadores" mnemonicParsing="false" text="Jogadores">
                <items>
-                  <MenuItem fx:id="menu_clientes_dashboard" mnemonicParsing="false" text="Dashboard" />
-                  <MenuItem fx:id="menu_clientes_relatorio" mnemonicParsing="false" text="Relatório" />
+                  <MenuItem fx:id="menu_jogadores_dashboard" mnemonicParsing="false" text="Dashboard" />
+                  <MenuItem fx:id="menu_jogadores_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
          </menus>

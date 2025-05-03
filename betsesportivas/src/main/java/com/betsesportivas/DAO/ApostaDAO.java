@@ -25,11 +25,11 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
         ResultSet result = sql.executeQuery();
         while (result.next()) {
             Integer id = result.getInt("id");
-            Integer cliente_id = result.getInt("cliente_id");
+            Integer jogador_id = result.getInt("jogador_id");
             Double valor = result.getDouble("valor");
             Integer atleta_id = result.getInt("atleta_id");
             Integer competicao_id = result.getInt("competicao_id");
-            apostas.add(new Aposta(id, cliente_id, valor, atleta_id, competicao_id));
+            apostas.add(new Aposta(id, jogador_id, valor, atleta_id, competicao_id));
         }
         return apostas;
     }
@@ -40,20 +40,20 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
         sql.setInt(1, id);
         ResultSet result = sql.executeQuery();
         Integer result_id = result.getInt("id");
-        Integer cliente_id = result.getInt("cliente_id");
+        Integer jogador_id = result.getInt("jogador_id");
         double valor = result.getDouble("valor");
         Integer atleta_id = result.getInt("atleta_id");
         Integer competicao_id = result.getInt("competicao_id");
 
-        return new Aposta(result_id, cliente_id, valor, atleta_id, competicao_id);
+        return new Aposta(result_id, jogador_id, valor, atleta_id, competicao_id);
 
     }
 
     @Override
     public Aposta Criar(Aposta valor) throws SQLException {
         PreparedStatement sql = _conn
-                .prepareStatement("INSERT INTO aposta(cliente_id, valor, atleta_id, competicao_id) VALUES(?,?,?,?)");
-        sql.setInt(1, valor.GetClienteId());
+                .prepareStatement("INSERT INTO aposta(jogador_id, valor, atleta_id, competicao_id) VALUES(?,?,?,?)");
+        sql.setInt(1, valor.GetJogadorId());
         sql.setDouble(2, valor.GetValor());
         sql.setInt(3, valor.GetAtletaId());
         sql.setInt(4, valor.GetCompeticaoId());
@@ -65,12 +65,12 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
     public Aposta Editar(Aposta valor) throws SQLException {
         PreparedStatement sql = _conn
                 .prepareStatement(
-                        "UPDATE aposta SET cliente_id = ?, valor=?, atleta_id = ?, competicao_id = ? WHERE id=?");
-        sql.setInt(1, valor.GetClienteId());
+                        "UPDATE aposta SET jogador_id = ?, valor=?, atleta_id = ?, competicao_id = ? WHERE id=?");
+        sql.setInt(1, valor.GetJogadorId());
         sql.setDouble(2, valor.GetValor());
         sql.setInt(3, valor.GetAtletaId());
         sql.setInt(4, valor.GetCompeticaoId());
-        sql.setInt(5, valor.GetId());
+        sql.setInt(5, valor.getId());
         sql.execute();
         return valor;
     }

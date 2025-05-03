@@ -116,7 +116,7 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                 (Date) Date.from(valor.GetDataFechamentoApostas().atStartOfDay(ZoneId.systemDefault())
                         .toInstant()));
         sql.setInt(4, valor.GetCategoriaId());
-        sql.setInt(5, valor.GetId());
+        sql.setInt(5, valor.getId());
         sql.execute();
         return valor;
     }

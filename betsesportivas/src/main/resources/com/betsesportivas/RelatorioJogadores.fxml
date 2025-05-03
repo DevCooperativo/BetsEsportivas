@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="anchorPane_dashboard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.betsesportivas.Controllers.RelatorioClientesController">
+<AnchorPane fx:id="anchorPane_dashboard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.betsesportivas.Controllers.RelatorioJogadoresController">
    <children>
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="800.0">
          <menus>
@@ -21,7 +21,7 @@
                   <MenuItem fx:id="menu_competicoes_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
-            <Menu fx:id="menu_clientes1" mnemonicParsing="false" text="Categorias">
+            <Menu fx:id="menu_jogadores1" mnemonicParsing="false" text="Categorias">
                <items>
                   <MenuItem fx:id="menu_categorias_dashboard" mnemonicParsing="false" text="Dashboard" />
                   <MenuItem fx:id="menu_categorias_relatorio" mnemonicParsing="false" text="Relatório" />
@@ -39,10 +39,10 @@
                   <MenuItem fx:id="menu_apostas_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
-            <Menu fx:id="menu_clientes" mnemonicParsing="false" text="Clientes">
+            <Menu fx:id="menu_jogadores" mnemonicParsing="false" text="Jogadores">
                <items>
-                  <MenuItem fx:id="menu_clientes_dashboard" mnemonicParsing="false" text="Dashboard" />
-                  <MenuItem fx:id="menu_clientes_relatorio" mnemonicParsing="false" text="Relatório" />
+                  <MenuItem fx:id="menu_jogadores_dashboard" mnemonicParsing="false" text="Dashboard" />
+                  <MenuItem fx:id="menu_jogadores_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
          </menus>
@@ -51,7 +51,7 @@
          <children>
           <AnchorPane layoutX="6.0" layoutY="8.0" minHeight="0.0" minWidth="0.0" prefHeight="566.0" prefWidth="793.0" style="-fx-background-color: white;">
                <children>
-                  <Label layoutX="294.0" layoutY="10.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Clientes" />
+                  <Label layoutX="294.0" layoutY="10.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Jogadores" />
                   <TableView fx:id="tblView_competicoes" layoutY="184.0" prefHeight="382.0" prefWidth="793.0">
                     <columns>
                         <TableColumn fx:id="tblViewColumn_competicoes_categoria" prefWidth="77.0" style="-fx-font-size: 12;" text="Nome" />
