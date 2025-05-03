@@ -8,7 +8,7 @@ public class Db {
 
     private String _url="jdbc:postgresql://127.0.0.1/postgres";
     private String _username="postgres";
-    private String _password="postgres";
+    private String _password="root";
 
     public Db(){}
 
@@ -28,7 +28,7 @@ public class Db {
                         "    nome VARCHAR(255) NOT NULL\r\n" + //
                         ");\r\n" + //
                         "\r\n" + //
-                        "CREATE TABLE IF NOT EXISTS cliente (\r\n" + //
+                        "CREATE TABLE IF NOT EXISTS jogador (\r\n" + //
                         "    id SERIAL PRIMARY KEY,\r\n" + //
                         "    nome VARCHAR(255) NOT NULL,\r\n" + //
                         "    saldo NUMERIC(10, 2) NOT NULL,\r\n" + //
@@ -62,11 +62,11 @@ public class Db {
                         "\r\n" + //
                         "CREATE TABLE IF NOT EXISTS aposta (\r\n" + //
                         "    id SERIAL PRIMARY KEY,\r\n" + //
-                        "    cliente_id INTEGER NOT NULL,\r\n" + //
+                        "    jogador_id INTEGER NOT NULL,\r\n" + //
                         "    valor NUMERIC(10, 2) NOT NULL,\r\n" + //
                         "    atleta_id INTEGER NOT NULL,\r\n" + //
                         "    competicao_id INTEGER NOT NULL,\r\n" + //
-                        "    FOREIGN KEY (cliente_id) REFERENCES cliente (id),\r\n" + //
+                        "    FOREIGN KEY (jogador_id) REFERENCES jogador (id),\r\n" + //
                         "    FOREIGN KEY (atleta_id, competicao_id) REFERENCES competidor (atleta_id, competicao_id)\r\n" + //
                         ");").execute();
     }

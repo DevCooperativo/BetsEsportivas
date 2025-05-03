@@ -23,7 +23,7 @@
                   <MenuItem fx:id="menu_competicoes_relatorio" mnemonicParsing="false" text="Relatório" />
             </items>
           </Menu>
-            <Menu fx:id="menu_clientes1" mnemonicParsing="false" text="Categorias">
+            <Menu fx:id="menu_jogadores1" mnemonicParsing="false" text="Categorias">
                <items>
                   <MenuItem fx:id="menu_categorias_dashboard" mnemonicParsing="false" text="Dashboard" />
                   <MenuItem fx:id="menu_categorias_relatorio" mnemonicParsing="false" text="Relatório" />
@@ -41,10 +41,10 @@
                   <MenuItem fx:id="menu_apostas_relatorio" mnemonicParsing="false" text="Relatório" />
             </items>
           </Menu>
-            <Menu fx:id="menu_clientes" mnemonicParsing="false" text="Clientes">
+            <Menu fx:id="menu_jogadores" mnemonicParsing="false" text="Jogadores">
                <items>
-                  <MenuItem fx:id="menu_clientes_dashboard" mnemonicParsing="false" text="Dashboard" />
-                  <MenuItem fx:id="menu_clientes_relatorio" mnemonicParsing="false" text="Relatório" />
+                  <MenuItem fx:id="menu_jogadores_dashboard" mnemonicParsing="false" text="Dashboard" />
+                  <MenuItem fx:id="menu_jogadores_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
         </menus>
@@ -56,7 +56,7 @@
                   <Label layoutX="370.0" layoutY="10.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Apostas" />
                   <TableView fx:id="tblView_apostas" layoutY="40.0" prefHeight="489.0" prefWidth="800.0">
                     <columns>
-                        <TableColumn fx:id="tblViewColumn_apostas_cliente" prefWidth="174.0" style="-fx-font-size: 12;" text="Cliente" />
+                        <TableColumn fx:id="tblViewColumn_apostas_jogador" prefWidth="174.0" style="-fx-font-size: 12;" text="Jogador" />
                         <TableColumn fx:id="tblViewColumn_apostas_valor" prefWidth="112.0" style="-fx-font-size: 12;" text="Valor" />
                         <TableColumn fx:id="tblViewColumn_apostas_competicao" prefWidth="257.0" style="-fx-font-size: 12;" text="Competição" />
                         <TableColumn fx:id="tblViewColumn_apostas_competidor" prefWidth="258.0" style="-fx-font-size: 12;" text="Competidor" />
@@ -81,8 +81,8 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label layoutX="48.0" layoutY="75.0" text="Cliente" />
-            <ComboBox fx:id="comboBox_cirar_cliente" layoutX="121.0" layoutY="72.0" prefWidth="150.0" promptText="Cliente" />
+            <Label layoutX="48.0" layoutY="75.0" text="Jogador" />
+            <ComboBox fx:id="comboBox_cirar_jogador" layoutX="121.0" layoutY="72.0" prefWidth="150.0" promptText="Jogador" />
             <Label layoutX="48.0" layoutY="126.0" text="Competição" />
             <ComboBox fx:id="comboBox_cirar_competicao" layoutX="121.0" layoutY="123.0" prefWidth="150.0" promptText="Competição" />
             <Label layoutX="333.0" layoutY="126.0" text="Competidor" />
@@ -99,8 +99,8 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label layoutX="48.0" layoutY="75.0" text="Cliente" />
-            <ComboBox fx:id="comboBox_editar_cliente" layoutX="121.0" layoutY="72.0" prefWidth="150.0" promptText="Cliente" />
+            <Label layoutX="48.0" layoutY="75.0" text="Jogador" />
+            <ComboBox fx:id="comboBox_editar_jogador" layoutX="121.0" layoutY="72.0" prefWidth="150.0" promptText="Jogador" />
             <Label layoutX="48.0" layoutY="126.0" text="Competição" />
             <ComboBox fx:id="comboBox_editar_competicao" layoutX="121.0" layoutY="123.0" prefWidth="150.0" promptText="Competição" />
             <Label layoutX="333.0" layoutY="126.0" text="Competidor" />

@@ -7,7 +7,7 @@ public abstract class BaseEntity {
         _id = id;
     }
 
-    public int GetId() {
+    public int getId() {
         return _id;
     }
 }

@@ -3,25 +3,25 @@ package com.betsesportivas.Domain;
 import com.betsesportivas.Domain.Abstractions.BaseEntity;
 
 public class Aposta extends BaseEntity {
-    private int _cliente_id;
+    private int _jogador_id;
     private double _valor;
     private int _atleta_id;
     private int _competicao_id;
 
-    public Aposta(int id, int cliente_id, double valor, int atleta_id, int competicao_id) {
+    public Aposta(int id, int jogador_id, double valor, int atleta_id, int competicao_id) {
         super(id);
-        _cliente_id = cliente_id;
+        _jogador_id = jogador_id;
         _valor = valor;
         _atleta_id = atleta_id;
         _competicao_id = competicao_id;
     }
 
-    public int GetClienteId() {
-        return _cliente_id;
+    public int GetJogadorId() {
+        return _jogador_id;
     }
 
-    public void SetClienteId(int cliente_id) {
-        _cliente_id = cliente_id;
+    public void SetJogadorId(int jogador_id) {
+        _jogador_id = jogador_id;
     }
 
     public double GetValor() {

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS categoria (
 
 );
 
-CREATE TABLE IF NOT EXISTS cliente (
+CREATE TABLE IF NOT EXISTS jogador (
     id SERIAL PRIMARY KEY,
 
     nome VARCHAR(255) NOT NULL,
@@ -60,12 +60,12 @@ CREATE TABLE IF NOT EXISTS competidor (
 CREATE TABLE IF NOT EXISTS aposta (
     id SERIAL PRIMARY KEY,
     
-    cliente_id INTEGER NOT NULL,
+    jogador_id INTEGER NOT NULL,
     valor NUMERIC(10, 2) NOT NULL,
     atleta_id INTEGER NOT NULL,
     competicao_id INTEGER NOT NULL,
     odd NUMERIC(5,2) NOT NULL DEFAULT 1.00,
 
-    FOREIGN KEY (cliente_id) REFERENCES cliente (id),
+    FOREIGN KEY (jogador_id) REFERENCES jogador (id),
     FOREIGN KEY (atleta_id, competicao_id) REFERENCES competidor (atleta_id, competicao_id)
 );

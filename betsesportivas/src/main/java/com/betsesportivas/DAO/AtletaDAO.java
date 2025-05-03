@@ -74,7 +74,7 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
         sql.setString(1, valor.getNome());
         sql.setInt(2, valor.GetVitorias());
         sql.setInt(3, valor.GetParticipacoes());
-        sql.setInt(4, valor.GetId());
+        sql.setInt(4, valor.getId());
         sql.execute();
         return valor;
     }

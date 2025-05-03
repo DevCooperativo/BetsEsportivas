@@ -93,7 +93,7 @@ public class DashboardCategoriasController implements Initializable {
     @FXML
     private MenuItem menu_apostas_dashboard;
     @FXML
-    private MenuItem menu_clientes_dashboard;
+    private MenuItem menu_jogadores_dashboard;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -254,9 +254,9 @@ public class DashboardCategoriasController implements Initializable {
             }
         });
 
-        menu_clientes_dashboard.setOnAction((ActionEvent event) -> {
+        menu_jogadores_dashboard.setOnAction((ActionEvent event) -> {
             try {
-                App.setNewScene("DashboardClientes");
+                App.setNewScene("DashboardJogadores");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }

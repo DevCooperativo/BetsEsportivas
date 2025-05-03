@@ -24,4 +24,8 @@ public class DateConverterHelper {
         return Timestamp.from(value.atZone(ZoneId.of("America/Sao_Paulo")).toInstant());
     }
 
+    public static Timestamp ConvertLocalDateToTimestamp(LocalDate value) {
+        return Timestamp.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
 }
