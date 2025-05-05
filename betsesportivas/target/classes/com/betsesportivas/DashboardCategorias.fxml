@@ -76,7 +76,7 @@
       </AnchorPane>
       <Pane fx:id="pane_criar" layoutX="230.0" layoutY="84.0" prefHeight="280.0" prefWidth="285.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
          <children>
-            <Button fx:id="btn_pane_criar_fechar" layoutX="206.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: red; -fx-background-color:hover: rgba(200, 12, 64, 1);" text="X" textFill="WHITE">
+            <Button fx:id="btn_pane_criar_fechar" layoutX="249.0" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: red; -fx-background-color:hover: rgba(200, 12, 64, 1);" text="X" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
