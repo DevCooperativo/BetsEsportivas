@@ -11,8 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 
-public class RelatorioJogadoresController implements Initializable {
-    //#region menus
+public class RelatorioCategoriasController implements Initializable {
+//#region menus
     @FXML
     private MenuItem menu_competicoes_dashboard;
     @FXML

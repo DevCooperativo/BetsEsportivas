@@ -15,20 +15,25 @@ public class RelatorioApostasController implements Initializable {
 
     @FXML
     private MenuItem menu_competicoes_dashboard;
-
     @FXML
-    private MenuItem menu_jogadores_dashboard;
-
+    private MenuItem menu_competicoes_relatorio;
     @FXML
     private MenuItem menu_apostas_dashboard;
-
+    @FXML
+    private MenuItem menu_apostas_relatorio;
+    @FXML
+    private MenuItem menu_atletas_dashboard;
+    @FXML
+    private MenuItem menu_atletas_relatorio;
     @FXML
     private MenuItem menu_categorias_dashboard;
-
     @FXML
-    private void switchToPrimary() throws IOException {
-        App.setRoot("primary");
-    }
+    private MenuItem menu_categorias_relatorio;
+    @FXML
+    private MenuItem menu_jogadores_dashboard;
+    @FXML
+    private MenuItem menu_jogadores_relatorio;
+    // #endregion
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -40,6 +45,7 @@ public class RelatorioApostasController implements Initializable {
         setMenuEvents();
     }
 
+    // #region menuEvents
     @FXML
     private void setMenuEvents() {
         menu_categorias_dashboard.setOnAction((ActionEvent event) -> {
@@ -49,11 +55,24 @@ public class RelatorioApostasController implements Initializable {
                 e.getStackTrace();
             }
         });
+        menu_categorias_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioCategorias");
+            }catch(IOException ex){
+                ex.getStackTrace();
+            }
+        });
         menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
-            System.out.println(".()");
             try {
                 App.setNewScene("DashboardCompeticoes");
             } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_competicoes_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioCompeticoes");
+            }catch(IOException ex){
                 ex.getStackTrace();
             }
         });
@@ -61,6 +80,29 @@ public class RelatorioApostasController implements Initializable {
         menu_apostas_dashboard.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("DashboardApostas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_apostas_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioApostas");
+            }catch(IOException ex){
+                ex.getStackTrace();
+            }
+        });
+
+        menu_atletas_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardAtletas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+
+        menu_atletas_relatorio.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("RelatorioAtletas");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }
@@ -73,5 +115,13 @@ public class RelatorioApostasController implements Initializable {
                 ex.getStackTrace();
             }
         });
+        menu_jogadores_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioJogadores");
+            }catch(IOException ex){
+                ex.getStackTrace();
+            }
+        });
     }
+    // #endregion
 }

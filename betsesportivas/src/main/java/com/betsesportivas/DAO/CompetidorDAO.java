@@ -132,23 +132,19 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
 
     @Override
     public List<CompetidorDTO> BuscarCompetidoresDisponiveisDTO(int idCompeticao) throws SQLException {
-        QueryBuilder mainQuery = new QueryBuilder();
-        QueryBuilder subQuery = new QueryBuilder().Select(new String[] { "atleta_id" }, "competidor").From("competidor")
-                .Where("");
         List<CompetidorDTO> CompetidorDTO = new LinkedList<>();
         PreparedStatement sql = _conn
                 .prepareStatement(new QueryBuilder()
                         .Select(null, "atleta")
                         .From("atleta")
-                        .WhereIn("atleta",
+                        .WhereIn("id", "atleta",
                                 (new QueryBuilder()
                                         .Select(new String[] { "atleta_id" }, "competidor")
                                         .From("competidor")
                                         .Where(String.format("competidor.competicao_id = %d", idCompeticao))),
-                                false)
+                                true)
                         .GroupBy("id", "atleta").toString());
                         System.out.println(sql);
-        sql.setInt(1, idCompeticao);
         ResultSet result = sql.executeQuery();
         while (result.next()) {
             int resultId = result.getInt("id");

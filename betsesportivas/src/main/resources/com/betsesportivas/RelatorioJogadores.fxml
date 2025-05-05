@@ -29,8 +29,8 @@
             </Menu>
             <Menu fx:id="menu_atletas" mnemonicParsing="false" text="Atletas">
                <items>
-                  <MenuItem fx:id="menu_atletas_dashboard" mnemonicParsing="false" text="Atletas" />
-                  <MenuItem fx:id="menu_atletas_relatorio" mnemonicParsing="false" text="Atletas" />
+                  <MenuItem fx:id="menu_atletas_dashboard" mnemonicParsing="false" text="Dashboard" />
+                  <MenuItem fx:id="menu_atletas_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
             <Menu fx:id="menu_apostas" mnemonicParsing="false" text="Apostas">

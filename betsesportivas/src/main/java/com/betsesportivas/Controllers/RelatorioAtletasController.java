@@ -11,8 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 
-public class RelatorioJogadoresController implements Initializable {
-    //#region menus
+public class RelatorioAtletasController implements Initializable {
+    // #region menus
     @FXML
     private MenuItem menu_competicoes_dashboard;
     @FXML
@@ -34,14 +34,14 @@ public class RelatorioJogadoresController implements Initializable {
     @FXML
     private MenuItem menu_jogadores_relatorio;
     // #endregion
-    
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setEvents();
     }
-    private void setEvents(){
-    setMenuEvents();
+
+    private void setEvents() {
+        setMenuEvents();
     }
     // #endregion
 
@@ -55,10 +55,10 @@ public class RelatorioJogadoresController implements Initializable {
                 e.getStackTrace();
             }
         });
-        menu_categorias_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_categorias_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioCategorias");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -69,10 +69,10 @@ public class RelatorioJogadoresController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_competicoes_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_competicoes_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioCompeticoes");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -84,10 +84,10 @@ public class RelatorioJogadoresController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_apostas_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_apostas_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioApostas");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -115,10 +115,10 @@ public class RelatorioJogadoresController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_jogadores_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioJogadores");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });

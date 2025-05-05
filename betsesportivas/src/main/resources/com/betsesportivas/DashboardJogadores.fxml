@@ -16,14 +16,14 @@
 
 <AnchorPane fx:id="anchorPane_dashboard" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.betsesportivas.Controllers.DashboardJogadoresController">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="800.0">
-        <menus>
-          <Menu fx:id="menu_dashboard" mnemonicParsing="false" text="Competicoes">
-            <items>
-              <MenuItem fx:id="menu_competicoes_dashboard" mnemonicParsing="false" text="Dashboard" />
+      <MenuBar layoutX="5.0" layoutY="2.0" prefHeight="25.0" prefWidth="800.0">
+         <menus>
+            <Menu fx:id="menu_dashboard" mnemonicParsing="false" text="Competicoes">
+               <items>
+                  <MenuItem fx:id="menu_competicoes_dashboard" mnemonicParsing="false" text="Dashboard" />
                   <MenuItem fx:id="menu_competicoes_relatorio" mnemonicParsing="false" text="Relatório" />
-            </items>
-          </Menu>
+               </items>
+            </Menu>
             <Menu fx:id="menu_jogadores1" mnemonicParsing="false" text="Categorias">
                <items>
                   <MenuItem fx:id="menu_categorias_dashboard" mnemonicParsing="false" text="Dashboard" />
@@ -32,23 +32,23 @@
             </Menu>
             <Menu fx:id="menu_atletas" mnemonicParsing="false" text="Atletas">
                <items>
-                  <MenuItem fx:id="menu_atletas_dashboard" mnemonicParsing="false" text="Atletas" />
-                  <MenuItem fx:id="menu_atletas_relatorio" mnemonicParsing="false" text="Atletas" />
+                  <MenuItem fx:id="menu_atletas_dashboard" mnemonicParsing="false" text="Dashboard" />
+                  <MenuItem fx:id="menu_atletas_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
-          <Menu fx:id="menu_apostas" mnemonicParsing="false" text="Apostas">
-            <items>
-              <MenuItem fx:id="menu_apostas_dashboard" mnemonicParsing="false" text="Dashboard" />
+            <Menu fx:id="menu_apostas" mnemonicParsing="false" text="Apostas">
+               <items>
+                  <MenuItem fx:id="menu_apostas_dashboard" mnemonicParsing="false" text="Dashboard" />
                   <MenuItem fx:id="menu_apostas_relatorio" mnemonicParsing="false" text="Relatório" />
-            </items>
-          </Menu>
+               </items>
+            </Menu>
             <Menu fx:id="menu_jogadores" mnemonicParsing="false" text="Jogadores">
                <items>
                   <MenuItem fx:id="menu_jogadores_dashboard" mnemonicParsing="false" text="Dashboard" />
                   <MenuItem fx:id="menu_jogadores_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
-        </menus>
+         </menus>
       </MenuBar>
       <Pane layoutY="25.0" prefHeight="575.0" prefWidth="800.0">
          <children>

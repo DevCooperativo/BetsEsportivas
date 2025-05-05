@@ -1,5 +1,7 @@
 package com.betsesportivas.QueryBuilder;
 
+import java.util.List;
+
 public class QueryBuilder {
     private StringBuilder query = new StringBuilder();
 
@@ -12,7 +14,7 @@ public class QueryBuilder {
     public QueryBuilder Select(String[] fields, String table) {
         query.append(" SELECT");
 
-        if (fields != null && fields.length > 1) {
+        if (fields != null) {
             for (int i = 0; i < fields.length; i++) {
                 query.append(String.format(" %s.%s", table, fields[i]));
                 if (i < fields.length - 1) {
@@ -70,6 +72,21 @@ public class QueryBuilder {
         return this;
     }
 
+    public QueryBuilder Where(String origin, boolean state, String option, int target) {
+        if (!query.toString().contains("WHERE")) {
+            query.append(" WHERE");
+        } else {
+            query.append(" AND");
+        }
+
+        if (state) {
+            query.append(String.format(" %s %s %d", origin, option, target));
+        } else {
+            query.append(String.format(" NOT %s %s %d", origin, option, target));
+        }
+        return this;
+    }
+
     public QueryBuilder Where(String condition) {
         if (!query.toString().contains("WHERE")) {
             query.append(" WHERE ").append(condition);
@@ -79,7 +96,7 @@ public class QueryBuilder {
         return this;
     }
 
-    public QueryBuilder WhereIn(String column, QueryBuilder subquery, boolean negated) {
+    public QueryBuilder WhereIn(String column, String table, QueryBuilder subquery, boolean negated) {
         if (!query.toString().contains("WHERE")) {
             query.append(" WHERE ");
         } else {
@@ -87,10 +104,30 @@ public class QueryBuilder {
         }
 
         if (negated) {
-            query.append(String.format("%s NOT IN (%s)", column, subquery.toString()));
+            query.append(String.format("%s.%s NOT IN (%s)", table, column, subquery.toString()));
         } else {
-            query.append(String.format("%s IN (%s)", column, subquery.toString()));
+            query.append(String.format("%s.%s IN (%s)", table, column, subquery.toString()));
         }
+        return this;
+    }
+
+    public <T> QueryBuilder WhereIn(String column, String table, List<T> values, boolean negated) {
+        query.append(String.format(" WHERE %s.%s", table,column));
+        if(negated){
+            query.append(" NOT");
+        }
+        query.append(" IN (");
+        for(int i = 0; i < values.size(); i++){
+            String convertedValue = values.get(i).toString();
+            if(i<values.size()-1){
+                query.append(String.format(" %s,", convertedValue).toString());
+            }
+            else{
+                query.append(String.format(" %s", convertedValue).toString());
+            }
+
+        }
+        query.append(" )");
         return this;
     }
 

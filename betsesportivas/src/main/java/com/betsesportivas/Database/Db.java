@@ -8,7 +8,7 @@ public class Db {
 
     private String _url="jdbc:postgresql://127.0.0.1/postgres";
     private String _username="postgres";
-    private String _password="root";
+    private String _password="postgres";
 
     public Db(){}
 

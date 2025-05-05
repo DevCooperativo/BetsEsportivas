@@ -8,15 +8,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.betsesportivas.App;
-import com.betsesportivas.DAO.CategoriaDAO;
-import com.betsesportivas.DAO.JogadorDAO;
-import com.betsesportivas.DAO.IBaseDAO;
 import com.betsesportivas.DAO.IJogadorDAO;
-import com.betsesportivas.DTO.CategoriaDTO;
+import com.betsesportivas.DAO.JogadorDAO;
 import com.betsesportivas.DTO.JogadorDTO;
 import com.betsesportivas.Database.Db;
-import com.betsesportivas.Domain.Categoria;
 import com.betsesportivas.Domain.Jogador;
+import com.betsesportivas.Helpers.ErrorHelper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,14 +33,6 @@ import javafx.scene.layout.Pane;
 
 public class DashboardJogadoresController implements Initializable {
 
-    @FXML
-    private MenuItem menu_categorias_dashboard;
-    @FXML
-    private MenuItem menu_competicoes_dashboard;
-    @FXML
-    private MenuItem menu_apostas_dashboard;
-    @FXML
-    private MenuItem menu_jogadores_dashboard;
     @FXML
     private Button btn_pane_criar_jogador;
     @FXML
@@ -95,6 +84,29 @@ public class DashboardJogadoresController implements Initializable {
 
     private final Db Database = new Db();
     private final IJogadorDAO<Jogador, JogadorDTO> jogadorDAO = new JogadorDAO();
+
+    // #region menus
+    @FXML
+    private MenuItem menu_competicoes_dashboard;
+    @FXML
+    private MenuItem menu_competicoes_relatorio;
+    @FXML
+    private MenuItem menu_apostas_dashboard;
+    @FXML
+    private MenuItem menu_apostas_relatorio;
+    @FXML
+    private MenuItem menu_atletas_dashboard;
+    @FXML
+    private MenuItem menu_atletas_relatorio;
+    @FXML
+    private MenuItem menu_categorias_dashboard;
+    @FXML
+    private MenuItem menu_categorias_relatorio;
+    @FXML
+    private MenuItem menu_jogadores_dashboard;
+    @FXML
+    private MenuItem menu_jogadores_relatorio;
+    // #endregion
 
     public DashboardJogadoresController() throws SQLException {
         jogadorDAO.Connect(Database.Connect());
@@ -174,15 +186,19 @@ public class DashboardJogadoresController implements Initializable {
 
     @FXML
     private void depositarSaldoHandler() throws SQLException {
-        Double valorDepositoDouble = Double.parseDouble(valorDeposito.getText());
-        onDepositoJogadorDTO = tableViewJogadorDeposito.getSelectionModel().getSelectedItem();
-        if (valorDepositoDouble <= 0 || onDepositoJogadorDTO == null)
-            return;
+        try {
+            Double valorDepositoDouble = Double.parseDouble(valorDeposito.getText());
+            onDepositoJogadorDTO = tableViewJogadorDeposito.getSelectionModel().getSelectedItem();
+            if (valorDepositoDouble <= 0 || onDepositoJogadorDTO == null)
+                return;
 
-        jogadorDAO.AdicionarSaldo(onDepositoJogadorDTO.getId(), valorDepositoDouble);
+            jogadorDAO.AdicionarSaldo(onDepositoJogadorDTO.getId(), valorDepositoDouble);
 
-        populateTableViewData();
-        pane_deposito.setVisible(false);
+            populateTableViewData();
+            pane_deposito.setVisible(false);
+        } catch (Exception e) {
+            ErrorHelper.ThrowErrorOnAlert(e);
+        }
 
     }
 
@@ -249,6 +265,7 @@ public class DashboardJogadoresController implements Initializable {
         setMenuEvents();
     }
 
+    // #region menuEvents
     @FXML
     private void setMenuEvents() {
         menu_categorias_dashboard.setOnAction((ActionEvent event) -> {
@@ -258,10 +275,23 @@ public class DashboardJogadoresController implements Initializable {
                 e.getStackTrace();
             }
         });
+        menu_categorias_relatorio.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("RelatorioCategorias");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
         menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
-            System.out.println(".()");
             try {
                 App.setNewScene("DashboardCompeticoes");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_competicoes_relatorio.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("RelatorioCompeticoes");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }
@@ -274,6 +304,29 @@ public class DashboardJogadoresController implements Initializable {
                 ex.getStackTrace();
             }
         });
+        menu_apostas_relatorio.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("RelatorioApostas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+
+        menu_atletas_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardAtletas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+
+        menu_atletas_relatorio.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("RelatorioAtletas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
 
         menu_jogadores_dashboard.setOnAction((ActionEvent event) -> {
             try {
@@ -282,5 +335,13 @@ public class DashboardJogadoresController implements Initializable {
                 ex.getStackTrace();
             }
         });
+        menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("RelatorioJogadores");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
     }
+    // #endregion
 }
