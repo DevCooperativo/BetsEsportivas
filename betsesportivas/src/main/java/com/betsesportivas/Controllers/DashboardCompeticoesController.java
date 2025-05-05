@@ -191,15 +191,23 @@ public class DashboardCompeticoesController implements Initializable {
     @FXML
     private MenuItem menu_competicoes_dashboard;
     @FXML
-    private MenuItem menu_jogadores_dashboard;
+    private MenuItem menu_competicoes_relatorio;
     @FXML
     private MenuItem menu_apostas_dashboard;
+    @FXML
+    private MenuItem menu_apostas_relatorio;
     @FXML
     private MenuItem menu_atletas_dashboard;
     @FXML
     private MenuItem menu_atletas_relatorio;
     @FXML
     private MenuItem menu_categorias_dashboard;
+    @FXML
+    private MenuItem menu_categorias_relatorio;
+    @FXML
+    private MenuItem menu_jogadores_dashboard;
+    @FXML
+    private MenuItem menu_jogadores_relatorio;
     // #endregion
 
     // ================================================================================
@@ -436,22 +444,32 @@ public class DashboardCompeticoesController implements Initializable {
 
     @FXML
     private void saveEdition() throws SQLException {
-        onEditCompeticaoDTO.setNome(textField_editar_nome.getText());
-        onEditCompeticaoDTO.setData_abertura_apostas(DateConverterHelper.ConvertStringToLocalDateTime(
-                (datePicker_editar_inicioApostas.getValue().toString() + " " + textField_editar_inicioApostas
-                        .getText())));
-        onEditCompeticaoDTO.setData_fechamento_apostas(
-                DateConverterHelper.ConvertStringToLocalDateTime((datePicker_editar_terminoApostas.getValue().toString()
-                        + " " + textField_editar_terminoApostas.getText())));
-        onEditCompeticaoDTO.setData_ocorrencia_evento(
-                DateConverterHelper.ConvertStringToLocalDateTime((datePicker_editar_dataOcorrencia.getValue().toString()
-                        + " " + textField_editar_dataOcorrencia.getText())));
-        onEditCompeticaoDTO.setCategoria(comboBox_editar_categoria.getValue());
-        onEditCompeticaoDTO.setCompetidores(pane_editar_competidores_participando.getItems());
-        competicaoDAO.EditarPorDTO(onEditCompeticaoDTO);
-        clearEdition();
-        closeEditPane();
-        populateTableViewData();
+
+        try {
+
+            onEditCompeticaoDTO.setNome(textField_editar_nome.getText());
+            onEditCompeticaoDTO.setData_abertura_apostas(DateConverterHelper.ConvertStringToLocalDateTime(
+                    (datePicker_editar_inicioApostas.getValue().toString() + " " + textField_editar_inicioApostas
+                            .getText())));
+            onEditCompeticaoDTO.setData_fechamento_apostas(
+                    DateConverterHelper
+                            .ConvertStringToLocalDateTime((datePicker_editar_terminoApostas.getValue().toString()
+                                    + " " + textField_editar_terminoApostas.getText())));
+            onEditCompeticaoDTO.setData_ocorrencia_evento(
+                    DateConverterHelper
+                            .ConvertStringToLocalDateTime((datePicker_editar_dataOcorrencia.getValue().toString()
+                                    + " " + textField_editar_dataOcorrencia.getText())));
+            onEditCompeticaoDTO.setCategoria(comboBox_editar_categoria.getValue());
+            onEditCompeticaoDTO.setCompetidores(pane_editar_competidores_participando.getItems());
+            competicaoDAO.EditarPorDTO(onEditCompeticaoDTO);
+            clearEdition();
+            closeEditPane();
+            populateTableViewData();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
     }
 
     @FXML
@@ -544,11 +562,24 @@ public class DashboardCompeticoesController implements Initializable {
                 e.getStackTrace();
             }
         });
+        menu_categorias_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioCategorias");
+            }catch(IOException ex){
+                ex.getStackTrace();
+            }
+        });
         menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
-            System.out.println(".()");
             try {
                 App.setNewScene("DashboardCompeticoes");
             } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_competicoes_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioCompeticoes");
+            }catch(IOException ex){
                 ex.getStackTrace();
             }
         });
@@ -557,6 +588,13 @@ public class DashboardCompeticoesController implements Initializable {
             try {
                 App.setNewScene("DashboardApostas");
             } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_apostas_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioApostas");
+            }catch(IOException ex){
                 ex.getStackTrace();
             }
         });
@@ -581,6 +619,13 @@ public class DashboardCompeticoesController implements Initializable {
             try {
                 App.setNewScene("DashboardJogadores");
             } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_jogadores_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioJogadores");
+            }catch(IOException ex){
                 ex.getStackTrace();
             }
         });

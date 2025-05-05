@@ -29,8 +29,8 @@
             </Menu>
             <Menu fx:id="menu_atletas" mnemonicParsing="false" text="Atletas">
                <items>
-                  <MenuItem fx:id="menu_atletas_dashboard" mnemonicParsing="false" text="Atletas" />
-                  <MenuItem fx:id="menu_atletas_relatorio" mnemonicParsing="false" text="Atletas" />
+                  <MenuItem fx:id="menu_atletas_dashboard" mnemonicParsing="false" text="Dashboard" />
+                  <MenuItem fx:id="menu_atletas_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
             <Menu fx:id="menu_apostas" mnemonicParsing="false" text="Apostas">
@@ -52,7 +52,7 @@
           <AnchorPane layoutX="6.0" layoutY="8.0" minHeight="0.0" minWidth="0.0" prefHeight="566.0" prefWidth="793.0" style="-fx-background-color: white;">
                <children>
                   <Label layoutX="272.0" layoutY="10.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Categorias" />
-                  <TableView fx:id="tblView_competicoes" layoutY="184.0" prefHeight="382.0" prefWidth="793.0">
+                  <TableView fx:id="tblView_competicoes" layoutX="-6.0" layoutY="183.0" prefHeight="382.0" prefWidth="793.0">
                     <columns>
                         <TableColumn fx:id="tblViewColumn_competicoes_categoria" prefWidth="185.0" style="-fx-font-size: 12;" text="Nome" />
                       <TableColumn fx:id="tblViewColumn_competicoes_terminoApostas" prefWidth="129.0" text="Vezes utilizada (total)" />

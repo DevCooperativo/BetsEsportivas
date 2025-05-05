@@ -27,7 +27,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 public class DashboardCategoriasController implements Initializable {
 
@@ -86,14 +85,28 @@ public class DashboardCategoriasController implements Initializable {
     @FXML
     private Button btn_criarCategoria;
 
-    @FXML
-    private MenuItem menu_categorias_dashboard;
+    //#region menus
     @FXML
     private MenuItem menu_competicoes_dashboard;
     @FXML
+    private MenuItem menu_competicoes_relatorio;
+    @FXML
     private MenuItem menu_apostas_dashboard;
     @FXML
+    private MenuItem menu_apostas_relatorio;
+    @FXML
+    private MenuItem menu_atletas_dashboard;
+    @FXML
+    private MenuItem menu_atletas_relatorio;
+    @FXML
+    private MenuItem menu_categorias_dashboard;
+    @FXML
+    private MenuItem menu_categorias_relatorio;
+    @FXML
     private MenuItem menu_jogadores_dashboard;
+    @FXML
+    private MenuItem menu_jogadores_relatorio;
+    // #endregion
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -237,11 +250,24 @@ public class DashboardCategoriasController implements Initializable {
                 e.getStackTrace();
             }
         });
+        menu_categorias_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioCategorias");
+            }catch(IOException ex){
+                ex.getStackTrace();
+            }
+        });
         menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
-            System.out.println(".()");
             try {
                 App.setNewScene("DashboardCompeticoes");
             } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_competicoes_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioCompeticoes");
+            }catch(IOException ex){
                 ex.getStackTrace();
             }
         });
@@ -249,6 +275,29 @@ public class DashboardCategoriasController implements Initializable {
         menu_apostas_dashboard.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("DashboardApostas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_apostas_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioApostas");
+            }catch(IOException ex){
+                ex.getStackTrace();
+            }
+        });
+
+        menu_atletas_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardAtletas");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+
+        menu_atletas_relatorio.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("RelatorioAtletas");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }
@@ -261,5 +310,13 @@ public class DashboardCategoriasController implements Initializable {
                 ex.getStackTrace();
             }
         });
+        menu_jogadores_relatorio.setOnAction((ActionEvent event) ->{
+            try{
+                App.setNewScene("RelatorioJogadores");
+            }catch(IOException ex){
+                ex.getStackTrace();
+            }
+        });
     }
+    // #endregion
 }
