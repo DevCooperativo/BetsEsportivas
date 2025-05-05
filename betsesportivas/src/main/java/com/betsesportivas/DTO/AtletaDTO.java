@@ -1,18 +1,30 @@
 package com.betsesportivas.DTO;
 
-public class AtletaDTO implements IBaseDTO {
-    public int Id;
-    public String Nome;
-    public String Sobrenome;
-    public int Vitorias;
-    public int Participacoes;
+import java.time.LocalDate;
 
-    public AtletaDTO(int Id, String Nome, String Sobrenome, int Participacoes, int Vitorias) {
+public class AtletaDTO implements IBaseDTO {
+    private int Id;
+    private String Nome;
+    private String Sobrenome;
+    private char Sexo;
+    private LocalDate Nascimento;
+    private int Vitorias;
+    private int Participacoes;
+
+    public AtletaDTO(int Id, String Nome, String Sobrenome, char Sexo, LocalDate Nascimento, int Participacoes, int Vitorias) {
         this.Id = Id;
         this.Nome = Nome;
         this.Sobrenome = Sobrenome;
         this.Participacoes = Participacoes;
         this.Vitorias = Vitorias;
+    }
+
+    public AtletaDTO(int Id, String Nome, String Sobrenome, char Sexo, LocalDate Nascimento) {
+        this.Id = Id;
+        this.Nome = Nome;
+        this.Sobrenome = Sobrenome;
+        this.Sexo = Sexo;
+        this.Nascimento = Nascimento;
     }
 
     public int getId() {
@@ -37,6 +49,22 @@ public class AtletaDTO implements IBaseDTO {
 
     public void setSobrenome(String sobrenome) {
         Sobrenome = sobrenome;
+    }
+
+    public char getSexo() {
+        return Sexo;
+    }
+
+    public void setSexo(char sexo) {
+        Sexo = sexo;
+    }
+
+    public LocalDate getNascimento() {
+        return Nascimento;
+    }
+
+    public void setNascimento(LocalDate nascimento) {
+        Nascimento = nascimento;
     }
 
     public int getVitorias() {

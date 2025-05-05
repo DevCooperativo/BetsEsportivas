@@ -50,4 +50,15 @@ public class FieldsHelper {
             }
         });
     }
+
+    public static char recuperarSexoPorString(String sexoString) throws Exception {
+        switch (sexoString) {
+            case "Masculino":
+                return 'M';
+            case "Feminino":
+                return 'F';
+            default:
+                throw new Exception("Sexo inválido");
+        }
+    }
 }
