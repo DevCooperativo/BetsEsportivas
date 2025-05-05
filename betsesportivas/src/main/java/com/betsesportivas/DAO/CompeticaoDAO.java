@@ -178,10 +178,13 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                                 int innerId = innerResult.getInt("id");
                                 String innerNome = innerResult.getString("nome");
                                 String innerSobrenome = innerResult.getString("sobrenome");
+                                LocalDate nascimento = innerResult.getDate("nascimento").toLocalDate();
+                                char sexo = innerResult.getString("sexo").charAt(0);
                                 int innerVitorias = innerResult.getInt("vitorias");
                                 int innerParticipacoes = innerResult.getInt("participacoes");
                                 competidorDTO.add(new CompetidorDTO(
-                                                new AtletaDTO(innerId, innerNome, innerSobrenome, innerVitorias,
+                                                new AtletaDTO(innerId, innerNome, innerSobrenome, sexo, nascimento,
+                                                                innerVitorias,
                                                                 innerParticipacoes),
                                                 innerCompeticao_id, innerNumero, innerPosicao_inicial,
                                                 innerPosicao_final));
@@ -194,47 +197,50 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                 return competicoes;
         }
 
-    @Override
-    public CompeticaoDTO EditarPorDTO(CompeticaoDTO valor) throws SQLException {
-        // TODO Auto-generated method stub
-        try {
-            _conn.setAutoCommit(false);
-            // #region atleta/competidor
-            List<Integer> participando = new ArrayList<>(
-                    valor.Competidores.stream().map(x -> x.AtletaDTO.getId()).collect(Collectors.toList()));
-            PreparedStatement sql = _conn.prepareStatement(QueryBuilder.Delete("competidor").WhereIn("atleta_id", "competidor",participando, true).Where("competidor.competicao_id", true, "=", valor.getId()).toString());
-            sql.execute();
-            for (int i : participando) {
-                sql = _conn.prepareStatement(
-                        "INSERT INTO competidor(atleta_id, competicao_id, posicao_inicial, numero) values(?,?,?,?)");
-                sql.setInt(1, i);
-                sql.setInt(2, valor.getId());
-                // sql.
-                sql.execute();
+        @Override
+        public CompeticaoDTO EditarPorDTO(CompeticaoDTO valor) throws SQLException {
+                // TODO Auto-generated method stub
+                try {
+                        _conn.setAutoCommit(false);
+                        // #region atleta/competidor
+                        List<Integer> participando = new ArrayList<>(
+                                        valor.Competidores.stream().map(x -> x.AtletaDTO.getId())
+                                                        .collect(Collectors.toList()));
+                        PreparedStatement sql = _conn.prepareStatement(QueryBuilder.Delete("competidor")
+                                        .WhereIn("atleta_id", "competidor", participando, true)
+                                        .Where("competidor.competicao_id", true, "=", valor.getId()).toString());
+                        sql.execute();
+                        for (int i : participando) {
+                                sql = _conn.prepareStatement(
+                                                "INSERT INTO competidor(atleta_id, competicao_id, posicao_inicial, numero) values(?,?,?,?)");
+                                sql.setInt(1, i);
+                                sql.setInt(2, valor.getId());
+                                // sql.
+                                sql.execute();
 
-            }
-            // #endregion
-            sql = _conn.prepareStatement(
-                    "UPDATE competicao SET nome=?, data_abertura_apostas = ?, data_fechamento_apostas = ?, data_ocorrencia_evento = ?, categoria_id = ?, valor_limite_vencedor = ? WHERE id = ?");
-            sql.setString(1, valor.getNome());
-            sql.setTimestamp(2, DateConverterHelper
-                    .ConvertLocalDateTimeToTimestamp(valor.getData_abertura_apostas()));
-            sql.setTimestamp(3,
-                    DateConverterHelper.ConvertLocalDateTimeToTimestamp(
-                            valor.getData_fechamento_apostas()));
-            sql.setTimestamp(4, DateConverterHelper
-                    .ConvertLocalDateTimeToTimestamp(valor.getData_ocorrencia_evento()));
-            sql.setInt(5, valor.getCategoria().getId());
-            sql.setDouble(6, valor.getValorEmJogo());
-            sql.setInt(7, valor.getId());
-            sql.execute();
-            _conn.commit();
-        } catch (Exception e) {
-            _conn.rollback();
-            throw e;
+                        }
+                        // #endregion
+                        sql = _conn.prepareStatement(
+                                        "UPDATE competicao SET nome=?, data_abertura_apostas = ?, data_fechamento_apostas = ?, data_ocorrencia_evento = ?, categoria_id = ?, valor_limite_vencedor = ? WHERE id = ?");
+                        sql.setString(1, valor.getNome());
+                        sql.setTimestamp(2, DateConverterHelper
+                                        .ConvertLocalDateTimeToTimestamp(valor.getData_abertura_apostas()));
+                        sql.setTimestamp(3,
+                                        DateConverterHelper.ConvertLocalDateTimeToTimestamp(
+                                                        valor.getData_fechamento_apostas()));
+                        sql.setTimestamp(4, DateConverterHelper
+                                        .ConvertLocalDateTimeToTimestamp(valor.getData_ocorrencia_evento()));
+                        sql.setInt(5, valor.getCategoria().getId());
+                        sql.setDouble(6, valor.getValorEmJogo());
+                        sql.setInt(7, valor.getId());
+                        sql.execute();
+                        _conn.commit();
+                } catch (Exception e) {
+                        _conn.rollback();
+                        throw e;
+                }
+                return valor;
         }
-        return valor;
-    }
 
         @Override
         public CompeticaoDTO CriarPorDTO(CompeticaoDTO valor) throws SQLException {

@@ -144,17 +144,20 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
                                         .Where(String.format("competidor.competicao_id = %d", idCompeticao))),
                                 true)
                         .GroupBy("id", "atleta").toString());
-                        System.out.println(sql);
+        System.out.println(sql);
         ResultSet result = sql.executeQuery();
         while (result.next()) {
             int resultId = result.getInt("id");
             String resultNome = result.getString("nome");
             String resultSobrenome = result.getString("sobrenome");
+            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            char sexo = result.getString("sexo").charAt(0);
             int resultVitorias = result.getInt("vitorias");
             int resultParticipacoes = result.getInt("participacoes");
             CompetidorDTO
                     .add(new CompetidorDTO(
-                            new AtletaDTO(resultId, resultNome, resultSobrenome, resultVitorias, resultParticipacoes)));
+                            new AtletaDTO(resultId, resultNome, resultSobrenome, sexo, nascimento, resultVitorias,
+                                    resultParticipacoes)));
         }
         return CompetidorDTO;
     }

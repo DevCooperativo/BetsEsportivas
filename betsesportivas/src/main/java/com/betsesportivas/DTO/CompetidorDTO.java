@@ -10,7 +10,7 @@ public class CompetidorDTO {
 
     public CompetidorDTO(AtletaDTO AtletaDTO, int Competicao_id, int Numero, int Posicao_final, int Posicao_inicial) {
         this.AtletaDTO = AtletaDTO;
-        this.Atleta_id = AtletaDTO.Id;
+        this.Atleta_id = AtletaDTO.getId();
         this.Competicao_id = Competicao_id;
         this.Numero = Numero;
         this.Posicao_final = Posicao_final;
