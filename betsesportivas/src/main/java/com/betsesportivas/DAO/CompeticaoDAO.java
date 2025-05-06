@@ -200,7 +200,7 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
 
     @Override
     public CompeticaoDTO EditarPorDTO(CompeticaoDTO valor) throws SQLException {
-        // TODO Auto-generated method stub
+        // // TODO Auto-generated method stub
         try {
             _conn.setAutoCommit(false);
             QueryBuilder qBuilder = new QueryBuilder();
@@ -237,7 +237,7 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                             .Update("competicao")
                             .Set("nome", valor.getNome())
                             .Set("data_abertura_apostas", DateConverterHelper
-                                    .ConvertLocalDateTimeToTimestamp(valor.getData_abertura_apostas()).toString())
+                                    .ConvertLocalDateTimeToTimestamp(valor.getData_abertura_apostas()).toString()) 
                             .Set("data_fechamento_apostas", DateConverterHelper
                                     .ConvertLocalDateTimeToTimestamp(valor.getData_fechamento_apostas()).toString())
                             .Set("data_ocorrencia_evento", DateConverterHelper
@@ -247,6 +247,7 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                             .Where(String.format("competicao.id = %d", valor.getId())).toString());
             sql.execute();
             _conn.commit();
+            return valor;
         } catch (Exception e) {
             _conn.rollback();
             throw e;

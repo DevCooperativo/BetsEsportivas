@@ -242,7 +242,6 @@ public class DashboardCompeticoesController implements Initializable {
         });
         tblViewColumn_competicoes_nome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tblViewColumn_competicoes_categoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
-        tblViewColumn_competicoes_categoria.setCellValueFactory(c -> c.getValue().nameProperty());
         tblViewColumn_competicoes_dataCadastro.setCellValueFactory(new PropertyValueFactory<>("data_cadastro"));
         tblViewColumn_competicoes_dataInicioApostas
                 .setCellValueFactory(new PropertyValueFactory<>("data_abertura_apostas"));
