@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.betsesportivas.DTO.AtletaDTO;
 import com.betsesportivas.Domain.Atleta;
+import com.betsesportivas.Helpers.DateConverterHelper;
 
 public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
     private Connection _conn;
@@ -94,14 +95,32 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
 
     @Override
     public List<AtletaDTO> BuscarTodosOsDTO() throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'BuscarTodosOsDTO'");
+        List<AtletaDTO> atletas = new ArrayList<>();
+        PreparedStatement sql = _conn.prepareStatement("SELECT * FROM atleta");
+        ResultSet result = sql.executeQuery();
+        while (result.next()) {
+            int id = result.getInt("id");
+            String nome = result.getString("nome");
+            String sobrenome = result.getString("sobrenome");
+            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            char sexo = result.getString("sexo").charAt(0);
+            int vitorias = result.getInt("vitorias");
+            int participacoes = result.getInt("participacoes");
+            atletas.add(new AtletaDTO(id, nome, sobrenome, sexo, nascimento, vitorias, participacoes));
+        }
+        return atletas;
     }
 
     @Override
     public AtletaDTO EditarPorDTO(AtletaDTO valor) throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'EditarPorDTO'");
+        PreparedStatement sql = _conn
+                .prepareStatement(
+                        "UPDATE atleta SET nome = ?, sobrenome =? WHERE id=?");
+        sql.setString(1, valor.getNome());
+        sql.setString(2, valor.getSobrenome());
+        sql.setInt(3, valor.getId());
+        sql.execute();
+        return valor;
     }
 
     @Override
@@ -115,9 +134,12 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
             int resultId = result.getInt("id");
             String resultNome = result.getString("nome");
             String resultSobrenome = result.getString("sobrenome");
+            char sexo = result.getString("sexo").charAt(0);
+            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
             int resultVitorias = result.getInt("vitorias");
             int resultParticipacoes = result.getInt("participacoes");
-            atletaDTO.add(new AtletaDTO(resultId, resultNome, resultSobrenome, resultVitorias, resultParticipacoes));
+            atletaDTO.add(new AtletaDTO(resultId, resultNome, resultSobrenome, sexo, nascimento, resultVitorias,
+                    resultParticipacoes));
         }
         return atletaDTO;
     }
@@ -134,16 +156,26 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
             int resultId = result.getInt("id");
             String resultNome = result.getString("nome");
             String resultSobrenome = result.getString("sobrenome");
+            char sexo = result.getString("sexo").charAt(0);
+            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
             int resultVitorias = result.getInt("vitorias");
             int resultParticipacoes = result.getInt("participacoes");
-            atletaDTO.add(new AtletaDTO(resultId, resultNome, resultSobrenome, resultVitorias, resultParticipacoes));
+            atletaDTO.add(new AtletaDTO(resultId, resultNome, resultSobrenome, sexo, nascimento, resultVitorias,
+                    resultParticipacoes));
         }
         return atletaDTO;
     }
 
     @Override
     public AtletaDTO CriarPorDTO(AtletaDTO valor) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        PreparedStatement sql = _conn
+                .prepareStatement("INSERT INTO atleta(nome, sobrenome, nascimento, sexo) VALUES(?,?,?,?)");
+        sql.setString(1, valor.getNome());
+        sql.setString(2, valor.getSobrenome());
+        sql.setTimestamp(3, DateConverterHelper.ConvertLocalDateToTimestamp(valor.getNascimento()));
+        sql.setString(4, "" + valor.getSexo());
+        sql.execute();
+        return valor;
     }
 
 }

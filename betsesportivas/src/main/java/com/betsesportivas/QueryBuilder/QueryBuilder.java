@@ -1,5 +1,6 @@
 package com.betsesportivas.QueryBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class QueryBuilder {
@@ -24,6 +25,92 @@ public class QueryBuilder {
         } else {
             query.append(String.format(" %s.*", table));
         }
+        return this;
+    }
+
+    public QueryBuilder Update(String table) {
+        query.append(String.format("UPDATE %s", table));
+        return this;
+    }
+
+    public QueryBuilder Set(String column, String value) {
+        if (!query.toString().contains("SET")) {
+            query.append(String.format(" SET %s = %s", column, value));
+        } else {
+            query.append(String.format(", SET %s = %s", column, value));
+        }
+        return this;
+    }
+
+    public QueryBuilder Set(String column, int value) {
+        if (!query.toString().contains("SET")) {
+            query.append(String.format(" SET %s = %d", column, value));
+        } else {
+            query.append(String.format(", SET %s = %d", column, value));
+        }
+        return this;
+    }
+
+    public QueryBuilder Set(String column, double value) {
+        if (!query.toString().contains("SET")) {
+            query.append(String.format(" SET %s = %f", column, value));
+        } else {
+            query.append(String.format(", SET %s = %f", column, value));
+        }
+        return this;
+    }
+
+    public QueryBuilder Insert(String table, List<String> columns) {
+        query.append(String.format(" INSERT INTO %s (", table));
+        for (int i = 0; i < columns.size(); i++) {
+            String convertedValue = columns.get(i);
+            if (i < columns.size() - 1) {
+                query.append(String.format(" %s,", convertedValue));
+            } else {
+                query.append(String.format(" %s", convertedValue));
+            }
+        }
+        return this;
+    }
+
+    public QueryBuilder InsertValue(String value) {
+        if (!query.toString().contains(("VALUES"))) {
+            query.append(String.format(" VALUES( %s", value));
+        } else {
+            query.append(String.format(", %s", value));
+        }
+        return this;
+    }
+
+    public QueryBuilder InsertValue(double value) {
+        if (!query.toString().contains(("VALUES"))) {
+            query.append(String.format(" VALUES( %f", value));
+        } else {
+            query.append(String.format(", %f", value));
+        }
+        return this;
+    }
+
+    public QueryBuilder InsertValue(int value) {
+        if (!query.toString().contains(("VALUES"))) {
+            query.append(String.format(" VALUES( %d", value));
+        } else {
+            query.append(String.format(", %d", value));
+        }
+        return this;
+    }
+
+    public QueryBuilder InsertValue(LocalDateTime value) {
+        if (!query.toString().contains(("VALUES"))) {
+            query.append(String.format(" VALUES( %s", value.toString()));
+        } else {
+            query.append(String.format(", %s", value.toString()));
+        }
+        return this;
+    }
+
+    public QueryBuilder EndInsertValue() {
+        query.append(" )");
         return this;
     }
 
@@ -112,17 +199,16 @@ public class QueryBuilder {
     }
 
     public <T> QueryBuilder WhereIn(String column, String table, List<T> values, boolean negated) {
-        query.append(String.format(" WHERE %s.%s", table,column));
-        if(negated){
+        query.append(String.format(" WHERE %s.%s", table, column));
+        if (!negated) {
             query.append(" NOT");
         }
         query.append(" IN (");
-        for(int i = 0; i < values.size(); i++){
+        for (int i = 0; i < values.size(); i++) {
             String convertedValue = values.get(i).toString();
-            if(i<values.size()-1){
+            if (i < values.size() - 1) {
                 query.append(String.format(" %s,", convertedValue).toString());
-            }
-            else{
+            } else {
                 query.append(String.format(" %s", convertedValue).toString());
             }
 
@@ -146,6 +232,11 @@ public class QueryBuilder {
         } else {
             query.append(String.format(", %s.%s", table, column));
         }
+        return this;
+    }
+
+    public QueryBuilder emptyQuery() {
+        query = new StringBuilder();
         return this;
     }
 
