@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS competicao (
     data_fechamento_apostas TIMESTAMP NOT NULL,
     data_ocorrencia_evento TIMESTAMP NOT NULL,
     categoria_id INTEGER NOT NULL,
-    valor_limite_vencedor NUMERIC(11,2) NOT NULL,
+    valor_maximo_aposta NUMERIC(11,2) NOT NULL,
+    valor_minimo_aposta NUMERIC(11,2) NOT NULL,
 
     data_cadastro TIMESTAMP NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categoria (id)

@@ -120,8 +120,24 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
 
     @Override
     public List<CompetidorDTO> BuscarTodosOsDTO() throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'BuscarTodosOsDTO'");
+        List<CompetidorDTO> competidores = new LinkedList<>();
+        PreparedStatement sql = _conn
+                .prepareStatement(new QueryBuilder().Select(null, "atleta").From("atleta").toString());
+        ResultSet result = sql.executeQuery();
+        while (result.next()) {
+            int resultId = result.getInt("id");
+            String resultNome = result.getString("nome");
+            String resultSobrenome = result.getString("sobrenome");
+            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            char sexo = result.getString("sexo").charAt(0);
+            int resultVitorias = result.getInt("vitorias");
+            int resultParticipacoes = result.getInt("participacoes");
+            competidores
+                    .add(new CompetidorDTO(
+                            new AtletaDTO(resultId, resultNome, resultSobrenome, sexo, nascimento, resultVitorias,
+                                    resultParticipacoes)));
+        }
+        return competidores;
     }
 
     @Override
