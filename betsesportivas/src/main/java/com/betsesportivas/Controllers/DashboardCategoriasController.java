@@ -11,22 +11,25 @@ import com.betsesportivas.DAO.CategoriaDAO;
 import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.Database.Db;
 import com.betsesportivas.Helpers.ColorHelper;
+import com.betsesportivas.Helpers.ErrorHelper;
+import com.betsesportivas.Helpers.ParserHelper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class DashboardCategoriasController implements Initializable {
 
@@ -85,7 +88,7 @@ public class DashboardCategoriasController implements Initializable {
     @FXML
     private Button btn_criarCategoria;
 
-    //#region menus
+    // #region menus
     @FXML
     private MenuItem menu_competicoes_dashboard;
     @FXML
@@ -121,6 +124,23 @@ public class DashboardCategoriasController implements Initializable {
 
     @FXML
     private void initializeTableView() throws SQLException {
+        tblView_categorias.setRowFactory(row -> new TableRow<CategoriaDTO>() {
+            @Override
+            protected void updateItem(CategoriaDTO item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setStyle(""); // Limpa o estilo se a linha estiver vazia
+                } else {
+                    // Exemplo de lógica de estilo
+                    if (!item.getCor().isEmpty()) {
+                        setStyle(String.format("-fx-background-color: %s44;", item.getCor()));
+                    } else {
+                        setStyle("-fx-background-color: white;");
+                    }
+                }
+            }
+
+        });
         tblViewColumn_categorias_nome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
         tblViewColumn_categorias_vezesUtilizadas.setCellValueFactory(new PropertyValueFactory<>("VezesUtilizada"));
 
@@ -133,6 +153,15 @@ public class DashboardCategoriasController implements Initializable {
         obvservableCategoriaDTO = FXCollections.observableArrayList(categoriaDTO);
         tblView_categorias.setItems(obvservableCategoriaDTO);
 
+    }
+
+    @FXML
+    private void closeCreatePane() {
+        textField_pane_criar_nome.setText("");
+        textField_pane_criar_descricao.setText("");
+        textField_pane_criar_max_participantes.setText("");
+        colorPicker_pane_criar_max_participantes.setValue(Color.WHITE);
+        pane_criar.setVisible(false);
     }
 
     @FXML
@@ -154,20 +183,12 @@ public class DashboardCategoriasController implements Initializable {
     }
 
     @FXML
-    private void saveEdition() throws SQLException {
-        onEditCategoriaDTO.setNome(textField_pane_editar_nome.getText());
-        categoriaDAO.EditarPorDTO(onEditCategoriaDTO);
-        closeEditPane();
-        populateTableViewData();
-    }
-
-    @FXML
     private void excludeEdition() throws SQLException {
         try {
             categoriaDAO.Excluir(onEditCategoriaDTO.getId());
+            populateTableViewData();
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
-            alert.show();
+            ErrorHelper.ThrowErrorOnAlert(e);
         }
         closeEditPane();
     }
@@ -180,7 +201,7 @@ public class DashboardCategoriasController implements Initializable {
         });
 
         btn_pane_criar_fechar.setOnAction((ActionEvent event) -> {
-            pane_criar.setVisible(false);
+            closeCreatePane();
         });
 
         btn_pane_editar_fechar.setOnAction((ActionEvent event) -> {
@@ -211,7 +232,6 @@ public class DashboardCategoriasController implements Initializable {
             String descricao = textField_pane_criar_descricao.getText();
             int maxParticipantes = Integer.parseInt(textField_pane_criar_max_participantes.getText());
             String cor = ColorHelper.toHexString(colorPicker_pane_criar_max_participantes.getValue());
-
             CategoriaDTO categoriaDTO = new CategoriaDTO(0, nome, descricao, cor, 0, maxParticipantes, true);
 
             categoriaDAO.CriarPorDTO(categoriaDTO);
@@ -226,18 +246,29 @@ public class DashboardCategoriasController implements Initializable {
     private void editarCategoriaHandler() {
         try {
             String nome = textField_pane_editar_nome.getText();
+            if (nome.isEmpty())
+                throw new Exception("Insira um nome para a categoria");
             String descricao = textField_pane_editar_descricao.getText();
-            int maxParticipantes = Integer.parseInt(textField_pane_editar_max_participantes.getText());
+            if (descricao.isEmpty())
+                throw new Exception("Insira uma descrição para a categoria");
+            int maxParticipantes = ParserHelper.tryParseInt(textField_pane_editar_max_participantes.getText());
+            if (maxParticipantes < 2)
+                throw new Exception("Insira um número máximo de participantes maior ou igual a 2 para a categoria");
+
             String cor = ColorHelper.toHexString(colorPicker_pane_editar_max_participantes.getValue());
             boolean isAtiva = checkBoxAtivoEditar.isSelected();
 
-            CategoriaDTO categoriaDTO = new CategoriaDTO(onEditCategoriaDTO.getId(), nome, descricao, cor, onEditCategoriaDTO.getVezesUtilizada(), maxParticipantes, isAtiva);
+            CategoriaDTO categoriaDTO = new CategoriaDTO(onEditCategoriaDTO.getId(), nome, descricao, cor,
+                    onEditCategoriaDTO.getVezesUtilizada(), maxParticipantes, isAtiva);
 
             categoriaDAO.EditarPorDTO(categoriaDTO);
             populateTableViewData();
             pane_editar.setVisible(false);
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            if (ex instanceof NumberFormatException) {
+
+            }
+            ErrorHelper.ThrowErrorOnAlert(ex);
         }
     }
 
@@ -250,10 +281,10 @@ public class DashboardCategoriasController implements Initializable {
                 e.getStackTrace();
             }
         });
-        menu_categorias_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_categorias_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioCategorias");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -264,10 +295,10 @@ public class DashboardCategoriasController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_competicoes_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_competicoes_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioCompeticoes");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -279,10 +310,10 @@ public class DashboardCategoriasController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_apostas_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_apostas_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioApostas");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -310,10 +341,10 @@ public class DashboardCategoriasController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_jogadores_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioJogadores");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -171,16 +172,21 @@ public class DashboardJogadoresController implements Initializable {
 
     @FXML
     private void handleFecharCriar() {
+        textFieldEmailJogador.setText("");
+        textFieldNomeJogador.setText("");
         pane_criar.setVisible(false);
     }
 
     @FXML
     private void handleFecharEditar() {
+        textFieldEditarEmailJogador.setText("");
+        textFieldEditarNomeJogador.setText("");
         pane_editar.setVisible(false);
     }
 
     @FXML
     private void handleFecharDeposito() {
+        valorDeposito.setText("0.0");
         pane_deposito.setVisible(false);
     }
 
@@ -189,12 +195,15 @@ public class DashboardJogadoresController implements Initializable {
         try {
             Double valorDepositoDouble = Double.parseDouble(valorDeposito.getText());
             onDepositoJogadorDTO = tableViewJogadorDeposito.getSelectionModel().getSelectedItem();
-            if (valorDepositoDouble <= 0 || onDepositoJogadorDTO == null)
-                return;
+            if (onDepositoJogadorDTO == null)
+                throw new Exception("Selecione um jogador");
+            if (valorDepositoDouble <= 0)
+                throw new Exception("Insira um valor válido para depósito");
 
             jogadorDAO.AdicionarSaldo(onDepositoJogadorDTO.getId(), valorDepositoDouble);
 
             populateTableViewData();
+            valorDeposito.setText("0.0");
             pane_deposito.setVisible(false);
         } catch (Exception e) {
             ErrorHelper.ThrowErrorOnAlert(e);
@@ -219,17 +228,27 @@ public class DashboardJogadoresController implements Initializable {
 
     @FXML
     private void criarJogadorHandler() throws SQLException {
-        String emailJogador = textFieldEmailJogador.getText();
-        String nomeJogador = textFieldNomeJogador.getText();
-        LocalDate dataNascimento = datePickerDataNascimento.getValue();
+        try {
+            String emailJogador = textFieldEmailJogador.getText();
+            String nomeJogador = textFieldNomeJogador.getText();
+            LocalDate dataNascimento = datePickerDataNascimento.getValue();
+            if (emailJogador.isEmpty())
+                throw new Exception("Insira o email do jogador");
+            if (nomeJogador.isEmpty())
+                throw new Exception("Insira o nome do jogador");
+            if ((LocalDateTime.now().getYear() - dataNascimento.getYear()) < 18)
+                throw new Exception("O jogador deve ser maior de 18 anos para ser cadastrado no sistema");
 
-        JogadorDTO jogadorDTO = new JogadorDTO(0, nomeJogador, dataNascimento, 0.0, emailJogador, true);
+            JogadorDTO jogadorDTO = new JogadorDTO(0, nomeJogador, dataNascimento, 0.0, emailJogador, true);
 
-        jogadorDAO.CriarPorDTO(jogadorDTO);
+            jogadorDAO.CriarPorDTO(jogadorDTO);
 
-        // jogadorDA
-        populateTableViewData();
-        pane_criar.setVisible(false);
+            // jogadorDA
+            populateTableViewData();
+            pane_criar.setVisible(false);
+        } catch (Exception ex) {
+            ErrorHelper.ThrowErrorOnAlert(ex);
+        }
     }
 
     @FXML
@@ -248,16 +267,24 @@ public class DashboardJogadoresController implements Initializable {
 
     @FXML
     private void editarJogadorHandler() throws SQLException {
-        String emailJogador = textFieldEditarEmailJogador.getText();
-        String nomeJogador = textFieldEditarNomeJogador.getText();
+        try {
+            String emailJogador = textFieldEditarEmailJogador.getText();
+            String nomeJogador = textFieldEditarNomeJogador.getText();
+            if (emailJogador.isEmpty())
+                throw new Exception("Insira o email do jogador");
+            if (nomeJogador.isEmpty())
+                throw new Exception("Insira o nome do jogador");
+            JogadorDTO jogadorDTO = new JogadorDTO(onEditJogadorDTO.getId(), nomeJogador, null, 0.0, emailJogador,
+                    true);
 
-        JogadorDTO jogadorDTO = new JogadorDTO(onEditJogadorDTO.getId(), nomeJogador, null, 0.0, emailJogador, true);
+            jogadorDAO.EditarPorDTO(jogadorDTO);
 
-        jogadorDAO.EditarPorDTO(jogadorDTO);
-
-        // jogadorDA
-        populateTableViewData();
-        pane_editar.setVisible(false);
+            // jogadorDA
+            populateTableViewData();
+            pane_editar.setVisible(false);
+        } catch (Exception e) {
+            ErrorHelper.ThrowErrorOnAlert(e);
+        }
     }
 
     @FXML

@@ -30,6 +30,7 @@ import com.betsesportivas.Domain.Categoria;
 import com.betsesportivas.Domain.Competicao;
 import com.betsesportivas.Domain.Competidor;
 import com.betsesportivas.Helpers.DateConverterHelper;
+import com.betsesportivas.Helpers.ErrorHelper;
 import com.betsesportivas.Helpers.FieldsHelper;
 
 import javafx.collections.FXCollections;
@@ -44,6 +45,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -217,12 +219,29 @@ public class DashboardCompeticoesController implements Initializable {
         List<CompeticaoDTO> listCompeticaoDTO = competicaoDAO.BuscarTodosOsDTO();
         observableCompeticaoDTO = FXCollections.observableArrayList(listCompeticaoDTO);
         tblView_competicoes.setItems(observableCompeticaoDTO);
+
     }
 
     private void initializeTableView() throws SQLException {
+        tblView_competicoes.setRowFactory(row -> new TableRow<CompeticaoDTO>() {
+            @Override
+            protected void updateItem(CompeticaoDTO item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setStyle(""); // Limpa o estilo se a linha estiver vazia
+                } else {
+                    // Exemplo de lógica de estilo
+                    if (!item.getCategoria().getCor().isEmpty()) {
+                        setStyle(String.format("-fx-background-color: %s44;", item.getCategoria().getCor()));
+                    } else {
+                        setStyle("-fx-background-color: white;");
+                    }
+                }
+            }
+
+        });
         tblViewColumn_competicoes_nome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tblViewColumn_competicoes_categoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
-        tblViewColumn_competicoes_categoria.setCellValueFactory(c -> c.getValue().nameProperty());
         tblViewColumn_competicoes_dataCadastro.setCellValueFactory(new PropertyValueFactory<>("data_cadastro"));
         tblViewColumn_competicoes_dataInicioApostas
                 .setCellValueFactory(new PropertyValueFactory<>("data_abertura_apostas"));
@@ -466,9 +485,7 @@ public class DashboardCompeticoesController implements Initializable {
             closeEditPane();
             populateTableViewData();
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(e.getMessage());
-            alert.show();
+            ErrorHelper.ThrowErrorOnAlert(e);
         }
     }
 
@@ -562,10 +579,10 @@ public class DashboardCompeticoesController implements Initializable {
                 e.getStackTrace();
             }
         });
-        menu_categorias_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_categorias_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioCategorias");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -576,10 +593,10 @@ public class DashboardCompeticoesController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_competicoes_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_competicoes_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioCompeticoes");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -591,10 +608,10 @@ public class DashboardCompeticoesController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_apostas_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_apostas_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioApostas");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
@@ -622,10 +639,10 @@ public class DashboardCompeticoesController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_jogadores_relatorio.setOnAction((ActionEvent event) ->{
-            try{
+        menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
+            try {
                 App.setNewScene("RelatorioJogadores");
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.getStackTrace();
             }
         });
