@@ -3,6 +3,8 @@ package com.betsesportivas.QueryBuilder;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.betsesportivas.Helpers.ParserHelper;
+
 public class QueryBuilder {
     private StringBuilder query = new StringBuilder();
 
@@ -35,9 +37,9 @@ public class QueryBuilder {
 
     public QueryBuilder Set(String column, String value) {
         if (!query.toString().contains("SET")) {
-            query.append(String.format(" SET %s = %s", column, value));
+            query.append(String.format(" SET %s = '%s'", column, value));
         } else {
-            query.append(String.format(", SET %s = %s", column, value));
+            query.append(String.format(", %s = '%s'", column, value));
         }
         return this;
     }
@@ -46,16 +48,16 @@ public class QueryBuilder {
         if (!query.toString().contains("SET")) {
             query.append(String.format(" SET %s = %d", column, value));
         } else {
-            query.append(String.format(", SET %s = %d", column, value));
+            query.append(String.format(", %s = %d", column, value));
         }
         return this;
     }
 
     public QueryBuilder Set(String column, double value) {
         if (!query.toString().contains("SET")) {
-            query.append(String.format(" SET %s = %f", column, value));
+            query.append(String.format(" SET %s = %s", column, ParserHelper.doubleToString(value)));
         } else {
-            query.append(String.format(", SET %s = %f", column, value));
+            query.append(String.format(", %s = %s", column, ParserHelper.doubleToString(value)));
         }
         return this;
     }
@@ -70,23 +72,24 @@ public class QueryBuilder {
                 query.append(String.format(" %s", convertedValue));
             }
         }
+        query.append(" )");
         return this;
     }
 
     public QueryBuilder InsertValue(String value) {
         if (!query.toString().contains(("VALUES"))) {
-            query.append(String.format(" VALUES( %s", value));
+            query.append(String.format(" VALUES( '%s'", value));
         } else {
-            query.append(String.format(", %s", value));
+            query.append(String.format(", '%s'", value));
         }
         return this;
     }
 
     public QueryBuilder InsertValue(double value) {
         if (!query.toString().contains(("VALUES"))) {
-            query.append(String.format(" VALUES( %f", value));
+            query.append(String.format(" VALUES( %s", ParserHelper.doubleToString(value)));
         } else {
-            query.append(String.format(", %f", value));
+            query.append(String.format(", %s", ParserHelper.doubleToString(value)));
         }
         return this;
     }
@@ -102,9 +105,9 @@ public class QueryBuilder {
 
     public QueryBuilder InsertValue(LocalDateTime value) {
         if (!query.toString().contains(("VALUES"))) {
-            query.append(String.format(" VALUES( %s", value.toString()));
+            query.append(String.format(" VALUES( '%s'", value.toString()));
         } else {
-            query.append(String.format(", %s", value.toString()));
+            query.append(String.format(", '%s'", value.toString()));
         }
         return this;
     }
@@ -231,6 +234,18 @@ public class QueryBuilder {
             query.append(String.format(" ORDER BY %s.%s", table, column));
         } else {
             query.append(String.format(", %s.%s", table, column));
+        }
+        return this;
+    }
+
+    public QueryBuilder Returning(String table, List<String> column) {
+        query.append(" RETURNING");
+        for (int i = 0; i < column.size(); i++) {
+            if (i < column.size() - 1) {
+                query.append(String.format(" %s.%s,", table, column.get(i)));
+            } else {
+                query.append(String.format(" %s.%s", table, column.get(i)));
+            }
         }
         return this;
     }

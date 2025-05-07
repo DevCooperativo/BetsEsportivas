@@ -124,33 +124,46 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
 
     @Override
     public void Excluir(int id) throws SQLException {
-        PreparedStatement sql = _conn.prepareStatement("DELETE FROM competicao WHERE id = ?");
-        sql.setInt(1, id);
-        sql.execute();
+        try {
+            _conn.setAutoCommit(false);
+            QueryBuilder qBuilder = new QueryBuilder();
+            PreparedStatement sql = _conn.prepareStatement(
+                    qBuilder.Delete("competidor").Where("competidor.competicao_id", true, "=", id).toString());
+            sql.execute();
+
+            qBuilder.emptyQuery();
+
+            sql = _conn.prepareStatement(
+                    qBuilder.Delete("competicao")
+                            .Where("competicao.id", true, "=", id)
+                            .toString());
+            sql.execute();
+
+            _conn.commit();
+
+        } catch (Exception ex) {
+            _conn.rollback();
+            throw ex;
+        }
     }
 
     @Override
     public CompeticaoDTO BuscarDTOPorId(int id) throws SQLException {
-        // TODO Auto-generated method stub
+
         throw new UnsupportedOperationException("Unimplemented method 'BuscarDTOPorId'");
     }
 
     @Override
     public List<CompeticaoDTO> BuscarTodosOsDTO() throws SQLException {
         List<CompeticaoDTO> competicoes = new ArrayList<>();
-        PreparedStatement sql = _conn.prepareStatement("SELECT \r\n" + //
-                "\tcom.*, \r\n" + //
-                "\tSUM(ap.valor) as ValorEmJogo, \r\n" + //
-                "\tCOUNT(apo.*) as quantidadeDeApostas, cat.*, \r\n" + //
-                "\tCASE \r\n" + //
-                "\t\tWHEN NOW() - com.data_fechamento_apostas > INTERVAL '24 Hours' \r\n" + //
-                "\t\tTHEN 'Encerrado' ELSE 'Aberta' \r\n" + //
-                "\t\tEND as Status\r\n" + //
-                "\tFROM competicao com\r\n" + //
-                "\tJOIN aposta ap ON ap.competicao_id = com.id \r\n" + //
-                "\tJOIN categoria cat ON cat.id=com.categoria_id \r\n" + //
-                "\tJOIN aposta apo ON apo.competicao_id=com.id \r\n" + //
-                "\tGROUP BY com.id, cat.id;\t");
+        // SELECT com.*, SUM(ap.valor) as ValorEmJogo, CASE WHEN NOW() -
+        // com.data_fechamento_apostas > INTERVAL '24 Hours' THEN 'Encerrado' ELSE
+        // 'Aberta' END as StatusFROM competicao comJOIN aposta ap ON ap.competicao_id =
+        // com.id JOIN categoria cat ON cat.id=com.categoria_id JOIN aposta apo ON
+        // apo.competicao_id=com.id GROUP BY com.id, cat.id;
+        // QueryBuilder qBuilder = new QueryBuilder();
+        PreparedStatement sql = _conn.prepareStatement(
+                "SELECT com.*, SUM(ap.valor) as ValorEmJogo, CASE WHEN NOW() - com.data_fechamento_apostas > INTERVAL '24 Hours' THEN 'Encerrado' ELSE 'Aberta' END as Status FROM competicao com LEFT JOIN aposta ap ON ap.competicao_id = com.id JOIN categoria cat ON cat.id=com.categoria_id GROUP BY com.id, cat.id");
         ResultSet result = sql.executeQuery();
         while (result.next()) {
             Integer id = result.getInt("id");
@@ -162,7 +175,8 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                     .toLocalDateTime();
             LocalDateTime data_ocorrencia_evento = result.getTimestamp("data_ocorrencia_evento")
                     .toLocalDateTime();
-            int quantidadeDeApostas = result.getInt("quantidadeDeApostas");
+            double maximoApostas = result.getDouble("valor_maximo_aposta");
+            double minimoApostas = result.getDouble("valor_minimo_aposta");
             CategoriaDTO categoriaDTO = _categoriaDAO.BuscarDTOPorId(result.getInt("categoria_id"));
             double valorEmJogo = result.getDouble("valorEmJogo");
             String status = result.getString("Status");
@@ -191,8 +205,8 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                         innerPosicao_final));
             }
             competicoes.add(new CompeticaoDTO(id, nome, categoriaDTO, data_cadastro, data_abertura_apostas,
-                    data_fechamento_apostas, data_ocorrencia_evento, quantidadeDeApostas,
-                    valorEmJogo, status, competidorDTO));
+                    data_fechamento_apostas, data_ocorrencia_evento,
+                    valorEmJogo, status, competidorDTO, maximoApostas, minimoApostas));
         }
 
         return competicoes;
@@ -205,46 +219,78 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             _conn.setAutoCommit(false);
             QueryBuilder qBuilder = new QueryBuilder();
             // #region atleta/competidor
-            List<Integer> participando = new ArrayList<>(
-                    valor.Competidores.stream().map(x -> x.AtletaDTO.getId()).collect(Collectors.toList()));
-            PreparedStatement sql = _conn.prepareStatement(
-                    QueryBuilder.Delete("competidor").WhereIn("atleta_id", "competidor", participando, false)
-                            .Where("competidor.competicao_id", true, "=", valor.getId()).toString());
-            sql.execute();
+            List<Integer> competicaoAtletas = new ArrayList<>(
+                    valor.Competidores.stream().map(x -> x.AtletaDTO.getId())
+                            .collect(Collectors.toList()));
+            PreparedStatement sql;
+            if (competicaoAtletas.size() > 0) {
+                sql = _conn.prepareStatement(
+                        qBuilder.Delete("competidor")
+                                .WhereIn("atleta_id", "competidor", competicaoAtletas,
+                                        false)
+                                .Where("competidor.competicao_id", true, "=",
+                                        valor.getId())
+                                .toString());
 
+            } else {
+                sql = _conn.prepareStatement(
+                        qBuilder.Delete("competidor").Where("competidor.competicao_id", true,
+                                "=", valor.getId()).toString());
+
+            }
+            sql.execute();
+            qBuilder.emptyQuery();
             sql = _conn.prepareStatement(qBuilder
                     .Select(new String[] { "atleta_id" }, "competidor")
                     .From("competidor")
-                    .Where(String.format("competidor.competicao_id = %s", valor.getId())).toString());
+                    .Where(String.format("competidor.competicao_id = %s", valor.getId()))
+                    .toString());
+            List<Integer> restantes = new LinkedList<>();
             ResultSet result = sql.executeQuery();
             while (result.next()) {
-
+                restantes.add(result.getInt("atleta_id"));
             }
-
+            qBuilder.emptyQuery();
             for (CompetidorDTO cDto : valor.getCompetidores()) {
-                sql = _conn.prepareStatement(qBuilder
-                        .Insert("competidor",
-                                Arrays.asList("atleta_id", "competicao_id", "posicao_inicial", "posicao_final",
-                                        "numero"))
-                        .InsertValue(cDto.getAtleta_id()).InsertValue(valor.getId())
-                        .InsertValue(cDto.getPosicao_inicial()).InsertValue(cDto.getPosicao_final())
-                        .InsertValue(cDto.getNumero()).toString());
-                sql.execute();
+                if (!restantes.contains(cDto.getAtleta_id())) {
+
+                    sql = _conn.prepareStatement(qBuilder
+                            .Insert("competidor",
+                                    Arrays.asList("atleta_id", "competicao_id",
+                                            "posicao_inicial",
+                                            "posicao_final",
+                                            "numero"))
+                            .InsertValue(cDto.getAtleta_id()).InsertValue(valor.getId())
+                            .InsertValue(cDto.getPosicao_inicial())
+                            .InsertValue(cDto.getPosicao_final())
+                            .InsertValue(cDto.getNumero()).EndInsertValue().toString());
+                    sql.execute();
+                }
             }
             // #endregion
+
+            qBuilder.emptyQuery();
             sql = _conn.prepareStatement(
-                    new QueryBuilder()
+                    qBuilder
                             .Update("competicao")
                             .Set("nome", valor.getNome())
                             .Set("data_abertura_apostas", DateConverterHelper
-                                    .ConvertLocalDateTimeToTimestamp(valor.getData_abertura_apostas()).toString()) 
+                                    .ConvertLocalDateTimeToTimestamp(valor
+                                            .getData_abertura_apostas())
+                                    .toString())
                             .Set("data_fechamento_apostas", DateConverterHelper
-                                    .ConvertLocalDateTimeToTimestamp(valor.getData_fechamento_apostas()).toString())
+                                    .ConvertLocalDateTimeToTimestamp(valor
+                                            .getData_fechamento_apostas())
+                                    .toString())
                             .Set("data_ocorrencia_evento", DateConverterHelper
-                                    .ConvertLocalDateTimeToTimestamp(valor.getData_ocorrencia_evento()).toString())
+                                    .ConvertLocalDateTimeToTimestamp(valor
+                                            .getData_ocorrencia_evento())
+                                    .toString())
                             .Set("categoria_id", valor.getCategoria().getId())
-                            .Set("valor_em_jogo", valor.getValorEmJogo())
-                            .Where(String.format("competicao.id = %d", valor.getId())).toString());
+                            .Set("valor_maximo_aposta", valor.getValor_maximo_aposta())
+                            .Set("valor_minimo_aposta", valor.getValor_minimo_aposta())
+                            .Where(String.format("competicao.id = %d", valor.getId()))
+                            .toString());
             sql.execute();
             _conn.commit();
             return valor;
@@ -255,14 +301,57 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
     }
 
     @Override
-    public CompeticaoDTO CriarPorDTO(CompeticaoDTO valor) throws SQLException {
-        // List<AtletaDTO> atltetaDTO = valor.Competidores;
-        // _conn.setAutoCommit(false);
-        // for (AtletaDTO atletaDTO : atltetaDTO) {
-        // PreparedStatement sql = _conn.prepareStatement("INSERT INTO
-        // competidor(atleta_id, competicao_id VALUES");
-        // }
-        throw new UnsupportedOperationException();
+    public CompeticaoDTO CriarPorDTO(CompeticaoDTO valor) throws Exception {
+        try {
+            List<CompetidorDTO> competidorDTO = valor.Competidores;
+            _conn.setAutoCommit(false);
+            QueryBuilder qBuilder = new QueryBuilder();
+            PreparedStatement sql;
+            int idCompeticao = 0;
+            sql = _conn.prepareStatement(qBuilder
+                    .Insert("competicao",
+                            Arrays.asList("nome", "data_abertura_apostas", "data_fechamento_apostas",
+                                    "data_ocorrencia_evento", "categoria_id", "valor_maximo_aposta",
+                                    "valor_minimo_aposta", "data_cadastro"))
+                    .InsertValue(valor.getNome())
+                    .InsertValue(valor.getData_abertura_apostas())
+                    .InsertValue(valor.getData_fechamento_apostas().toString())
+                    .InsertValue(valor.getData_ocorrencia_evento())
+                    .InsertValue(valor.getCategoria().getId())
+                    .InsertValue(valor.getValor_maximo_aposta())
+                    .InsertValue(valor.getValor_minimo_aposta())
+                    .InsertValue(valor.getData_cadastro().toString())
+                    .EndInsertValue()
+                    .Returning("competicao", Arrays.asList("id"))
+                    .toString());
+            ResultSet result = sql.executeQuery();
+            if (result.next()) {
+                idCompeticao = result.getInt("id");
+            } else {
+                throw new Exception("Competição não criada");
+            }
+            qBuilder.emptyQuery();
+
+            for (CompetidorDTO competidor : competidorDTO) {
+                sql = _conn.prepareStatement(qBuilder
+                        .Insert("competidor",
+                                Arrays.asList("atleta_id", "competicao_id", "numero", "posicao_inicial",
+                                        "posicao_final"))
+                        .InsertValue(competidor.getAtleta_id())
+                        .InsertValue(idCompeticao)
+                        .InsertValue(competidor.getNumero())
+                        .InsertValue(competidor.getPosicao_inicial())
+                        .InsertValue(competidor.getPosicao_final())
+                        .EndInsertValue().toString());
+                sql.execute();
+                qBuilder.emptyQuery();
+            }
+            _conn.commit();
+            return valor;
+        } catch (Exception e) {
+            _conn.rollback();
+            throw e;
+        }
     }
 
 }

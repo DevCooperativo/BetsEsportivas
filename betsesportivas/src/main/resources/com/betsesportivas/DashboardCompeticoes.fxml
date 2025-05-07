@@ -62,13 +62,13 @@
                   <TableView fx:id="tblView_competicoes" layoutY="40.0" prefHeight="489.0" prefWidth="800.0">
                     <columns>
                         <TableColumn fx:id="tblViewColumn_competicoes_nome" prefWidth="77.0" style="-fx-font-size: 12;" text="Nome" />
-                        <TableColumn fx:id="tblViewColumn_competicoes_categoria" prefWidth="77.0" style="-fx-font-size: 12;" text="Categoria" />
-                        <TableColumn fx:id="tblViewColumn_competicoes_dataCadastro" prefWidth="96.0" text="Data de Cadastro" />
-                      <TableColumn fx:id="tblViewColumn_competicoes_dataInicioApostas" prefWidth="95.0" style="-fx-font-size: 12;" text="Incício apostas" />
-                      <TableColumn fx:id="tblViewColumn_competicoes_dataTerminoApostas" prefWidth="99.0" text="Término apostas" />
-                        <TableColumn fx:id="tblViewColumn_competicoes_qtdApostas" prefWidth="75.0" text="Qtd Apostas" />
-                        <TableColumn fx:id="tblViewColumn_competicoes_valorEmJogo" prefWidth="89.0" text="Valor em jogo" />
-                        <TableColumn fx:id="tblViewColumn_competicoes_status" prefWidth="41.0" text="Status" />
+                        <TableColumn fx:id="tblViewColumn_competicoes_categoria" prefWidth="75.0" style="-fx-font-size: 12;" text="Categoria" />
+                        <TableColumn fx:id="tblViewColumn_competicoes_dataCadastro" prefWidth="114.0" text="Data de Cadastro" />
+                      <TableColumn fx:id="tblViewColumn_competicoes_dataInicioApostas" prefWidth="108.0" style="-fx-font-size: 12;" text="Incício apostas" />
+                      <TableColumn fx:id="tblViewColumn_competicoes_dataTerminoApostas" prefWidth="126.0" text="Término apostas" />
+                        <TableColumn fx:id="tblViewColumn_competicoes_minimoApostas" prefWidth="98.0" text="Mínimo apostas" />
+                        <TableColumn fx:id="tblViewColumn_competicoes_maximoApostas" prefWidth="112.0" text="Máximo apostas" />
+                        <TableColumn fx:id="tblViewColumn_competicoes_status" prefWidth="70.0" text="Status" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -86,33 +86,46 @@
             </AnchorPane>
          </children>
       </Pane>
-      <Pane fx:id="pane_criar" layoutX="106.0" layoutY="92.0" prefHeight="297.0" prefWidth="593.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
+      <Pane fx:id="pane_criar" layoutX="106.0" layoutY="92.0" prefHeight="355.0" prefWidth="593.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
          <children>
             <Button fx:id="btn_criar_fechar" cancelButton="true" layoutX="558.0" layoutY="7.0" mnemonicParsing="false" style="-fx-background-color: red;" text="X" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label layoutX="26.0" layoutY="95.0" text="Nome" />
-            <TextField fx:id="textField_criar_nome" layoutX="130.0" layoutY="91.0" prefHeight="25.0" prefWidth="156.0" />
+            <Label layoutX="23.0" layoutY="68.0" text="Nome" />
+            <TextField fx:id="textField_criar_nome" layoutX="127.0" layoutY="64.0" prefHeight="25.0" prefWidth="156.0" />
             <Text layoutX="199.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Criação de Competição">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Text>
-            <Label layoutX="311.0" layoutY="95.0" text="Categoria" />
-            <ComboBox fx:id="comboBox_criar_categoria" layoutX="414.0" layoutY="91.0" prefHeight="25.0" prefWidth="156.0" />
-            <DatePicker fx:id="datePicker_criar_inicioApostas" layoutX="130.0" layoutY="128.0" prefHeight="25.0" prefWidth="94.0" />
-            <Label layoutX="27.0" layoutY="129.0" text="Início das apostas" />
-            <DatePicker fx:id="datePicker_criar_terminoApostas" layoutX="415.0" layoutY="128.0" prefHeight="25.0" prefWidth="94.0" />
-            <Label layoutX="292.0" layoutY="132.0" text="Término das apostas" />
-            <DatePicker fx:id="datePicker_criar_dataOcorrencia" layoutX="129.0" layoutY="169.0" prefHeight="25.0" prefWidth="94.0" />
-            <Label layoutX="27.0" layoutY="173.0" text="Data ocorrência" />
-            <Button fx:id="btn_criar_salvar" layoutX="231.0" layoutY="258.0" mnemonicParsing="false" onAction="#salvarCriacaoCompeticao" prefHeight="25.0" prefWidth="132.0" text="Salvar" />
-            <TextField fx:id="textField_criar_inicioApostas" layoutX="223.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
-            <TextField fx:id="textField_criar_dataOcorrencia" layoutX="218.0" layoutY="169.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
-            <TextField fx:id="textField_criar_terminoApostas" layoutX="509.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
-            <Button fx:id="btn_criar_competidores" layoutX="368.0" layoutY="169.0" mnemonicParsing="false" onAction="#abrirSelecaoCompetidoresCriar" prefHeight="25.0" prefWidth="141.0" text="Competidores" />
+            <Label layoutX="308.0" layoutY="68.0" text="Categoria" />
+            <ComboBox fx:id="comboBox_criar_categoria" layoutX="411.0" layoutY="64.0" prefHeight="25.0" prefWidth="156.0" />
+            <DatePicker fx:id="datePicker_criar_inicioApostas" layoutX="127.0" layoutY="101.0" prefHeight="25.0" prefWidth="94.0" />
+            <Label layoutX="24.0" layoutY="102.0" text="Início das apostas" />
+            <DatePicker fx:id="datePicker_criar_terminoApostas" layoutX="412.0" layoutY="101.0" prefHeight="25.0" prefWidth="94.0" />
+            <Label layoutX="289.0" layoutY="105.0" text="Término das apostas" />
+            <DatePicker fx:id="datePicker_criar_dataOcorrencia" layoutX="126.0" layoutY="142.0" prefHeight="25.0" prefWidth="94.0" />
+            <Label layoutX="24.0" layoutY="146.0" text="Data ocorrência" />
+            <Button fx:id="btn_criar_salvar" layoutX="230.0" layoutY="308.0" mnemonicParsing="false" onAction="#salvarCriacaoCompeticao" prefHeight="25.0" prefWidth="132.0" text="Salvar" />
+            <TextField fx:id="textField_criar_inicioApostas" layoutX="220.0" layoutY="101.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
+            <TextField fx:id="textField_criar_dataOcorrencia" layoutX="215.0" layoutY="142.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
+            <TextField fx:id="textField_criar_terminoApostas" layoutX="506.0" layoutY="101.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
+            <Button fx:id="btn_criar_competidores" layoutX="288.0" layoutY="142.0" mnemonicParsing="false" onAction="#abrirSelecaoCompetidoresCriar" prefHeight="25.0" prefWidth="281.0" text="Competidores" />
+            <Pane layoutX="-4.0" layoutY="187.0" prefHeight="105.0" prefWidth="602.0" style="-fx-background-color: white;">
+               <children>
+                  <Label layoutX="98.0" layoutY="64.0" text="Valor mínimo" />
+                  <Label layoutX="328.0" layoutY="64.0" text="Valor máximo" />
+                  <TextField fx:id="textFieldMinimoApostas" layoutX="185.0" layoutY="60.0" prefHeight="25.0" prefWidth="103.0" />
+                  <TextField fx:id="textFieldMaximoApostas" layoutX="414.0" layoutY="60.0" prefHeight="25.0" prefWidth="103.0" />
+                  <Text layoutX="267.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Apostas">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
          </children>
       </Pane>
       <Pane fx:id="pane_criar_competidores" layoutX="78.0" layoutY="54.0" prefHeight="489.0" prefWidth="633.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
@@ -127,8 +140,8 @@
                   </AnchorPane>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="57.0">
                      <children>
-                        <Button fx:id="pane_criar_competidores_remover" layoutX="16.0" layoutY="181.0" mnemonicParsing="false" onAction="#removeCompetidorEdit" prefHeight="25.0" prefWidth="26.0" text="&lt;" />
-                        <Button fx:id="pane_criar_competidores_adicionar" layoutX="16.0" layoutY="136.0" mnemonicParsing="false" onAction="#addCompetidorEdit" prefHeight="25.0" prefWidth="26.0" text="&gt;" />
+                        <Button fx:id="pane_criar_competidores_remover" layoutX="16.0" layoutY="181.0" mnemonicParsing="false" onAction="#removeCompetidor" prefHeight="25.0" prefWidth="26.0" text="&lt;" />
+                        <Button fx:id="pane_criar_competidores_adicionar" layoutX="16.0" layoutY="136.0" mnemonicParsing="false" onAction="#addCompetidor" prefHeight="25.0" prefWidth="26.0" text="&gt;" />
                      </children>
                   </AnchorPane>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="375.0" prefWidth="509.0">
@@ -147,12 +160,12 @@
             </Pane>
             <ButtonBar layoutX="419.0" layoutY="451.0" prefHeight="40.0" prefWidth="200.0">
                <buttons>
-                  <Button fx:id="pane_criar_competidores_concluir" mnemonicParsing="false" onAction="#closeEditCompetidoresPane" text="Concluir" />
+                  <Button fx:id="pane_criar_competidores_concluir" mnemonicParsing="false" onAction="#closeCompetidoresPane" text="Concluir" />
                </buttons>
             </ButtonBar>
          </children>
       </Pane>
-      <Pane fx:id="pane_editar" layoutX="106.0" layoutY="91.0" prefHeight="297.0" prefWidth="593.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
+      <Pane fx:id="pane_editar" layoutX="106.0" layoutY="91.0" prefHeight="411.0" prefWidth="593.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
          <children>
             <Button fx:id="btn_editar_fechar" cancelButton="true" layoutX="558.0" layoutY="7.0" mnemonicParsing="false" onAction="#closeEditPane" style="-fx-background-color: red;" text="X" textFill="WHITE">
                <font>
@@ -174,12 +187,25 @@
             <Label layoutX="292.0" layoutY="132.0" text="Término das apostas" />
             <DatePicker fx:id="datePicker_editar_dataOcorrencia" layoutX="120.0" layoutY="165.0" prefHeight="25.0" prefWidth="103.0" />
             <Label layoutX="26.0" layoutY="169.0" text="Data ocorrência" />
-            <Button fx:id="btn_editar_salvar" layoutX="319.0" layoutY="258.0" mnemonicParsing="false" onAction="#saveEdition" prefHeight="25.0" prefWidth="97.0" text="Salvar" />
+            <Button fx:id="btn_editar_salvar" layoutX="320.0" layoutY="356.0" mnemonicParsing="false" onAction="#saveEdition" prefHeight="25.0" prefWidth="97.0" text="Salvar" />
             <TextField fx:id="textField_editar_inicioApostas" layoutX="223.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
             <TextField fx:id="textField_editar_dataOcorrencia" layoutX="223.0" layoutY="165.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
             <TextField fx:id="textField_editar_terminoApostas" layoutX="505.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
-            <Button fx:id="btn_editar_excluir" layoutX="176.0" layoutY="258.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: rgb(250, 91, 12);" text="Excluir" textFill="WHITE" />
-            <Button fx:id="btn_editar_competidores" layoutX="383.0" layoutY="165.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="141.0" text="Competidores" />
+            <Button fx:id="btn_editar_excluir" layoutX="177.0" layoutY="356.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: rgb(250, 91, 12);" text="Excluir" textFill="WHITE" />
+            <Button fx:id="btn_editar_competidores" layoutX="289.0" layoutY="165.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="281.0" text="Competidores" />
+            <Pane layoutY="221.0" prefHeight="105.0" prefWidth="593.0" style="-fx-background-color: white;">
+               <children>
+                  <Label layoutX="98.0" layoutY="64.0" text="Valor mínimo" />
+                  <Label layoutX="328.0" layoutY="64.0" text="Valor máximo" />
+                  <TextField fx:id="textFieldEditarMinimoApostas" layoutX="185.0" layoutY="60.0" prefHeight="25.0" prefWidth="103.0" />
+                  <TextField fx:id="textFieldEditarMaximoApostas" layoutX="414.0" layoutY="60.0" prefHeight="25.0" prefWidth="103.0" />
+                  <Text layoutX="267.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Apostas">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
          </children>
       </Pane>
       <Pane fx:id="pane_editar_competidores" layoutX="78.0" layoutY="53.0" prefHeight="496.0" prefWidth="633.0" style="-fx-background-color: rgb(210,210,210);" visible="false">

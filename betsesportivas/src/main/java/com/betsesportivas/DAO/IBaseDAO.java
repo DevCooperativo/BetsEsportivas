@@ -17,7 +17,7 @@ public interface IBaseDAO<T, S> {
 
     void Excluir(int id) throws SQLException;
 
-    S CriarPorDTO(S valor) throws SQLException;
+    S CriarPorDTO(S valor) throws Exception;
 
     S BuscarDTOPorId(int id) throws SQLException;
 
