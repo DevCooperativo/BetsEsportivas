@@ -1,19 +1,19 @@
 package com.betsesportivas.Domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.betsesportivas.Domain.Abstractions.BaseEntity;
 
 public class Atleta extends BaseEntity {
     private String _nome;
     private String _sobrenome;
-    
-    private LocalDate _nascimento;
-    private String _sexo;
+
+    private LocalDateTime _nascimento;
+    private Character _sexo;
     private int _vitorias = 0;
     private int _participacoes = 0;
 
-    public Atleta(int id, String _nome, String _sobrenome, LocalDate _nascimento, String _sexo, int _vitorias,
+    public Atleta(int id, String _nome, String _sobrenome, LocalDateTime _nascimento, Character _sexo, int _vitorias,
             int _participacoes) {
         super(id);
         this._nome = _nome;
@@ -24,14 +24,13 @@ public class Atleta extends BaseEntity {
         this._participacoes = _participacoes;
     }
 
-    public Atleta(int id, String _nome, String _sobrenome, LocalDate _nascimento, String _sexo) {
+    public Atleta(int id, String _nome, String _sobrenome, LocalDateTime _nascimento, Character _sexo) {
         super(id);
         this._nome = _nome;
         this._sobrenome = _sobrenome;
         this._nascimento = _nascimento;
         this._sexo = _sexo;
     }
-
 
     public String getNome() {
         return _nome;
@@ -57,19 +56,19 @@ public class Atleta extends BaseEntity {
         _participacoes = participacoes;
     }
 
-    public String getSexo() {
+    public Character getSexo() {
         return _sexo;
     }
 
-    public void setSexo(String _sexo) {
+    public void setSexo(Character _sexo) {
         this._sexo = _sexo;
     }
 
-    public LocalDate getNascimento() {
+    public LocalDateTime getNascimento() {
         return _nascimento;
     }
 
-    public void setNascimento(LocalDate _nascimento) {
+    public void setNascimento(LocalDateTime _nascimento) {
         this._nascimento = _nascimento;
     }
 

@@ -18,22 +18,18 @@ import com.betsesportivas.DTO.AtletaDTO;
 import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.DTO.CompeticaoDTO;
 import com.betsesportivas.DTO.CompetidorDTO;
-import com.betsesportivas.Domain.Categoria;
 import com.betsesportivas.Domain.Competicao;
 import com.betsesportivas.Helpers.DateConverterHelper;
 import com.betsesportivas.QueryBuilder.QueryBuilder;
 
 public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> {
     private Connection _conn;
-    private IBaseDAO<Categoria, CategoriaDTO> _categoriaDAO;
-
-    public CompeticaoDAO(IBaseDAO<Categoria, CategoriaDTO> categoriaDAO) {
-        _categoriaDAO = categoriaDAO;
-    }
+    private CategoriaDAO _categoriaDAO = new CategoriaDAO();
 
     @Override
     public void Connect(Connection conn) {
         _conn = conn;
+        _categoriaDAO.Connect(_conn);
     }
 
     @Override
@@ -128,7 +124,8 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             _conn.setAutoCommit(false);
             QueryBuilder qBuilder = new QueryBuilder();
             PreparedStatement sql = _conn.prepareStatement(
-                    qBuilder.Delete("competidor").Where("competidor.competicao_id", true, "=", id).toString());
+                    qBuilder.Delete("competidor").Where("competidor.competicao_id", true, "=", id)
+                            .toString());
             sql.execute();
 
             qBuilder.emptyQuery();
@@ -193,8 +190,8 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                 int innerId = innerResult.getInt("id");
                 String innerNome = innerResult.getString("nome");
                 String innerSobrenome = innerResult.getString("sobrenome");
-                LocalDate nascimento = innerResult.getDate("nascimento").toLocalDate();
-                char sexo = innerResult.getString("sexo").charAt(0);
+                LocalDateTime nascimento = innerResult.getTimestamp("nascimento").toLocalDateTime();
+                Character sexo = innerResult.getString("sexo").charAt(0);
                 int innerVitorias = innerResult.getInt("vitorias");
                 int innerParticipacoes = innerResult.getInt("participacoes");
                 competidorDTO.add(new CompetidorDTO(
@@ -310,8 +307,10 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             int idCompeticao = 0;
             sql = _conn.prepareStatement(qBuilder
                     .Insert("competicao",
-                            Arrays.asList("nome", "data_abertura_apostas", "data_fechamento_apostas",
-                                    "data_ocorrencia_evento", "categoria_id", "valor_maximo_aposta",
+                            Arrays.asList("nome", "data_abertura_apostas",
+                                    "data_fechamento_apostas",
+                                    "data_ocorrencia_evento", "categoria_id",
+                                    "valor_maximo_aposta",
                                     "valor_minimo_aposta", "data_cadastro"))
                     .InsertValue(valor.getNome())
                     .InsertValue(valor.getData_abertura_apostas())
@@ -335,7 +334,8 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             for (CompetidorDTO competidor : competidorDTO) {
                 sql = _conn.prepareStatement(qBuilder
                         .Insert("competidor",
-                                Arrays.asList("atleta_id", "competicao_id", "numero", "posicao_inicial",
+                                Arrays.asList("atleta_id", "competicao_id", "numero",
+                                        "posicao_inicial",
                                         "posicao_final"))
                         .InsertValue(competidor.getAtleta_id())
                         .InsertValue(idCompeticao)

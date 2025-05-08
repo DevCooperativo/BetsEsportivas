@@ -20,4 +20,6 @@ public interface ICompetidorDAO<T, S> extends IBaseDAO<T, S> {
     S EditarPorDTO(S valor) throws SQLException;
 
     List<S> BuscarCompetidoresDisponiveisDTO(int idCompeticao) throws SQLException;
+
+    List<S> BuscarCompetidoresParticipandoSemAposta(int idCompeticao, int idJogador) throws SQLException;
 }

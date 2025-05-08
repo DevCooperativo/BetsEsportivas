@@ -68,5 +68,6 @@ CREATE TABLE IF NOT EXISTS aposta (
     odd NUMERIC(5,2) NOT NULL DEFAULT 1.00,
 
     FOREIGN KEY (jogador_id) REFERENCES jogador (id),
-    FOREIGN KEY (atleta_id, competicao_id) REFERENCES competidor (atleta_id, competicao_id)
+    FOREIGN KEY (atleta_id, competicao_id) REFERENCES competidor (atleta_id, competicao_id),
+    UNIQUE(jogador_id, atleta_id, competicao_id)
 );
