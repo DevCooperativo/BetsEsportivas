@@ -1,25 +1,40 @@
 package com.betsesportivas.DTO;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AtletaDTO implements IBaseDTO {
     private int Id;
     private String Nome;
     private String Sobrenome;
-    private char Sexo;
-    private LocalDate Nascimento;
+    private Character Sexo;
+    private LocalDateTime Nascimento;
     private int Vitorias;
     private int Participacoes;
 
-    public AtletaDTO(int Id, String Nome, String Sobrenome, char Sexo, LocalDate Nascimento, int Participacoes, int Vitorias) {
-        this.Id = Id;
-        this.Nome = Nome;
-        this.Sobrenome = Sobrenome;
-        this.Participacoes = Participacoes;
-        this.Vitorias = Vitorias;
+    public AtletaDTO(String nome, String sobrenome, Character sexo, LocalDateTime nascimento, int vitorias,
+            int participacoes) {
+        Nome = nome;
+        Sobrenome = sobrenome;
+        Sexo = sexo;
+        Nascimento = nascimento;
+        Vitorias = vitorias;
+        Participacoes = participacoes;
     }
 
-    public AtletaDTO(int Id, String Nome, String Sobrenome, char Sexo, LocalDate Nascimento) {
+    
+    public AtletaDTO(int id, String nome, String sobrenome, Character sexo, LocalDateTime nascimento, int vitorias,
+            int participacoes) {
+        Id = id;
+        Nome = nome;
+        Sobrenome = sobrenome;
+        Sexo = sexo;
+        Nascimento = nascimento;
+        Vitorias = vitorias;
+        Participacoes = participacoes;
+    }
+
+
+    public AtletaDTO(int Id, String Nome, String Sobrenome, Character Sexo, LocalDateTime Nascimento) {
         this.Id = Id;
         this.Nome = Nome;
         this.Sobrenome = Sobrenome;
@@ -59,11 +74,11 @@ public class AtletaDTO implements IBaseDTO {
         Sexo = sexo;
     }
 
-    public LocalDate getNascimento() {
+    public LocalDateTime getNascimento() {
         return Nascimento;
     }
 
-    public void setNascimento(LocalDate nascimento) {
+    public void setNascimento(LocalDateTime nascimento) {
         Nascimento = nascimento;
     }
 

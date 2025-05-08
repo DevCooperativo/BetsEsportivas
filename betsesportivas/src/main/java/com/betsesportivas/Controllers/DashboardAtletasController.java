@@ -4,19 +4,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import com.betsesportivas.App;
 import com.betsesportivas.DAO.AtletaDAO;
 import com.betsesportivas.DAO.IAtletaDAO;
-import com.betsesportivas.DAO.IJogadorDAO;
-import com.betsesportivas.DAO.JogadorDAO;
 import com.betsesportivas.DTO.AtletaDTO;
-import com.betsesportivas.DTO.JogadorDTO;
 import com.betsesportivas.Database.Db;
 import com.betsesportivas.Domain.Atleta;
-import com.betsesportivas.Domain.Jogador;
+import com.betsesportivas.Helpers.DateConverterHelper;
 import com.betsesportivas.Helpers.ErrorHelper;
 import com.betsesportivas.Helpers.FieldsHelper;
 
@@ -147,11 +145,11 @@ public class DashboardAtletasController implements Initializable {
 
             String nomeAtleta = textFieldNomeAtleta.getText();
             String sobreNomeAtleta = textFieldSobrenomeAtleta.getText();
-            LocalDate dataNascimento = datePickerDataNascimento.getValue();
+            LocalDateTime dataNascimento = DateConverterHelper.ConvertStringToLocalDateTime(datePickerDataNascimento.getValue().toString() + "00-00-00");
             String sexoRecuperado = comboBoxSexoAtleta.getSelectionModel().getSelectedItem();
             char sexo = FieldsHelper.recuperarSexoPorString(sexoRecuperado);
 
-            if (LocalDate.now().isBefore(dataNascimento) || LocalDate.now().isEqual(dataNascimento)) {
+            if (LocalDateTime.now().isBefore(dataNascimento) || LocalDateTime.now().isEqual(dataNascimento)) {
                 throw new Exception("A data de hoje é maior ou igual à data de nascimento informada");
             }
 

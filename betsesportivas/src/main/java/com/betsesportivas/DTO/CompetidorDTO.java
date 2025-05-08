@@ -1,6 +1,6 @@
 package com.betsesportivas.DTO;
 
-public class CompetidorDTO {
+public class CompetidorDTO implements IBaseDTO {
     public int Atleta_id;
     public AtletaDTO AtletaDTO;
     public int Competicao_id;
@@ -17,8 +17,8 @@ public class CompetidorDTO {
         this.Posicao_inicial = Posicao_inicial;
     }
 
-    public CompetidorDTO(AtletaDTO AtletaDTO){
-        this.AtletaDTO=AtletaDTO;
+    public CompetidorDTO(AtletaDTO AtletaDTO) {
+        this.AtletaDTO = AtletaDTO;
         this.Atleta_id = AtletaDTO.getId();
     }
 
@@ -71,7 +71,12 @@ public class CompetidorDTO {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.AtletaDTO.getNome() + " " + this.AtletaDTO.getSobrenome();
+    }
+
+    @Override
+    public String getNome() {
+        return this.AtletaDTO.getNome();
     }
 }

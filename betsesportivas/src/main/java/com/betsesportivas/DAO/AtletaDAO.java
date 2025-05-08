@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,8 +30,8 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
             int id = result.getInt("id");
             String nome = result.getString("nome");
             String sobrenome = result.getString("sobrenome");
-            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
-            String sexo = result.getString("sexo");
+            LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
+            Character sexo = result.getString("sexo").charAt(0);
             int vitorias = result.getInt("vitorias");
             int participacoes = result.getInt("participacoes");
             atletas.add(new Atleta(id, nome, sobrenome, nascimento, sexo, vitorias, participacoes));
@@ -47,8 +47,8 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
         int resultId = result.getInt("id");
         String nome = result.getString("nome");
         String sobrenome = result.getString("sobrenome");
-        LocalDate nascimento = result.getDate("nascimento").toLocalDate();
-        String sexo = result.getString("sexo");
+        LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
+        Character sexo = result.getString("sexo").charAt(0);
         int vitorias = result.getInt("vitorias");
         int participacoes = result.getInt("participacoes");
 
@@ -102,7 +102,7 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
             int id = result.getInt("id");
             String nome = result.getString("nome");
             String sobrenome = result.getString("sobrenome");
-            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
             char sexo = result.getString("sexo").charAt(0);
             int vitorias = result.getInt("vitorias");
             int participacoes = result.getInt("participacoes");
@@ -135,7 +135,7 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
             String resultNome = result.getString("nome");
             String resultSobrenome = result.getString("sobrenome");
             char sexo = result.getString("sexo").charAt(0);
-            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
             int resultVitorias = result.getInt("vitorias");
             int resultParticipacoes = result.getInt("participacoes");
             atletaDTO.add(new AtletaDTO(resultId, resultNome, resultSobrenome, sexo, nascimento, resultVitorias,
@@ -157,7 +157,7 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
             String resultNome = result.getString("nome");
             String resultSobrenome = result.getString("sobrenome");
             char sexo = result.getString("sexo").charAt(0);
-            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
             int resultVitorias = result.getInt("vitorias");
             int resultParticipacoes = result.getInt("participacoes");
             atletaDTO.add(new AtletaDTO(resultId, resultNome, resultSobrenome, sexo, nascimento, resultVitorias,
@@ -172,7 +172,7 @@ public class AtletaDAO implements IAtletaDAO<Atleta, AtletaDTO> {
                 .prepareStatement("INSERT INTO atleta(nome, sobrenome, nascimento, sexo) VALUES(?,?,?,?)");
         sql.setString(1, valor.getNome());
         sql.setString(2, valor.getSobrenome());
-        sql.setTimestamp(3, DateConverterHelper.ConvertLocalDateToTimestamp(valor.getNascimento()));
+        sql.setTimestamp(3, DateConverterHelper.ConvertLocalDateTimeToTimestamp(valor.getNascimento()));
         sql.setString(4, "" + valor.getSexo());
         sql.execute();
         return valor;

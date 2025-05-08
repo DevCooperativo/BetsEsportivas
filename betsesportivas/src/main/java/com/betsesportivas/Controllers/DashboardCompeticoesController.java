@@ -62,7 +62,7 @@ public class DashboardCompeticoesController implements Initializable {
 
     public DashboardCompeticoesController() throws SQLException {
         categoriaDAO.Connect(Database.Connect());
-        competicaoDAO = new CompeticaoDAO(categoriaDAO);
+        competicaoDAO = new CompeticaoDAO();
         competicaoDAO.Connect(Database.Connect());
         atletaDAO.Connect(Database.Connect());
         competidorDAO.Connect(Database.Connect());

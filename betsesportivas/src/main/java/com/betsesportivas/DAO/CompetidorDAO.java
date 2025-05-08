@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +27,8 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
     public List<Competidor> BuscarTodos() throws SQLException {
         List<Competidor> Competidors = new ArrayList<>();
         QueryBuilder qBuilder = new QueryBuilder();
-        PreparedStatement sql = _conn.prepareStatement(qBuilder.Select(null, "competidor").Select(null, "atleta")
+        PreparedStatement sql = _conn.prepareStatement(qBuilder.Select(null, "competidor")
+                .Select(null, "atleta")
                 .From("competidor").InnerJoin("atleta", "id", "=", "competidor").toString());
         ResultSet result = sql.executeQuery();
         while (result.next()) {
@@ -38,12 +39,13 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
             int posicao_final = result.getInt("posicao_final");
             String nome = result.getString("nome");
             String sobrenome = result.getString("sobrenome");
-            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
-            String sexo = result.getString("sexo");
+            LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
+            Character sexo = result.getString("sexo").charAt(0);
             int vitorias = result.getInt("vitorias");
             int participacoes = result.getInt("participacoes");
             Competidors.add(
-                    new Competidor(new Atleta(atleta_id, nome, sobrenome, nascimento, sexo, vitorias, participacoes),
+                    new Competidor(new Atleta(atleta_id, nome, sobrenome, nascimento, sexo,
+                            vitorias, participacoes),
                             competicao_id, numero, posicao_inicial, posicao_final));
         }
         return Competidors;
@@ -62,8 +64,8 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
         int posicao_final = result.getInt("posicao_final");
         String nome = result.getString("nome");
         String sobrenome = result.getString("sobrenome");
-        LocalDate nascimento = result.getDate("nascimento").toLocalDate();
-        String sexo = result.getString("sexo");
+        LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
+        Character sexo = result.getString("sexo").charAt(0);
         int vitorias = result.getInt("vitorias");
         int participacoes = result.getInt("participacoes");
 
@@ -128,13 +130,14 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
             int resultId = result.getInt("id");
             String resultNome = result.getString("nome");
             String resultSobrenome = result.getString("sobrenome");
-            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
             char sexo = result.getString("sexo").charAt(0);
             int resultVitorias = result.getInt("vitorias");
             int resultParticipacoes = result.getInt("participacoes");
             competidores
                     .add(new CompetidorDTO(
-                            new AtletaDTO(resultId, resultNome, resultSobrenome, sexo, nascimento, resultVitorias,
+                            new AtletaDTO(resultId, resultNome, resultSobrenome, sexo,
+                                    nascimento, resultVitorias,
                                     resultParticipacoes)));
         }
         return competidores;
@@ -155,9 +158,12 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
                         .From("atleta")
                         .WhereIn("id", "atleta",
                                 (new QueryBuilder()
-                                        .Select(new String[] { "atleta_id" }, "competidor")
+                                        .Select(new String[] { "atleta_id" },
+                                                "competidor")
                                         .From("competidor")
-                                        .Where(String.format("competidor.competicao_id = %d", idCompeticao))),
+                                        .Where(String.format(
+                                                "competidor.competicao_id = %d",
+                                                idCompeticao))),
                                 true)
                         .GroupBy("id", "atleta").toString());
         System.out.println(sql);
@@ -166,13 +172,14 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
             int resultId = result.getInt("id");
             String resultNome = result.getString("nome");
             String resultSobrenome = result.getString("sobrenome");
-            LocalDate nascimento = result.getDate("nascimento").toLocalDate();
+            LocalDateTime nascimento = result.getTimestamp("nascimento").toLocalDateTime();
             char sexo = result.getString("sexo").charAt(0);
             int resultVitorias = result.getInt("vitorias");
             int resultParticipacoes = result.getInt("participacoes");
             CompetidorDTO
                     .add(new CompetidorDTO(
-                            new AtletaDTO(resultId, resultNome, resultSobrenome, sexo, nascimento, resultVitorias,
+                            new AtletaDTO(resultId, resultNome, resultSobrenome, sexo,
+                                    nascimento, resultVitorias,
                                     resultParticipacoes)));
         }
         return CompetidorDTO;
@@ -181,6 +188,38 @@ public class CompetidorDAO implements ICompetidorDAO<Competidor, CompetidorDTO> 
     @Override
     public CompetidorDTO CriarPorDTO(CompetidorDTO valor) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<CompetidorDTO> BuscarCompetidoresParticipandoSemAposta(int idCompeticao, int idJogador) throws SQLException {
+        List<CompetidorDTO> listaCompetidores = new LinkedList();
+        PreparedStatement sql = _conn.prepareStatement(
+                "SELECT  atleta.id AS atleta_id, atleta.nome AS atleta_nome, atleta.sobrenome AS atleta_sobrenome, atleta.sexo AS atleta_sexo, atleta.nascimento AS atleta_nascimento, atleta.vitorias AS atleta_vitorias, atleta.participacoes AS atleta_participacoes, competidor.competicao_id AS competidor_competicao_id, competidor.numero AS competidor_numero, competidor.posicao_inicial AS competidor_posicao_inicial, competidor.posicao_final AS competidor_posicao_final FROM  atleta JOIN competidor ON atleta.id = competidor.atleta_id JOIN competicao ON competicao.id = competidor.competicao_id LEFT JOIN aposta ON aposta.atleta_id = atleta.id AND aposta.competicao_id = competidor.competicao_id AND aposta.jogador_id = ? WHERE competidor.competicao_id = ? AND aposta.id IS NULL;");
+
+        sql.setInt(1, idJogador);
+        sql.setInt(2, idCompeticao);
+
+        ResultSet result = sql.executeQuery();
+        while (result.next()) {
+            int atleta_id = result.getInt("atleta_id");
+            String atleta_nome = result.getString("atleta_nome");
+            String atleta_sobrenome = result.getString("atleta_sobrenome");
+            Character atleta_sexo = result.getString("atleta_sexo").charAt(0);
+            LocalDateTime atleta_nascimento = result.getTimestamp("atleta_nascimento").toLocalDateTime();
+            int atleta_vitorias = result.getInt("atleta_vitorias");
+            int atleta_participacoes = result.getInt("atleta_participacoes");
+            int competidor_competicao_id = result.getInt("competidor_competicao_id");
+            int competidor_numero = result.getInt("competidor_numero");
+            int competidor_posicao_inicial = result.getInt("competidor_posicao_inicial");
+            int competidor_posicao_final = result.getInt("competidor_posicao_final");
+            listaCompetidores.add(new CompetidorDTO(
+                    new AtletaDTO(atleta_id, atleta_nome, atleta_sobrenome, atleta_sexo,
+                            atleta_nascimento, atleta_vitorias, atleta_participacoes),
+                    competidor_competicao_id, competidor_numero, competidor_posicao_final,
+                    competidor_posicao_inicial));
+        }
+
+        return listaCompetidores;
     }
 
 }
