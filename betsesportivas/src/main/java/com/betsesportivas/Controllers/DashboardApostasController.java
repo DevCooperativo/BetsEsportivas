@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
-import com.betsesportivas.Abstractions.ComboboxItem;
 import com.betsesportivas.App;
 import com.betsesportivas.DAO.ApostaDAO;
 import com.betsesportivas.DAO.CompeticaoDAO;
 import com.betsesportivas.DAO.CompetidorDAO;
 import com.betsesportivas.DAO.JogadorDAO;
 import com.betsesportivas.DTO.ApostaDTO;
+import com.betsesportivas.DTO.CompeticaoDTO;
+import com.betsesportivas.DTO.CompetidorDTO;
+import com.betsesportivas.DTO.JogadorDTO;
 import com.betsesportivas.Database.Db;
 import com.betsesportivas.Helpers.ErrorHelper;
 import com.betsesportivas.Helpers.FieldsHelper;
@@ -52,22 +53,22 @@ public class DashboardApostasController implements Initializable {
     @FXML
     private ObservableList<ApostaDTO> observableAposta;
     @FXML
-    private ObservableList<ComboboxItem> observableJogador;
+    private ObservableList<JogadorDTO> observableJogador;
     @FXML
-    private ObservableList<ComboboxItem> observableCompetidor;
+    private ObservableList<CompetidorDTO> observableCompetidor;
     @FXML
-    private ObservableList<ComboboxItem> observableCompeticao;
+    private ObservableList<CompeticaoDTO> observableCompeticao;
 
     @FXML
     private TableView<ApostaDTO> tblViewApostas;
     @FXML
-    private TableColumn<ApostaDTO, String> tblViewColumnApostasJogador;
+    private TableColumn<ApostaDTO, JogadorDTO> tblViewColumnApostasJogador;
     @FXML
     private TableColumn<ApostaDTO, Double> tblViewColumnApostasValor;
     @FXML
-    private TableColumn<ApostaDTO, String> tblViewColumnApostasCompeticao;
+    private TableColumn<ApostaDTO, CompeticaoDTO> tblViewColumnApostasCompeticao;
     @FXML
-    private TableColumn<ApostaDTO, String> tblViewColumnApostasCompetidor;
+    private TableColumn<ApostaDTO, CompetidorDTO> tblViewColumnApostasCompetidor;
 
     @FXML
     private Button btnCriarAposta;
@@ -75,13 +76,17 @@ public class DashboardApostasController implements Initializable {
     @FXML
     private Pane paneCriar;
     @FXML
-    private ComboBox<ComboboxItem> comboBoxJogador;
+    private ComboBox<JogadorDTO> comboBoxJogador;
     @FXML
-    private ComboBox<ComboboxItem> comboBoxCompeticao;
+    private ComboBox<CompeticaoDTO> comboBoxCompeticao;
     @FXML
     private TextField textFieldValor;
     @FXML
-    private ComboBox<ComboboxItem> comboBoxCompetidor;
+    private Text textValorMinimo;
+    @FXML
+    private Text textValorMaximo;
+    @FXML
+    private ComboBox<CompetidorDTO> comboBoxCompetidor;
     @FXML
     private Slider sliderOdd;
     @FXML
@@ -96,13 +101,17 @@ public class DashboardApostasController implements Initializable {
     @FXML
     private Pane paneEditar;
     @FXML
-    private ComboBox<ComboboxItem> comboBoxEditarJogador;
+    private ComboBox<JogadorDTO> comboBoxEditarJogador;
     @FXML
-    private ComboBox<ComboboxItem> comboBoxEditarCompeticao;
+    private ComboBox<CompeticaoDTO> comboBoxEditarCompeticao;
     @FXML
     private TextField textFieldEditarValor;
     @FXML
-    private ComboBox<ComboboxItem> comboBoxEditarCompetidor;
+    private Text textEditarValorMinimo;
+    @FXML
+    private Text textEditarValorMaximo;
+    @FXML
+    private ComboBox<CompetidorDTO> comboBoxEditarCompetidor;
     @FXML
     private Slider sliderEditarOdd;
     @FXML
@@ -138,20 +147,20 @@ public class DashboardApostasController implements Initializable {
     // #endregion
 
     private void setTableViewFields() throws SQLException {
-        tblViewColumnApostasCompeticao.setCellValueFactory(new PropertyValueFactory<>("NomeCompeticao"));
-        tblViewColumnApostasCompetidor.setCellValueFactory(new PropertyValueFactory<>("NomeCompetidor"));
+        tblViewColumnApostasCompeticao.setCellValueFactory(new PropertyValueFactory<>("CompeticaoDTO"));
+        tblViewColumnApostasCompetidor.setCellValueFactory(new PropertyValueFactory<>("CompetidorDTO"));
         tblViewColumnApostasValor.setCellValueFactory(new PropertyValueFactory<>("valor"));
-        tblViewColumnApostasJogador.setCellValueFactory(new PropertyValueFactory<>("NomeJogador"));
+        tblViewColumnApostasJogador.setCellValueFactory(new PropertyValueFactory<>("JogadorDTO"));
         populateTableView();
     }
 
     private void setComboBoxes() {
-        FieldsHelper.<ComboboxItem>setComboBoxProperties(comboBoxCompeticao);
-        FieldsHelper.<ComboboxItem>setComboBoxProperties(comboBoxCompetidor);
-        FieldsHelper.<ComboboxItem>setComboBoxProperties(comboBoxJogador);
-        FieldsHelper.<ComboboxItem>setComboBoxProperties(comboBoxEditarCompeticao);
-        FieldsHelper.<ComboboxItem>setComboBoxProperties(comboBoxEditarCompetidor);
-        FieldsHelper.<ComboboxItem>setComboBoxProperties(comboBoxEditarJogador);
+        FieldsHelper.<CompeticaoDTO>setComboBoxProperties(comboBoxCompeticao);
+        FieldsHelper.<CompetidorDTO>setComboBoxProperties(comboBoxCompetidor);
+        FieldsHelper.<JogadorDTO>setComboBoxProperties(comboBoxJogador);
+        FieldsHelper.<CompeticaoDTO>setComboBoxProperties(comboBoxEditarCompeticao);
+        FieldsHelper.<CompetidorDTO>setComboBoxProperties(comboBoxEditarCompetidor);
+        FieldsHelper.<JogadorDTO>setComboBoxProperties(comboBoxEditarJogador);
     }
 
     private void setOddTexts() {
@@ -195,19 +204,15 @@ public class DashboardApostasController implements Initializable {
     }
 
     private void populateComboboxes() throws SQLException {
-        observableJogador = FXCollections.observableArrayList(jogadorDAO.BuscarTodosOsDTO().stream()
-                .map(x -> new ComboboxItem(x.getNome(), x.getId())).collect(Collectors.toList()));
+        observableJogador = FXCollections.observableArrayList(jogadorDAO.BuscarTodosOsDTO());
         comboBoxJogador.setItems(observableJogador);
-        observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO().stream()
-                .map(x -> new ComboboxItem(x.getNome(), x.getId())).collect(Collectors.toList()));
+        observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO());
         comboBoxCompeticao.setItems(observableCompeticao);
         if (comboBoxCompeticao.getValue() != null) {
             observableCompetidor = FXCollections.observableArrayList(
                     competidorDAO
-                            .BuscarCompetidoresParticipandoSemAposta(comboBoxCompeticao.getValue().getValue(),
-                                    comboBoxJogador.getValue().getValue())
-                            .stream()
-                            .map(x -> new ComboboxItem(x.getNome(), x.getAtleta_id())).collect(Collectors.toList()));
+                            .BuscarCompetidoresParticipandoSemAposta(comboBoxCompeticao.getValue().getId(),
+                                    comboBoxJogador.getValue().getId()));
             comboBoxCompetidor.setItems(observableCompetidor);
         }
     }
@@ -224,13 +229,13 @@ public class DashboardApostasController implements Initializable {
 
     private void saveCreate() throws SQLException {
         try {
-            ComboboxItem jogador = comboBoxJogador.getValue();
-            ComboboxItem competicao = comboBoxCompeticao.getValue();
-            ComboboxItem competidor = comboBoxCompetidor.getValue();
+            JogadorDTO jogador = comboBoxJogador.getValue();
+            CompeticaoDTO competicao = comboBoxCompeticao.getValue();
+            CompetidorDTO competidor = comboBoxCompetidor.getValue();
             double valor = Double.parseDouble(textFieldValor.getText());
             double odd = sliderOdd.getValue();
             apostaDAO.CriarPorDTO(
-                    new ApostaDTO(jogador.getValue(), valor, competidor.getValue(), competicao.getValue(), odd));
+                    new ApostaDTO(jogador.getId(), valor, competidor.getAtleta_id(), competicao.getId(), odd));
             populateTableView();
             closeCreate();
         } catch (Exception e) {
@@ -252,29 +257,21 @@ public class DashboardApostasController implements Initializable {
         textFieldEditarValor.setDisable(false);
         sliderEditarOdd.setDisable(false);
 
-        observableJogador = FXCollections.observableArrayList((jogadorDAO.BuscarTodosOsDTO().stream()
-                .map(x -> new ComboboxItem(x.getNome(), x.getId())).collect(Collectors.toList())));
+        observableJogador = FXCollections.observableArrayList((jogadorDAO.BuscarTodosOsDTO()));
         comboBoxEditarJogador.setItems(observableJogador);
-        comboBoxEditarJogador
-                .setValue(new ComboboxItem(onEditApostaDTO.getNomeJogador(), onEditApostaDTO.getIdJogador()));
+        comboBoxEditarJogador.setValue(onEditApostaDTO.getJogadorDTO());
 
-        observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO().stream()
-                .map(x -> new ComboboxItem(x.getNome(), x.getId())).collect(Collectors.toList()));
+        observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO());
         comboBoxEditarCompeticao.setItems(observableCompeticao);
         comboBoxEditarCompeticao
-                .setValue(new ComboboxItem(onEditApostaDTO.getNomeCompeticao(), onEditApostaDTO.getIdCompeticao()));
+                .setValue(onEditApostaDTO.getCompeticaoDTO());
 
         observableCompetidor = FXCollections
                 .observableArrayList(competidorDAO.BuscarCompetidoresParticipandoSemAposta(
-                        comboBoxEditarCompeticao.getValue().getValue(), comboBoxEditarJogador.getValue().getValue())
-                        .stream()
-                        .map(x -> new ComboboxItem(
-                                String.format("%s %s", x.AtletaDTO.getNome(), x.AtletaDTO.getSobrenome()),
-                                x.getAtleta_id()))
-                        .collect(Collectors.toList()));
+                        comboBoxEditarCompeticao.getValue().getId(), comboBoxEditarJogador.getValue().getId()));
         comboBoxEditarCompetidor.setItems(observableCompetidor);
         comboBoxEditarCompetidor
-                .setValue(new ComboboxItem(onEditApostaDTO.getNomeCompetidor(), onEditApostaDTO.getIdCompetidor()));
+                .setValue(onEditApostaDTO.getCompetidorDTO());
 
         textFieldEditarValor.setText(ParserHelper.doubleToString(onEditApostaDTO.getValor()));
         sliderEditarOdd.setValue(onEditApostaDTO.getOdd());
@@ -289,14 +286,14 @@ public class DashboardApostasController implements Initializable {
 
     private void saveEdit() {
         try {
-            ComboboxItem jogador = comboBoxEditarJogador.getValue();
-            ComboboxItem competicao = comboBoxEditarCompeticao.getValue();
-            ComboboxItem competidor = comboBoxEditarCompetidor.getValue();
+            JogadorDTO jogador = comboBoxEditarJogador.getValue();
+            CompeticaoDTO competicao = comboBoxEditarCompeticao.getValue();
+            CompetidorDTO competidor = comboBoxEditarCompetidor.getValue();
             double valor = Double.parseDouble(textFieldEditarValor.getText());
             double odd = sliderEditarOdd.getValue();
             apostaDAO.EditarPorDTO(
-                    new ApostaDTO(onEditApostaDTO.getId(), jogador.getValue(), valor, competidor.getValue(),
-                            competicao.getValue(), odd));
+                    new ApostaDTO(onEditApostaDTO.getId(), jogador.getId(), valor, competidor.getAtleta_id(),
+                            competicao.getId(), odd));
             populateTableView();
             closeEdit();
         } catch (Exception e) {
@@ -319,8 +316,7 @@ public class DashboardApostasController implements Initializable {
         comboBoxJogador.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 try {
-                    observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO().stream()
-                            .map(x -> new ComboboxItem(x.getNome(), x.getId())).collect(Collectors.toList()));
+                    observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO());
                     comboBoxCompeticao.setItems(observableCompeticao);
                     comboBoxCompeticao.setDisable(false);
                 } catch (SQLException e) {
@@ -344,12 +340,8 @@ public class DashboardApostasController implements Initializable {
                         observableCompetidor = FXCollections.observableArrayList(
                                 competidorDAO
                                         .BuscarCompetidoresParticipandoSemAposta(
-                                                comboBoxCompeticao.getValue().getValue(),
-                                                comboBoxJogador.getValue().getValue())
-                                        .stream()
-                                        .map(x -> new ComboboxItem(String.format("%s %s", x.AtletaDTO.getNome(),
-                                                x.AtletaDTO.getSobrenome()), x.getAtleta_id()))
-                                        .collect(Collectors.toList()));
+                                                comboBoxCompeticao.getValue().getId(),
+                                                comboBoxJogador.getValue().getId()));
                         comboBoxCompetidor.setItems(observableCompetidor);
                     }
                     comboBoxCompetidor.setDisable(false);
@@ -377,9 +369,7 @@ public class DashboardApostasController implements Initializable {
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         try {
-                            observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO()
-                                    .stream()
-                                    .map(x -> new ComboboxItem(x.getNome(), x.getId())).collect(Collectors.toList()));
+                            observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO());
                             comboBoxEditarCompeticao.setItems(observableCompeticao);
                             comboBoxEditarCompetidor.setDisable(false);
                         } catch (SQLException e) {
@@ -400,19 +390,15 @@ public class DashboardApostasController implements Initializable {
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         try {
-                            if (comboBoxEditarCompeticao.getValue() != null) {
-                                observableCompetidor = FXCollections.observableArrayList(
-                                        competidorDAO
-                                                .BuscarCompetidoresParticipandoSemAposta(
-                                                        comboBoxEditarCompeticao.getValue().getValue(),
-                                                        comboBoxEditarJogador.getValue().getValue())
-                                                .stream()
-                                                .map(x -> new ComboboxItem(String.format("%s %s", x.AtletaDTO.getNome(),
-                                                        x.AtletaDTO.getSobrenome()), x.getAtleta_id()))
-                                                .collect(Collectors.toList()));
-                                comboBoxEditarCompetidor.setItems(observableCompetidor);
-                            }
+                            observableCompetidor = FXCollections.observableArrayList(
+                                    competidorDAO
+                                            .BuscarCompetidoresParticipandoSemAposta(
+                                                    comboBoxEditarCompeticao.getValue().getId(),
+                                                    comboBoxEditarJogador.getValue().getId()));
+                            comboBoxEditarCompetidor.setItems(observableCompetidor);
                             comboBoxEditarCompetidor.setDisable(false);
+                            textValorMinimo.setText(ParserHelper.parseString(newValue.getValor_minimo_aposta()));
+                            textValorMaximo.setText(ParserHelper.parseString(newValue.getValor_maximo_aposta()));
                         } catch (SQLException e) {
                             ErrorHelper.ThrowErrorOnAlert(e);
                         }

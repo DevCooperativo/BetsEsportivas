@@ -55,7 +55,10 @@
          <children>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="575.0" prefWidth="800.0" style="-fx-background-color: white;">
                <children>
-                  <Label layoutX="370.0" layoutY="10.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Apostas" />
+                  <Label layoutX="370.0" layoutY="10.0" text="Apostas">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font></Label>
                   <TableView fx:id="tblViewApostas" layoutY="40.0" prefHeight="489.0" prefWidth="800.0">
                     <columns>
                         <TableColumn fx:id="tblViewColumnApostasJogador" prefWidth="174.0" style="-fx-font-size: 12;" text="Jogador" />
@@ -95,6 +98,20 @@
             <Slider fx:id="sliderOdd" blockIncrement="0.5" disable="true" layoutX="181.0" layoutY="179.0" majorTickUnit="2.0" max="10.0" min="0.5" minorTickCount="2" prefWidth="264.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
             <Text layoutX="301.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Odd" />
             <Text fx:id="textOdd" layoutX="464.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="42.755859375" />
+            <Text layoutX="513.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mínimo:" />
+            <Text layoutX="408.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Máximo:" />
+            <Text layoutX="443.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valores (R$)">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="textValorMinimo" layoutX="420.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <Text fx:id="textValorMaximo" layoutX="524.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <Label layoutX="241.0" layoutY="5.0" text="Cadastro de aposta">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <Pane fx:id="paneEditar" layoutX="92.0" layoutY="126.0" prefHeight="315.0" prefWidth="625.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
@@ -117,6 +134,20 @@
             <Slider fx:id="sliderEditarOdd" blockIncrement="0.5" disable="true" layoutX="181.0" layoutY="169.0" majorTickUnit="2.0" max="10.0" min="0.5" minorTickCount="2" prefWidth="264.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
             <Text layoutX="301.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Odd" />
             <Text fx:id="textEditarOdd" layoutX="463.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="36.484375" />
+            <Text layoutX="250.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edição de aposta">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
+            <Text layoutX="512.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mínimo:" />
+            <Text layoutX="407.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Máximo:" />
+            <Text layoutX="442.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valores (R$)">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="textEditarValorMinimo" layoutX="419.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <Text fx:id="textEditarValorMaximo" layoutX="523.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          </children>
       </Pane>
    </children>

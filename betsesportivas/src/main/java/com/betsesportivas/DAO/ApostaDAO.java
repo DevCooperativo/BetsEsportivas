@@ -4,11 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.betsesportivas.DTO.ApostaDTO;
+import com.betsesportivas.DTO.AtletaDTO;
+import com.betsesportivas.DTO.CompeticaoDTO;
+import com.betsesportivas.DTO.CompetidorDTO;
+import com.betsesportivas.DTO.JogadorDTO;
 import com.betsesportivas.Domain.Aposta;
 import com.betsesportivas.QueryBuilder.QueryBuilder;
 
@@ -95,7 +100,31 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
         List<ApostaDTO> apostaList = new LinkedList<>();
         QueryBuilder qBuilder = new QueryBuilder();
         PreparedStatement sql = _conn.prepareStatement(
-                "SELECT aposta.id as aposta_id, aposta.jogador_id as aposta_jogador_id, aposta.valor as aposta_valor, aposta.atleta_id as aposta_atleta_id, aposta.competicao_id as aposta_competicao_id, aposta.odd as aposta_odd, competicao.nome as competicao_nome, (SELECT CONCAT(atleta.nome || ' ' || atleta.sobrenome) from atleta WHERE atleta.id = aposta.atleta_id) as atleta_nome, jogador.nome as jogador_nome, atleta.nome as atleta_nome from aposta JOIN competicao ON competicao.id = aposta.competicao_id JOIN atleta on aposta.atleta_id = atleta.id JOIN jogador ON jogador.id = aposta.jogador_id;");
+                "SELECT \r\n" + //
+                        "\taposta.id as aposta_id, \r\n" + //
+                        "\taposta.jogador_id as aposta_jogador_id, \r\n" + //
+                        "\taposta.valor as aposta_valor, \r\n" + //
+                        "\taposta.atleta_id as aposta_atleta_id, \r\n" + //
+                        "\taposta.competicao_id as aposta_competicao_id, \r\n" + //
+                        "\taposta.odd as aposta_odd, \r\n" + //
+                        "\tcompeticao.nome as competicao_nome, \r\n" + //
+                        "\tcompeticao.data_abertura_apostas as competicao_data_abertura_apostas,\r\n" + //
+                        "\tcompeticao.data_fechamento_apostas as competicao_data_fechamento_apostas,\r\n" + //
+                        "\tcompeticao.data_ocorrencia_evento as competicao_data_ocorrencia_evento,\r\n" + //
+                        "\tcompeticao.valor_minimo_aposta as competicao_valor_minimo_aposta, \r\n" + //
+                        "\tcompeticao.valor_maximo_aposta as competicao_valor_maximo_aposta, \r\n" + //
+                        "\tatleta.nome as atleta_nome,\r\n" + //
+                        "\tatleta.sobrenome as atleta_sobrenome,\r\n" + //
+                        "\tjogador.nome as jogador_nome, \r\n" + //
+                        "\tjogador.saldo as jogador_saldo,\r\n" + //
+                        "\tatleta.nome as atleta_nome \r\n" + //
+                        "\tfrom aposta \r\n" + //
+                        "\tJOIN competicao \r\n" + //
+                        "\t\tON competicao.id = aposta.competicao_id \r\n" + //
+                        "\tJOIN atleta \r\n" + //
+                        "\t\tON aposta.atleta_id = atleta.id \r\n" + //
+                        "\tJOIN jogador \r\n" + //
+                        "\t\tON jogador.id = aposta.jogador_id;");
 
         ResultSet result = sql.executeQuery();
 
@@ -109,10 +138,21 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
             double aposta_odd = result.getDouble("aposta_odd");
             String competicao_nome = result.getString("competicao_nome");
             String atleta_nome = result.getString("atleta_nome");
+            String atleta_sobrenome = result.getString("atleta_sobrenome");
+            LocalDateTime competicao_data_abertura_apostas = result.getTimestamp("competicao_data_abertura_apostas").toLocalDateTime();
+            LocalDateTime competicao_data_fechamento_apostas = result.getTimestamp("competicao_data_fechamento_apostas").toLocalDateTime();
+            LocalDateTime competicao_data_ocorrencia_evento = result.getTimestamp("competicao_data_ocorrencia_evento").toLocalDateTime();
+            double competicao_valor_maximo_aposta = result.getDouble("competicao_valor_maximo_aposta");
+            double competicao_valor_minimo_aposta = result.getDouble("competicao_valor_minimo_aposta");
             String jogador_nome = result.getString("jogador_nome");
+            double jogador_saldo = result.getDouble("jogador_saldo");
 
-            apostaList.add(new ApostaDTO(aposta_id, aposta_jogador_id, jogador_nome, aposta_valor, aposta_atleta_id,
-                    atleta_nome, aposta_competicao_id, competicao_nome, aposta_odd));
+            apostaList.add(new ApostaDTO(aposta_id, aposta_valor, aposta_odd,
+                    new JogadorDTO(aposta_jogador_id, jogador_nome, jogador_saldo),
+                    new CompeticaoDTO(aposta_competicao_id, competicao_nome, competicao_data_abertura_apostas,
+                            competicao_data_fechamento_apostas, competicao_data_ocorrencia_evento, competicao_valor_maximo_aposta,
+                            competicao_valor_minimo_aposta),
+                    new CompetidorDTO(new AtletaDTO(aposta_atleta_id, atleta_nome, atleta_sobrenome))));
         }
         return apostaList;
     }
@@ -121,7 +161,8 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
     public ApostaDTO EditarPorDTO(ApostaDTO valor) throws SQLException {
         try {
             _conn.setAutoCommit(false);
-            PreparedStatement sql = _conn.prepareStatement("SELECT jogador.saldo, aposta.valor FROM jogador JOIN aposta ON aposta.jogador_id = jogador.id WHERE jogador.id = ? AND aposta.id = ?");
+            PreparedStatement sql = _conn.prepareStatement(
+                    "SELECT jogador.saldo, aposta.valor FROM jogador JOIN aposta ON aposta.jogador_id = jogador.id WHERE jogador.id = ? AND aposta.id = ?");
             sql.setInt(1, valor.getIdJogador());
             sql.setInt(2, valor.getId());
             ResultSet result = sql.executeQuery();
