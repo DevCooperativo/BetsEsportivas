@@ -153,12 +153,6 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
     @Override
     public List<CompeticaoDTO> BuscarTodosOsDTO() throws SQLException {
         List<CompeticaoDTO> competicoes = new ArrayList<>();
-        // SELECT com.*, SUM(ap.valor) as ValorEmJogo, CASE WHEN NOW() -
-        // com.data_fechamento_apostas > INTERVAL '24 Hours' THEN 'Encerrado' ELSE
-        // 'Aberta' END as StatusFROM competicao comJOIN aposta ap ON ap.competicao_id =
-        // com.id JOIN categoria cat ON cat.id=com.categoria_id JOIN aposta apo ON
-        // apo.competicao_id=com.id GROUP BY com.id, cat.id;
-        // QueryBuilder qBuilder = new QueryBuilder();
         PreparedStatement sql = _conn.prepareStatement(
                 "SELECT com.*, SUM(ap.valor) as ValorEmJogo, CASE WHEN NOW() - com.data_fechamento_apostas > INTERVAL '24 Hours' THEN 'Encerrado' ELSE 'Aberta' END as Status FROM competicao com LEFT JOIN aposta ap ON ap.competicao_id = com.id JOIN categoria cat ON cat.id=com.categoria_id GROUP BY com.id, cat.id");
         ResultSet result = sql.executeQuery();
@@ -198,8 +192,8 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                         new AtletaDTO(innerId, innerNome, innerSobrenome, sexo, nascimento,
                                 innerVitorias,
                                 innerParticipacoes),
-                        innerCompeticao_id, innerNumero, innerPosicao_inicial,
-                        innerPosicao_final));
+                        innerCompeticao_id, innerNumero,
+                        innerPosicao_final, innerPosicao_inicial));
             }
             competicoes.add(new CompeticaoDTO(id, nome, categoriaDTO, data_cadastro, data_abertura_apostas,
                     data_fechamento_apostas, data_ocorrencia_evento,
@@ -215,27 +209,68 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
         try {
             _conn.setAutoCommit(false);
             QueryBuilder qBuilder = new QueryBuilder();
-            // #region atleta/competidor
-            List<Integer> competicaoAtletas = new ArrayList<>(
-                    valor.Competidores.stream().map(x -> x.AtletaDTO.getId())
-                            .collect(Collectors.toList()));
+            List<CompetidorDTO> competicaoAtletas = valor.Competidores;
             PreparedStatement sql;
+            List<Integer> excluidos = new LinkedList<>();
+            // #region transaction
             if (competicaoAtletas.size() > 0) {
                 sql = _conn.prepareStatement(
                         qBuilder.Delete("competidor")
-                                .WhereIn("atleta_id", "competidor", competicaoAtletas,
+                                .WhereIn("atleta_id", "competidor", competicaoAtletas
+                                        .stream().map(x -> x.AtletaDTO.getId())
+                                        .collect(Collectors.toList()),
                                         false)
                                 .Where("competidor.competicao_id", true, "=",
                                         valor.getId())
+                                .Returning("competidor", Arrays.asList("atleta_id"))
                                 .toString());
-
+                ResultSet result = sql.executeQuery();
+                while (result.next()) {
+                    excluidos.add(result.getInt("atleta_id"));
+                }
             } else {
                 sql = _conn.prepareStatement(
-                        qBuilder.Delete("competidor").Where("competidor.competicao_id", true,
-                                "=", valor.getId()).toString());
-
+                        "DELETE FROM competidor WHERE competicao_id = ? RETURNING atleta_id");
+                sql.setInt(1, valor.getId());
+                ResultSet result = sql.executeQuery();
+                while (result.next()) {
+                    excluidos.add(result.getInt("atleta_id"));
+                }
             }
-            sql.execute();
+            // #endregion
+
+            // #region transaction
+            for (int i : excluidos) {
+                sql = _conn.prepareStatement(
+                        "UPDATE atleta SET participacoes = participacoes - 1 WHERE id = ?;");
+                sql.setInt(1, i);
+                sql.execute();
+            }
+            // #endregion
+
+            // #region transaction
+
+            for (CompetidorDTO c : competicaoAtletas.stream().filter(x -> !excluidos.contains(x.AtletaDTO.getId()))
+                    .collect(Collectors.toList())) {
+                sql = _conn.prepareStatement(
+                        "SELECT posicao_inicial, posicao_final, numero, atleta_id FROM competidor JOIN atleta ON atleta.id = competidor.atleta_id WHERE competidor.competicao_id = ? AND atleta.id = ? GROUP BY competidor.posicao_inicial, competidor.posicao_final, competidor.numero, atleta_id");
+                sql.setInt(1, valor.getId());
+                sql.setInt(2, c.getAtleta_id());
+                ResultSet result = sql.executeQuery();
+                while (result.next()) {
+                    if (result.getInt("posicao_inicial") != c.getPosicao_inicial()) {
+                        sql = _conn.prepareStatement(
+                                "UPDATE competidor SET posicao_inicial = ? WHERE atleta_id = ? AND competicao_id = ?");
+                        sql.setInt(1, c.getPosicao_inicial());
+                        sql.setInt(2, c.getAtleta_id());
+                        sql.setInt(3, c.getCompeticao_id());
+                        sql.execute();
+                    }
+                }
+            }
+
+            // #endregion
+
             qBuilder.emptyQuery();
             sql = _conn.prepareStatement(qBuilder
                     .Select(new String[] { "atleta_id" }, "competidor")
@@ -251,20 +286,27 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             for (CompetidorDTO cDto : valor.getCompetidores()) {
                 if (!restantes.contains(cDto.getAtleta_id())) {
 
-                    sql = _conn.prepareStatement(qBuilder
-                            .Insert("competidor",
-                                    Arrays.asList("atleta_id", "competicao_id",
-                                            "posicao_inicial",
-                                            "posicao_final",
-                                            "numero"))
-                            .InsertValue(cDto.getAtleta_id()).InsertValue(valor.getId())
-                            .InsertValue(cDto.getPosicao_inicial())
-                            .InsertValue(cDto.getPosicao_final())
-                            .InsertValue(cDto.getNumero()).EndInsertValue().toString());
+                    // #region transaction
+                    sql = _conn.prepareStatement(
+                            "INSERT INTO competidor (atleta_id, competicao_id, posicao_inicial, posicao_final, numero) VALUES(?,?,?,?,?);");
+                    sql.setInt(1, cDto.getAtleta_id());
+                    sql.setInt(2, valor.getId());
+                    sql.setInt(3, cDto.getPosicao_inicial());
+                    sql.setInt(4, cDto.getPosicao_final());
+                    sql.setInt(5, cDto.getNumero());
                     sql.execute();
+                    // #endregion
+
+                    // #region transaction
+                    sql = _conn.prepareStatement(
+                            "UPDATE atleta SET participacoes = participacoes + 1 WHERE id = ?");
+                    sql.setInt(1, cDto.getAtleta_id());
+                    sql.execute();
+                    // #endregion
+
                 }
+
             }
-            // #endregion
 
             qBuilder.emptyQuery();
             sql = _conn.prepareStatement(
@@ -305,6 +347,7 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             QueryBuilder qBuilder = new QueryBuilder();
             PreparedStatement sql;
             int idCompeticao = 0;
+            // #region transaction
             sql = _conn.prepareStatement(qBuilder
                     .Insert("competicao",
                             Arrays.asList("nome", "data_abertura_apostas",
@@ -329,9 +372,11 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             } else {
                 throw new Exception("Competição não criada");
             }
+            // #endregion
             qBuilder.emptyQuery();
 
             for (CompetidorDTO competidor : competidorDTO) {
+                // #region
                 sql = _conn.prepareStatement(qBuilder
                         .Insert("competidor",
                                 Arrays.asList("atleta_id", "competicao_id", "numero",
@@ -344,6 +389,15 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                         .InsertValue(competidor.getPosicao_final())
                         .EndInsertValue().toString());
                 sql.execute();
+                // #endregion
+
+                // #region transaction
+                sql = _conn.prepareStatement(
+                        "UPDATE atleta SET participacoes = participacoes + 1 WHERE id = ?");
+                sql.setInt(1, competidor.getAtleta_id());
+                sql.execute();
+                // #endregion
+
                 qBuilder.emptyQuery();
             }
             _conn.commit();

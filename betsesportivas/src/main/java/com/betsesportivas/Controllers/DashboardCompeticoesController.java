@@ -149,6 +149,8 @@ public class DashboardCompeticoesController implements Initializable {
     @FXML
     private ListView<CompetidorDTO> pane_editar_competidores_participando;
     @FXML
+    private TextField pane_editar_competidores_posicao;
+    @FXML
     private Button btn_editar_competidores_concluir;
     @FXML
     private Button btn_editar_salvar;
@@ -186,6 +188,8 @@ public class DashboardCompeticoesController implements Initializable {
     private ListView<CompetidorDTO> pane_criar_competidores_participando;
     @FXML
     private ListView<CompetidorDTO> pane_criar_competidores_disponiveis;
+    @FXML
+    private TextField pane_criar_competidores_posicao;
     @FXML
     private Button pane_criar_competidores_concluir;
     @FXML
@@ -304,15 +308,6 @@ public class DashboardCompeticoesController implements Initializable {
         onCreateCompeticaoDTO = new CompeticaoDTO();
     }
 
-    @FXML
-    private void saveCreation() throws SQLException {
-        onCreateCompeticaoDTO.setNome(textField_editar_nome.getText());
-        // competicaoDAO.Criar(onCreateCompeticaoDTO);
-        clearCreation();
-        closeCreatePane();
-        populateTableViewData();
-    }
-
     private void clearCreation() {
         textField_criar_nome.setText("");
         textField_criar_inicioApostas.setText("");
@@ -428,7 +423,7 @@ public class DashboardCompeticoesController implements Initializable {
                     atletasSelecionados);
 
             competicaoDAO.CriarPorDTO(competicao);
-
+            populateTableViewData();
             pane_criar.setVisible(false);
         } catch (Exception e) {
             ErrorHelper.ThrowErrorOnAlert(e);
@@ -494,6 +489,7 @@ public class DashboardCompeticoesController implements Initializable {
         CompetidorDTO atleta = pane_editar_competidores_disponiveis.getSelectionModel().getSelectedItem();
         if (atleta != null) {
             atletasDisponiveisObservable.remove(atleta);
+            atleta.setPosicao_inicial(ParserHelper.tryParseInt(pane_editar_competidores_posicao.getText()));
             atletasParticipandoObservable.add(atleta);
         }
     }
@@ -596,6 +592,39 @@ public class DashboardCompeticoesController implements Initializable {
             }
         });
 
+        pane_criar_competidores_participando.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        pane_criar_competidores_posicao.setDisable(false);
+                        pane_criar_competidores_posicao
+                                .setText(ParserHelper.parseString(newValue.getPosicao_inicial()));
+                    } else {
+                        pane_criar_competidores_posicao.setDisable(true);
+                    }
+                });
+        pane_criar_competidores_disponiveis.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                pane_criar_competidores_participando.getSelectionModel().clearSelection();
+                pane_criar_competidores_posicao.setText(null);
+                pane_criar_competidores_posicao.setDisable(true);
+            }
+        });
+        pane_criar_competidores_participando.focusedProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (newValue) {
+                pane_criar_competidores_disponiveis.getSelectionModel().clearSelection();
+            }
+        });
+
+        pane_criar_competidores_posicao.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != "") {
+                if (pane_criar_competidores_participando.getSelectionModel().getSelectedItem() != null) {
+                    pane_criar_competidores_participando.getSelectionModel().getSelectedItem()
+                            .setPosicao_inicial(Integer.parseInt(newValue));
+                }
+            }
+        });
+
         btn_criar_fechar.setOnAction((ActionEvent event) -> {
             closeCreatePane();
         });
@@ -612,6 +641,39 @@ public class DashboardCompeticoesController implements Initializable {
             }
         });
 
+        pane_editar_competidores_participando.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        pane_editar_competidores_posicao.setDisable(false);
+                        pane_editar_competidores_posicao
+                                .setText(ParserHelper.parseString(newValue.getPosicao_inicial()));
+                    } else {
+                        pane_editar_competidores_posicao.setDisable(true);
+                    }
+                });
+        pane_editar_competidores_disponiveis.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                pane_editar_competidores_participando.getSelectionModel().clearSelection();
+                pane_editar_competidores_posicao.setText(null);
+                pane_editar_competidores_posicao.setDisable(true);
+            }
+        });
+        pane_editar_competidores_participando.focusedProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (newValue) {
+                pane_editar_competidores_disponiveis.getSelectionModel().clearSelection();
+            }
+        });
+
+        pane_editar_competidores_posicao.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != "") {
+                if (pane_editar_competidores_participando.getSelectionModel().getSelectedItem() != null) {
+                    pane_editar_competidores_participando.getSelectionModel().getSelectedItem()
+                            .setPosicao_inicial(Integer.parseInt(newValue));
+                }
+            }
+        });
+
         btn_editar_competidores.setOnAction((ActionEvent event) -> {
             try {
                 openEditCompetidoresPane();
@@ -623,6 +685,7 @@ public class DashboardCompeticoesController implements Initializable {
         btn_editar_excluir.setOnAction((ActionEvent event) -> {
             try {
                 competicaoDAO.Excluir(onEditCompeticaoDTO.getId());
+                closeEditPane();
                 populateTableViewData();
             } catch (Exception e) {
                 ErrorHelper.ThrowErrorOnAlert(e);
