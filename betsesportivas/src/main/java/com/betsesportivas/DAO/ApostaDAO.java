@@ -121,7 +121,17 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
     public ApostaDTO EditarPorDTO(ApostaDTO valor) throws SQLException {
         try {
             _conn.setAutoCommit(false);
-            PreparedStatement sql = _conn.prepareStatement(
+            PreparedStatement sql = _conn.prepareStatement("SELECT jogador.saldo, aposta.valor FROM jogador JOIN aposta ON aposta.jogador_id = jogador.id WHERE jogador.id = ? AND aposta.id = ?");
+            sql.setInt(1, valor.getIdJogador());
+            sql.setInt(2, valor.getId());
+            ResultSet result = sql.executeQuery();
+            Double valorOriginal = null;
+            Double saldoOriginal = null;
+            while (result.next()) {
+                valorOriginal = result.getDouble("valor");
+                saldoOriginal = result.getDouble("saldo");
+            }
+            sql = _conn.prepareStatement(
                     "UPDATE aposta SET jogador_id=?, valor=?, atleta_id=?, competicao_id=?, odd=? WHERE id = ?");
             sql.setInt(1, valor.getIdJogador());
             sql.setDouble(2, valor.getValor());
@@ -130,6 +140,13 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
             sql.setDouble(5, valor.getOdd());
             sql.setInt(6, valor.getId());
             sql.execute();
+            if (valor.getValor() != valorOriginal && valorOriginal != null) {
+                sql = _conn.prepareStatement("UPDATE jogador SET saldo = saldo + ? - ? WHERE id = ?");
+                sql.setDouble(1, valorOriginal);
+                sql.setDouble(2, valor.getValor());
+                sql.setInt(3, valor.getIdJogador());
+                sql.execute();
+            }
             _conn.commit();
             return valor;
         } catch (Exception e) {
@@ -149,6 +166,11 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
             sql.setInt(3, valor.getIdCompetidor());
             sql.setInt(4, valor.getIdCompeticao());
             sql.setDouble(5, valor.getOdd());
+            sql.execute();
+
+            sql = _conn.prepareStatement("UPDATE jogador SET saldo = saldo - ? WHERE id = ?");
+            sql.setDouble(1, valor.getValor());
+            sql.setInt(2, valor.getIdJogador());
             sql.execute();
             _conn.commit();
             return valor;
