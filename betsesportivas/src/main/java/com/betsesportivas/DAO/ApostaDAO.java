@@ -84,9 +84,15 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
 
     @Override
     public void Excluir(int id) throws SQLException {
-        PreparedStatement sql = _conn.prepareStatement("DELETE FROM aposta WHERE id = ?");
+        PreparedStatement sql = _conn.prepareStatement("DELETE FROM aposta WHERE id = ? RETURNING jogador_id, valor");
         sql.setInt(1, id);
-        sql.execute();
+        ResultSet result = sql.executeQuery();
+        while(result.next()){
+            sql = _conn.prepareStatement("UPDATE jogador SET saldo = saldo + ? WHERE id = ?");
+            sql.setDouble(1, result.getDouble("valor"));
+            sql.setInt(2, result.getInt("jogador_id"));
+            sql.execute();
+        }
     }
 
     @Override

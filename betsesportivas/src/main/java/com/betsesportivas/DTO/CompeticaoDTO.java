@@ -203,7 +203,7 @@ public class CompeticaoDTO implements IBaseDTO {
 
     @Override
     public String getNomeFormatado() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Nome;
     }
 
 }

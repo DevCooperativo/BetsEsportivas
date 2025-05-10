@@ -59,6 +59,7 @@ public class DashboardApostasController implements Initializable {
     @FXML
     private ObservableList<CompeticaoDTO> observableCompeticao;
 
+
     @FXML
     private TableView<ApostaDTO> tblViewApostas;
     @FXML
@@ -75,6 +76,8 @@ public class DashboardApostasController implements Initializable {
 
     @FXML
     private Pane paneCriar;
+    @FXML
+    private Text textEditarSaldo;
     @FXML
     private ComboBox<JogadorDTO> comboBoxJogador;
     @FXML
@@ -100,6 +103,8 @@ public class DashboardApostasController implements Initializable {
     private ApostaDTO onEditApostaDTO;
     @FXML
     private Pane paneEditar;
+    @FXML
+    private Text textSaldo;
     @FXML
     private ComboBox<JogadorDTO> comboBoxEditarJogador;
     @FXML
@@ -188,6 +193,8 @@ public class DashboardApostasController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
+            textSaldo.setText("");
+            textEditarSaldo.setText("");
             setFields();
             setEvents();
             clearCreate();
@@ -230,9 +237,25 @@ public class DashboardApostasController implements Initializable {
     private void saveCreate() throws SQLException {
         try {
             JogadorDTO jogador = comboBoxJogador.getValue();
+            if (jogador == null) {
+                throw new Exception("Escolha um jogador");
+            }
             CompeticaoDTO competicao = comboBoxCompeticao.getValue();
+            if (competicao == null) {
+                throw new Exception("Escolha uma competição");
+            }
             CompetidorDTO competidor = comboBoxCompetidor.getValue();
+            if (competidor == null) {
+                throw new Exception("Escolha um competidor");
+            }
             double valor = Double.parseDouble(textFieldValor.getText());
+            if (valor > jogador.getSaldo()) {
+                throw new Exception("O jogador não possui saldo suficiente");
+            }
+            if (valor < 0
+                    || (valor > competicao.getValor_maximo_aposta() || valor < competicao.getValor_minimo_aposta())) {
+                throw new Exception("Insira um valor dentro dos limites da competição");
+            }
             double odd = sliderOdd.getValue();
             apostaDAO.CriarPorDTO(
                     new ApostaDTO(jogador.getId(), valor, competidor.getAtleta_id(), competicao.getId(), odd));
@@ -251,7 +274,6 @@ public class DashboardApostasController implements Initializable {
     }
 
     private void openEdit() throws SQLException {
-        comboBoxEditarJogador.setDisable(false);
         comboBoxEditarCompeticao.setDisable(false);
         comboBoxEditarCompetidor.setDisable(false);
         textFieldEditarValor.setDisable(false);
@@ -287,9 +309,28 @@ public class DashboardApostasController implements Initializable {
     private void saveEdit() {
         try {
             JogadorDTO jogador = comboBoxEditarJogador.getValue();
+            if (jogador == null) {
+                throw new Exception("Escolha um jogador");
+            }
             CompeticaoDTO competicao = comboBoxEditarCompeticao.getValue();
+            if (competicao == null) {
+                throw new Exception("Escolha uma competição");
+            }
+
             CompetidorDTO competidor = comboBoxEditarCompetidor.getValue();
+            if (competidor == null) {
+                throw new Exception("Escolha um competidor");
+            }
+
             double valor = Double.parseDouble(textFieldEditarValor.getText());
+            if (onEditApostaDTO.getJogadorDTO().getSaldo() + onEditApostaDTO.getValor() - valor < 0) {
+                throw new Exception("O jogador não possui saldo suficiente");
+            }
+            if (valor < 0
+                    || (valor > competicao.getValor_maximo_aposta() || valor < competicao.getValor_minimo_aposta())) {
+                throw new Exception("Insira um valor dentro dos limites da competição");
+            }
+
             double odd = sliderEditarOdd.getValue();
             apostaDAO.EditarPorDTO(
                     new ApostaDTO(onEditApostaDTO.getId(), jogador.getId(), valor, competidor.getAtleta_id(),
@@ -319,6 +360,7 @@ public class DashboardApostasController implements Initializable {
                     observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO());
                     comboBoxCompeticao.setItems(observableCompeticao);
                     comboBoxCompeticao.setDisable(false);
+                    textSaldo.setText(newValue.getSaldo().toString());
                 } catch (SQLException e) {
                     ErrorHelper.ThrowErrorOnAlert(e);
                 } finally {
@@ -343,6 +385,8 @@ public class DashboardApostasController implements Initializable {
                                                 comboBoxCompeticao.getValue().getId(),
                                                 comboBoxJogador.getValue().getId()));
                         comboBoxCompetidor.setItems(observableCompetidor);
+                        textValorMinimo.setText(ParserHelper.doubleToString(newValue.getValor_minimo_aposta()));
+                        textValorMaximo.setText(ParserHelper.doubleToString(newValue.getValor_maximo_aposta()));
                     }
                     comboBoxCompetidor.setDisable(false);
                 } catch (SQLException e) {
@@ -372,6 +416,7 @@ public class DashboardApostasController implements Initializable {
                             observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO());
                             comboBoxEditarCompeticao.setItems(observableCompeticao);
                             comboBoxEditarCompetidor.setDisable(false);
+                            textEditarSaldo.setText(newValue.getSaldo().toString());
                         } catch (SQLException e) {
                             ErrorHelper.ThrowErrorOnAlert(e);
                         } finally {
@@ -397,8 +442,8 @@ public class DashboardApostasController implements Initializable {
                                                     comboBoxEditarJogador.getValue().getId()));
                             comboBoxEditarCompetidor.setItems(observableCompetidor);
                             comboBoxEditarCompetidor.setDisable(false);
-                            textValorMinimo.setText(ParserHelper.parseString(newValue.getValor_minimo_aposta()));
-                            textValorMaximo.setText(ParserHelper.parseString(newValue.getValor_maximo_aposta()));
+                            textEditarValorMinimo.setText(ParserHelper.parseString(newValue.getValor_minimo_aposta()));
+                            textEditarValorMaximo.setText(ParserHelper.parseString(newValue.getValor_maximo_aposta()));
                         } catch (SQLException e) {
                             ErrorHelper.ThrowErrorOnAlert(e);
                         }

@@ -87,16 +87,16 @@
                </font>
             </Button>
             <Label layoutX="48.0" layoutY="75.0" text="Jogador" />
-            <ComboBox fx:id="comboBoxJogador" layoutX="121.0" layoutY="72.0" prefWidth="150.0" promptText="Jogador" />
+            <ComboBox fx:id="comboBoxJogador" layoutX="121.0" layoutY="72.0" prefHeight="25.0" prefWidth="116.0" promptText="Jogador" />
             <Label layoutX="334.0" layoutY="75.0" text="Competição" />
-            <ComboBox fx:id="comboBoxCompeticao" disable="true" layoutX="407.0" layoutY="72.0" prefWidth="150.0" promptText="Competição" />
+            <ComboBox fx:id="comboBoxCompeticao" disable="true" layoutX="407.0" layoutY="72.0" prefHeight="25.0" prefWidth="116.0" promptText="Competição" />
             <Label layoutX="48.0" layoutY="126.0" text="Competidor" />
-            <ComboBox fx:id="comboBoxCompetidor" disable="true" layoutX="121.0" layoutY="123.0" prefWidth="150.0" promptText="Competidor" />
-            <TextField fx:id="textFieldValor" disable="true" layoutX="408.0" layoutY="123.0" promptText="R$..." />
+            <ComboBox fx:id="comboBoxCompetidor" disable="true" layoutX="121.0" layoutY="123.0" prefHeight="25.0" prefWidth="116.0" promptText="Competidor" />
+            <TextField fx:id="textFieldValor" disable="true" layoutX="408.0" layoutY="123.0" prefHeight="25.0" prefWidth="116.0" promptText="R$..." />
             <Label layoutX="334.0" layoutY="127.0" text="Valor" />
             <Button fx:id="btnSalvar" layoutX="255.0" layoutY="226.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" text="Salvar" />
-            <Slider fx:id="sliderOdd" blockIncrement="0.5" disable="true" layoutX="181.0" layoutY="179.0" majorTickUnit="2.0" max="10.0" min="0.5" minorTickCount="2" prefWidth="264.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
-            <Text layoutX="301.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Odd" />
+            <Slider fx:id="sliderOdd" blockIncrement="0.5" disable="true" layoutX="181.0" layoutY="166.0" majorTickUnit="2.0" max="10.0" min="0.5" minorTickCount="2" prefWidth="264.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
+            <Text layoutX="301.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Odd" />
             <Text fx:id="textOdd" layoutX="464.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="42.755859375" />
             <Text layoutX="513.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mínimo:" />
             <Text layoutX="408.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Máximo:" />
@@ -107,11 +107,17 @@
             </Text>
             <Text fx:id="textValorMinimo" layoutX="420.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Text fx:id="textValorMaximo" layoutX="524.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-            <Label layoutX="241.0" layoutY="5.0" text="Cadastro de aposta">
+            <Label layoutX="240.0" layoutY="18.0" text="Cadastro de aposta">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
+            <Text layoutX="77.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Saldo (R$)">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="textSaldo" layoutX="99.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          </children>
       </Pane>
       <Pane fx:id="paneEditar" layoutX="92.0" layoutY="126.0" prefHeight="315.0" prefWidth="625.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
@@ -122,12 +128,12 @@
                </font>
             </Button>
             <Label layoutX="48.0" layoutY="75.0" text="Jogador" />
-            <ComboBox fx:id="comboBoxEditarJogador" layoutX="121.0" layoutY="72.0" prefWidth="150.0" promptText="Jogador" />
+            <ComboBox fx:id="comboBoxEditarJogador" disable="true" layoutX="121.0" layoutY="72.0" prefHeight="25.0" prefWidth="116.0" promptText="Jogador" />
             <Label layoutX="334.0" layoutY="74.0" text="Competição" />
-            <ComboBox fx:id="comboBoxEditarCompeticao" layoutX="407.0" layoutY="71.0" prefWidth="150.0" promptText="Competição" />
+            <ComboBox fx:id="comboBoxEditarCompeticao" layoutX="407.0" layoutY="71.0" prefHeight="25.0" prefWidth="116.0" promptText="Competição" />
             <Label layoutX="48.0" layoutY="125.0" text="Competidor" />
-            <ComboBox fx:id="comboBoxEditarCompetidor" disable="true" layoutX="121.0" layoutY="122.0" prefWidth="150.0" promptText="Competidor" />
-            <TextField fx:id="textFieldEditarValor" disable="true" layoutX="408.0" layoutY="122.0" promptText="R$..." />
+            <ComboBox fx:id="comboBoxEditarCompetidor" disable="true" layoutX="121.0" layoutY="122.0" prefHeight="25.0" prefWidth="116.0" promptText="Competidor" />
+            <TextField fx:id="textFieldEditarValor" disable="true" layoutX="408.0" layoutY="122.0" prefHeight="25.0" prefWidth="116.0" promptText="R$..." />
             <Label layoutX="334.0" layoutY="126.0" text="Valor" />
             <Button fx:id="btnEditarSalvar" layoutX="333.0" layoutY="226.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" text="Salvar" />
             <Button fx:id="btnEditarExcluir" layoutX="170.0" layoutY="226.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" style="-fx-background-color: rgb(250,91,12);" text="Excluir" textFill="WHITE" />
@@ -148,6 +154,12 @@
             </Text>
             <Text fx:id="textEditarValorMinimo" layoutX="419.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Text fx:id="textEditarValorMaximo" layoutX="523.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <Text layoutX="77.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Saldo (R$)">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="textEditarSaldo" layoutX="99.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          </children>
       </Pane>
    </children>
