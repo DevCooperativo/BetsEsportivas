@@ -11,6 +11,20 @@ public class ApostaDTO implements IBaseDTO {
     public String NomeCompeticao;
     public double Odd;
 
+    private JogadorDTO JogadorDTO;
+    private CompeticaoDTO CompeticaoDTO;
+    private CompetidorDTO CompetidorDTO;
+
+    public ApostaDTO(int id, double valor, double odd, JogadorDTO jogadorDTO, CompeticaoDTO competicaoDTO,
+            CompetidorDTO competidorDTO) {
+        Id = id;
+        Valor = valor;
+        Odd = odd;
+        JogadorDTO = jogadorDTO;
+        CompeticaoDTO = competicaoDTO;
+        CompetidorDTO = competidorDTO;
+    }
+
     public ApostaDTO(int id, int idJogador, String nomeJogador, double valor, int idCompetidor, String nomeCompetidor,
             int idCompeticao, String nomeCompeticao, double odd) {
         Id = id;
@@ -24,8 +38,8 @@ public class ApostaDTO implements IBaseDTO {
         Odd = odd;
     }
 
-    public ApostaDTO(int idJogador, double valor, int idCompetidor, int idCompeticao, double odd) {
-        IdJogador = idJogador;
+    public ApostaDTO(JogadorDTO jogadorDTO, double valor, int idCompetidor, int idCompeticao, double odd) {
+        JogadorDTO = jogadorDTO;
         Valor = valor;
         IdCompetidor = idCompetidor;
         IdCompeticao = idCompeticao;
@@ -125,8 +139,32 @@ public class ApostaDTO implements IBaseDTO {
         Odd = odd;
     }
 
+    public JogadorDTO getJogadorDTO() {
+        return JogadorDTO;
+    }
+
+    public void setJogadorDTO(JogadorDTO JogadorDTO) {
+        this.JogadorDTO = JogadorDTO;
+    }
+
+    public CompeticaoDTO getCompeticaoDTO() {
+        return CompeticaoDTO;
+    }
+
+    public void setCompeticaoDTO(CompeticaoDTO CompeticaoDTO) {
+        this.CompeticaoDTO = CompeticaoDTO;
+    }
+
+    public CompetidorDTO getCompetidorDTO() {
+        return CompetidorDTO;
+    }
+
+    public void setCompetidorDTO(CompetidorDTO CompetidorDTO) {
+        this.CompetidorDTO = CompetidorDTO;
+    }
+
     @Override
-    public String getNome() {
+    public String getNomeFormatado() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -55,7 +55,7 @@
                   <TableView fx:id="tblView_competicoes" layoutX="-6.0" layoutY="183.0" prefHeight="382.0" prefWidth="793.0">
                     <columns>
                         <TableColumn fx:id="tblViewColumn_competicoes_categoria" prefWidth="185.0" style="-fx-font-size: 12;" text="Nome" />
-                      <TableColumn fx:id="tblViewColumn_competicoes_terminoApostas" prefWidth="129.0" text="Vezes utilizada (total)" />
+                      <TableColumn fx:id="tblViewColumn_competicoes_fechamentoApostas" prefWidth="129.0" text="Vezes utilizada (total)" />
                         <TableColumn fx:id="tblViewColumn_competicoes_dataOcorrencia" prefWidth="137.0" text="Vezes utilizada (mês)" />
                         <TableColumn fx:id="tblViewColumn_competicoes_qtdApostas" prefWidth="133.0" text="Apostas por categoria" />
                     </columns>

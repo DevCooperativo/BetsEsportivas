@@ -21,7 +21,6 @@ public class AtletaDTO implements IBaseDTO {
         Participacoes = participacoes;
     }
 
-    
     public AtletaDTO(int id, String nome, String sobrenome, Character sexo, LocalDateTime nascimento, int vitorias,
             int participacoes) {
         Id = id;
@@ -33,6 +32,11 @@ public class AtletaDTO implements IBaseDTO {
         Participacoes = participacoes;
     }
 
+    public AtletaDTO(int id, String nome, String sobrenome) {
+        Id = id;
+        Nome = nome;
+        Sobrenome = sobrenome;
+    }
 
     public AtletaDTO(int Id, String Nome, String Sobrenome, Character Sexo, LocalDateTime Nascimento) {
         this.Id = Id;
@@ -100,6 +104,11 @@ public class AtletaDTO implements IBaseDTO {
 
     @Override
     public String toString() {
+        return this.Nome + " " + this.Sobrenome;
+    }
+
+    @Override
+    public String getNomeFormatado() {
         return this.Nome + " " + this.Sobrenome;
     }
 }

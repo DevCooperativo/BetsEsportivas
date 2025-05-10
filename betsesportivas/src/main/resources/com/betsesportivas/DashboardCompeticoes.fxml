@@ -65,7 +65,7 @@
                         <TableColumn fx:id="tblViewColumn_competicoes_categoria" prefWidth="75.0" style="-fx-font-size: 12;" text="Categoria" />
                         <TableColumn fx:id="tblViewColumn_competicoes_dataCadastro" prefWidth="114.0" text="Data de Cadastro" />
                       <TableColumn fx:id="tblViewColumn_competicoes_dataInicioApostas" prefWidth="108.0" style="-fx-font-size: 12;" text="Incício apostas" />
-                      <TableColumn fx:id="tblViewColumn_competicoes_dataTerminoApostas" prefWidth="126.0" text="Término apostas" />
+                      <TableColumn fx:id="tblViewColumn_competicoes_dataFechamentoApostas" prefWidth="126.0" text="Término apostas" />
                         <TableColumn fx:id="tblViewColumn_competicoes_minimoApostas" prefWidth="98.0" text="Mínimo apostas" />
                         <TableColumn fx:id="tblViewColumn_competicoes_maximoApostas" prefWidth="112.0" text="Máximo apostas" />
                         <TableColumn fx:id="tblViewColumn_competicoes_status" prefWidth="70.0" text="Status" />
@@ -77,11 +77,13 @@
                   <Button fx:id="btn_refresh" layoutX="758.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="24.0" text="↺">
                      <font>
                         <Font size="14.0" />
-                     </font></Button>
+                     </font>
+                  </Button>
                   <Button fx:id="btn_criarEvento" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="24.0" text="+">
                      <font>
                         <Font size="14.0" />
-                     </font></Button>
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
          </children>
@@ -104,14 +106,14 @@
             <ComboBox fx:id="comboBox_criar_categoria" layoutX="411.0" layoutY="64.0" prefHeight="25.0" prefWidth="156.0" />
             <DatePicker fx:id="datePicker_criar_inicioApostas" layoutX="127.0" layoutY="101.0" prefHeight="25.0" prefWidth="94.0" />
             <Label layoutX="24.0" layoutY="102.0" text="Início das apostas" />
-            <DatePicker fx:id="datePicker_criar_terminoApostas" layoutX="412.0" layoutY="101.0" prefHeight="25.0" prefWidth="94.0" />
+            <DatePicker fx:id="datePicker_criar_fechamentoApostas" layoutX="412.0" layoutY="101.0" prefHeight="25.0" prefWidth="94.0" />
             <Label layoutX="289.0" layoutY="105.0" text="Término das apostas" />
             <DatePicker fx:id="datePicker_criar_dataOcorrencia" layoutX="126.0" layoutY="142.0" prefHeight="25.0" prefWidth="94.0" />
             <Label layoutX="24.0" layoutY="146.0" text="Data ocorrência" />
             <Button fx:id="btn_criar_salvar" layoutX="230.0" layoutY="308.0" mnemonicParsing="false" onAction="#salvarCriacaoCompeticao" prefHeight="25.0" prefWidth="132.0" text="Salvar" />
             <TextField fx:id="textField_criar_inicioApostas" layoutX="220.0" layoutY="101.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
             <TextField fx:id="textField_criar_dataOcorrencia" layoutX="215.0" layoutY="142.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
-            <TextField fx:id="textField_criar_terminoApostas" layoutX="506.0" layoutY="101.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
+            <TextField fx:id="textField_criar_fechamentoApostas" layoutX="506.0" layoutY="101.0" prefHeight="25.0" prefWidth="63.0" promptText="hh/mm" />
             <Button fx:id="btn_criar_competidores" layoutX="288.0" layoutY="142.0" mnemonicParsing="false" onAction="#abrirSelecaoCompetidoresCriar" prefHeight="25.0" prefWidth="281.0" text="Competidores" />
             <Pane layoutX="-4.0" layoutY="187.0" prefHeight="105.0" prefWidth="602.0" style="-fx-background-color: white;">
                <children>
@@ -183,14 +185,14 @@
             <ComboBox fx:id="comboBox_editar_categoria" layoutX="401.0" layoutY="91.0" prefHeight="25.0" prefWidth="165.0" />
             <DatePicker fx:id="datePicker_editar_inicioApostas" layoutX="121.0" layoutY="128.0" prefHeight="25.0" prefWidth="103.0" />
             <Label layoutX="26.0" layoutY="132.0" text="Início das apostas" />
-            <DatePicker fx:id="datePicker_editar_terminoApostas" layoutX="402.0" layoutY="128.0" prefHeight="25.0" prefWidth="103.0" />
+            <DatePicker fx:id="datePicker_editar_fechamentoApostas" layoutX="402.0" layoutY="128.0" prefHeight="25.0" prefWidth="103.0" />
             <Label layoutX="292.0" layoutY="132.0" text="Término das apostas" />
             <DatePicker fx:id="datePicker_editar_dataOcorrencia" layoutX="120.0" layoutY="165.0" prefHeight="25.0" prefWidth="103.0" />
             <Label layoutX="26.0" layoutY="169.0" text="Data ocorrência" />
             <Button fx:id="btn_editar_salvar" layoutX="320.0" layoutY="356.0" mnemonicParsing="false" onAction="#saveEdition" prefHeight="25.0" prefWidth="97.0" text="Salvar" />
             <TextField fx:id="textField_editar_inicioApostas" layoutX="223.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
             <TextField fx:id="textField_editar_dataOcorrencia" layoutX="223.0" layoutY="165.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
-            <TextField fx:id="textField_editar_terminoApostas" layoutX="505.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
+            <TextField fx:id="textField_editar_fechamentoApostas" layoutX="505.0" layoutY="128.0" prefHeight="25.0" prefWidth="63.0" promptText="hh-mm" />
             <Button fx:id="btn_editar_excluir" layoutX="177.0" layoutY="356.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: rgb(250, 91, 12);" text="Excluir" textFill="WHITE" />
             <Button fx:id="btn_editar_competidores" layoutX="289.0" layoutY="165.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="281.0" text="Competidores" />
             <Pane layoutY="221.0" prefHeight="105.0" prefWidth="593.0" style="-fx-background-color: white;">
@@ -206,6 +208,7 @@
                   </Text>
                </children>
             </Pane>
+            <Button fx:id="btnEditarFinalizar" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" style="-fx-background-color: rgb(21, 200 ,21);" text="Finalizar Competição" textFill="WHITE" />
          </children>
       </Pane>
       <Pane fx:id="pane_editar_competidores" layoutX="78.0" layoutY="53.0" prefHeight="496.0" prefWidth="633.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
@@ -243,6 +246,29 @@
                   <Button fx:id="pane_editar_competidores_concluir" mnemonicParsing="false" onAction="#closeEditCompetidoresPane" text="Concluir" />
               </buttons>
             </ButtonBar>
+         </children>
+      </Pane>
+      <Pane fx:id="paneFinalizar" layoutX="236.0" layoutY="63.0" prefHeight="496.0" prefWidth="329.0" style="-fx-background-color: rgb(250,250,250);" visible="false">
+         <children>
+            <AnchorPane layoutX="22.0" layoutY="42.0" minHeight="0.0" minWidth="0.0" prefHeight="304.0" prefWidth="285.0" style="-fx-background-color: rgb(210,210,210);">
+               <children>
+                  <ListView fx:id="listViewFinalizar" layoutX="2.0" layoutY="41.0" prefHeight="292.0" prefWidth="281.0" />
+                  <Text layoutX="87.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Atletas participando" />
+               </children>
+            </AnchorPane>
+            <Pane layoutX="1.0" layoutY="343.0" prefHeight="105.0" prefWidth="325.0" style="-fx-background-color: #f4f4f4;">
+               <children>
+                  <Label layoutX="94.0" layoutY="44.0" text="Posição Final" />
+                  <TextField fx:id="textFieldFinalizarPosicaoFinal" disable="true" layoutX="181.0" layoutY="40.0" prefHeight="25.0" prefWidth="51.0" />
+               </children>
+            </Pane>
+            <ButtonBar layoutX="419.0" layoutY="451.0" prefHeight="40.0" prefWidth="200.0" />
+            <Button fx:id="btnFinalizarConfirmar" layoutX="101.0" layoutY="459.0" mnemonicParsing="false" onAction="#closeEditCompetidoresPane" text="Confirmar finalização" />
+            <Button fx:id="btnFinalizarFechar" cancelButton="true" layoutX="294.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeEditPane" style="-fx-background-color: red;" text="X" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>
