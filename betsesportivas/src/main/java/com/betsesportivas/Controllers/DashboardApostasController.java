@@ -261,7 +261,7 @@ public class DashboardApostasController implements Initializable {
             if (odd == 0)
                 throw new Exception("Insira uma Odd válida");
             apostaDAO.CriarPorDTO(
-                    new ApostaDTO(jogador.getId(), valor, competidor.getAtleta_id(), competicao.getId(), odd));
+                    new ApostaDTO(jogador, valor, competidor.getAtleta_id(), competicao.getId(), odd));
             populateTableView();
             closeCreate();
         } catch (Exception e) {

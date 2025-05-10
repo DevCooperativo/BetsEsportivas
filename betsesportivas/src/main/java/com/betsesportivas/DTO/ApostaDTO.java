@@ -38,8 +38,8 @@ public class ApostaDTO implements IBaseDTO {
         Odd = odd;
     }
 
-    public ApostaDTO(int idJogador, double valor, int idCompetidor, int idCompeticao, double odd) {
-        IdJogador = idJogador;
+    public ApostaDTO(JogadorDTO jogadorDTO, double valor, int idCompetidor, int idCompeticao, double odd) {
+        JogadorDTO = jogadorDTO;
         Valor = valor;
         IdCompetidor = idCompetidor;
         IdCompeticao = idCompeticao;

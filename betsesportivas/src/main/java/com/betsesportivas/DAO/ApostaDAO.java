@@ -87,7 +87,7 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
         PreparedStatement sql = _conn.prepareStatement("DELETE FROM aposta WHERE id = ? RETURNING jogador_id, valor");
         sql.setInt(1, id);
         ResultSet result = sql.executeQuery();
-        while(result.next()){
+        while (result.next()) {
             sql = _conn.prepareStatement("UPDATE jogador SET saldo = saldo + ? WHERE id = ?");
             sql.setDouble(1, result.getDouble("valor"));
             sql.setInt(2, result.getInt("jogador_id"));
@@ -145,9 +145,12 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
             String competicao_nome = result.getString("competicao_nome");
             String atleta_nome = result.getString("atleta_nome");
             String atleta_sobrenome = result.getString("atleta_sobrenome");
-            LocalDateTime competicao_data_abertura_apostas = result.getTimestamp("competicao_data_abertura_apostas").toLocalDateTime();
-            LocalDateTime competicao_data_fechamento_apostas = result.getTimestamp("competicao_data_fechamento_apostas").toLocalDateTime();
-            LocalDateTime competicao_data_ocorrencia_evento = result.getTimestamp("competicao_data_ocorrencia_evento").toLocalDateTime();
+            LocalDateTime competicao_data_abertura_apostas = result.getTimestamp("competicao_data_abertura_apostas")
+                    .toLocalDateTime();
+            LocalDateTime competicao_data_fechamento_apostas = result.getTimestamp("competicao_data_fechamento_apostas")
+                    .toLocalDateTime();
+            LocalDateTime competicao_data_ocorrencia_evento = result.getTimestamp("competicao_data_ocorrencia_evento")
+                    .toLocalDateTime();
             double competicao_valor_maximo_aposta = result.getDouble("competicao_valor_maximo_aposta");
             double competicao_valor_minimo_aposta = result.getDouble("competicao_valor_minimo_aposta");
             String jogador_nome = result.getString("jogador_nome");
@@ -156,7 +159,8 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
             apostaList.add(new ApostaDTO(aposta_id, aposta_valor, aposta_odd,
                     new JogadorDTO(aposta_jogador_id, jogador_nome, jogador_saldo),
                     new CompeticaoDTO(aposta_competicao_id, competicao_nome, competicao_data_abertura_apostas,
-                            competicao_data_fechamento_apostas, competicao_data_ocorrencia_evento, competicao_valor_maximo_aposta,
+                            competicao_data_fechamento_apostas, competicao_data_ocorrencia_evento,
+                            competicao_valor_maximo_aposta,
                             competicao_valor_minimo_aposta),
                     new CompetidorDTO(new AtletaDTO(aposta_atleta_id, atleta_nome, atleta_sobrenome))));
         }
@@ -203,10 +207,54 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
     }
 
     @Override
-    public ApostaDTO CriarPorDTO(ApostaDTO valor) throws SQLException {
+    public ApostaDTO CriarPorDTO(ApostaDTO valor) throws SQLException, Exception {
         try {
             _conn.setAutoCommit(false);
-            PreparedStatement sql = _conn.prepareStatement(
+            PreparedStatement sql = _conn.prepareStatement("SELECT \r\n" + //
+                    "    jogador.id AS jogador_id,\r\n" + //
+                    "    jogador.nome AS jogador_nome,\r\n" + //
+                    "    aposta_stats.total_apostas,\r\n" + //
+                    "    aposta_stats.valor_total_apostado,\r\n" + //
+                    "    aposta_stats.lucro,\r\n" + //
+                    "    CASE \r\n" + //
+                    "        WHEN aposta_stats.total_apostas < 10 \r\n" + //
+                    "             AND aposta_stats.lucro < 0.3 * aposta_stats.valor_total_apostado \r\n" + //
+                    "        THEN 1\r\n" + //
+                    "        ELSE -1\r\n" + //
+                    "    END AS status_aposta\r\n" + //
+                    "FROM jogador\r\n" + //
+                    "JOIN (\r\n" + //
+                    "    SELECT \r\n" + //
+                    "        aposta.jogador_id,\r\n" + //
+                    "        COUNT(DISTINCT aposta.id) AS total_apostas,\r\n" + //
+                    "        SUM(aposta.valor) AS valor_total_apostado,\r\n" + //
+                    "        SUM(\r\n" + //
+                    "            CASE \r\n" + //
+                    "                WHEN aposta.atleta_id = competidor.atleta_id \r\n" + //
+                    "                     AND competidor.posicao_final = 1 \r\n" + //
+                    "                THEN aposta.valor * aposta.odd \r\n" + //
+                    "                ELSE -aposta.valor \r\n" + //
+                    "            END\r\n" + //
+                    "        ) AS lucro\r\n" + //
+                    "    FROM aposta\r\n" + //
+                    "    LEFT JOIN competidor ON competidor.competicao_id = aposta.competicao_id \r\n" + //
+                    "                         AND competidor.atleta_id = aposta.atleta_id\r\n" + //
+                    "    JOIN competicao ON competicao.id = aposta.competicao_id\r\n" + //
+                    "    WHERE \r\n" + //
+                    "        aposta.jogador_id = ?\r\n" + //
+                    "        AND NOW() - competicao.data_ocorrencia_evento < INTERVAL '1 Month'\r\n" + //
+                    "        AND NOW() > competicao.data_ocorrencia_evento\r\n" + //
+                    "    GROUP BY aposta.jogador_id\r\n" + //
+                    ") AS aposta_stats ON jogador.id = aposta_stats.jogador_id;");
+            sql.setInt(1, valor.getJogadorDTO().getId());
+            ResultSet result = sql.executeQuery();
+            while (result.next()) {
+                if (result.getInt("status_aposta") == -1)
+                    throw new Exception(
+                            "Este usuário superou o limite de 30% de lucros em um mês ou já fez mais de 10 apostas");
+            }
+            // #region transaction
+            sql = _conn.prepareStatement(
                     "INSERT INTO aposta(jogador_id, valor, atleta_id, competicao_id, odd) values(?,?,?,?,?)");
             sql.setInt(1, valor.getIdJogador());
             sql.setDouble(2, valor.getValor());
@@ -219,6 +267,7 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
             sql.setDouble(1, valor.getValor());
             sql.setInt(2, valor.getIdJogador());
             sql.execute();
+            // #endregion
             _conn.commit();
             return valor;
         } catch (Exception e) {
