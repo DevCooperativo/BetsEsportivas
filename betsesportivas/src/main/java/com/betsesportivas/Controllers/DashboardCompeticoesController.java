@@ -395,26 +395,29 @@ public class DashboardCompeticoesController implements Initializable {
     @FXML
     private void salvarCriacaoCompeticao() {
         try {
-            String nomeCompeticao = textField_criar_nome.getText();
-            CategoriaDTO categoriaSelecionada = comboBox_criar_categoria.getSelectionModel().getSelectedItem();
+            String nomeCompeticao = ParserHelper.parseField(textField_criar_nome.getText(), "Nome da competição");
 
-            String dataAberturaApostasString = datePicker_criar_inicioApostas.getValue().toString() + " "
-                    + textField_criar_inicioApostas.getText();
+            CategoriaDTO categoriaSelecionada = comboBox_criar_categoria.getSelectionModel().getSelectedItem();
+            if(categoriaSelecionada == null) throw new Exception("Escolha uma categoria");
+
+
+            String dataAberturaApostasString = ParserHelper.parseField(datePicker_criar_inicioApostas.getValue(), "Data da Abertura das Apostas") + " "
+                    + ParserHelper.parseField(textField_criar_inicioApostas.getText(), "Hora da Abertura das Apostas");
             LocalDateTime dataAberturaApostas = DateConverterHelper
                     .ConvertStringToLocalDateTime(dataAberturaApostasString);
 
-            String dataOcorrenciaApostasString = datePicker_criar_dataOcorrencia.getValue().toString() + " "
-                    + textField_criar_dataOcorrencia.getText();
+            String dataOcorrenciaApostasString = ParserHelper.parseField(datePicker_criar_dataOcorrencia.getValue(), "Data de Ocorrência") + " "
+                    + ParserHelper.parseField(textField_criar_dataOcorrencia.getText(), "Hora da ocorrência");
             LocalDateTime dataOcorrenciaApostas = DateConverterHelper
                     .ConvertStringToLocalDateTime(dataOcorrenciaApostasString);
 
-            String dataTerminoApostasString = datePicker_criar_terminoApostas.getValue().toString() + " "
-                    + textField_criar_terminoApostas.getText();
+            String dataTerminoApostasString = ParserHelper.parseField(datePicker_criar_terminoApostas.getValue(), "Data de Fechamento das Apostas") + " "
+                    + ParserHelper.parseField(textField_criar_terminoApostas.getText(), "Hora de Fechamento das Apostas");
             LocalDateTime dataTeminoApostas = DateConverterHelper
                     .ConvertStringToLocalDateTime(dataTerminoApostasString);
 
-            Double minimoApostas = Double.valueOf(textFieldMinimoApostas.getText().replace(',', '.'));
-            Double maximoApostas = Double.valueOf(textFieldMaximoApostas.getText().replace(',', '.'));
+            Double minimoApostas = Double.valueOf(ParserHelper.parseField(textFieldMinimoApostas.getText().replace(',', '.'), "Valor Mínimo de Apostas"));
+            Double maximoApostas = Double.valueOf(ParserHelper.parseField(textFieldMaximoApostas.getText().replace(',', '.'), "Valor Máximo de Apostas"));
 
             List<CompetidorDTO> atletasSelecionados = atletasParticipandoCriacaoObservable;
 
@@ -513,24 +516,25 @@ public class DashboardCompeticoesController implements Initializable {
 
         try {
 
-            onEditCompeticaoDTO.setNome(textField_editar_nome.getText());
+            onEditCompeticaoDTO.setNome(ParserHelper.parseField(textField_editar_nome.getText(), "Nome da competição"));
             onEditCompeticaoDTO.setData_abertura_apostas(DateConverterHelper.ConvertStringToLocalDateTime(
-                    (datePicker_editar_inicioApostas.getValue().toString() + " " + textField_editar_inicioApostas
-                            .getText())));
+                    (ParserHelper.parseField(datePicker_editar_inicioApostas.getValue(), "Data de Abertura das Apostas") + " " + ParserHelper.parseField(textField_editar_inicioApostas
+                            .getText(), "Hora de Abertura das Apoastas"))));
             onEditCompeticaoDTO.setData_fechamento_apostas(
                     DateConverterHelper
-                            .ConvertStringToLocalDateTime((datePicker_editar_terminoApostas.getValue().toString()
-                                    + " " + textField_editar_terminoApostas.getText())));
+                            .ConvertStringToLocalDateTime((ParserHelper.parseField(datePicker_editar_terminoApostas.getValue(), "Data de Fechamento das Apoastas")
+                                    + " " + ParserHelper.parseField(textField_editar_terminoApostas.getText(), "Hora de Fechamento das Apostas"))));
             onEditCompeticaoDTO.setData_ocorrencia_evento(
                     DateConverterHelper
-                            .ConvertStringToLocalDateTime((datePicker_editar_dataOcorrencia.getValue().toString()
-                                    + " " + textField_editar_dataOcorrencia.getText())));
+                            .ConvertStringToLocalDateTime((ParserHelper.parseField(datePicker_editar_dataOcorrencia.getValue(), "Data de Ocorrência")
+                                    + " " + ParserHelper.parseField(textField_editar_dataOcorrencia.getText(), "Hora de Ocorrencia"))));
             onEditCompeticaoDTO.setCategoria(comboBox_editar_categoria.getValue());
             onEditCompeticaoDTO
-                    .setValor_minimo_aposta((Double.parseDouble(textFieldEditarMinimoApostas.getText())));
+                    .setValor_minimo_aposta((Double.parseDouble(ParserHelper.parseField(textFieldEditarMinimoApostas.getText(), "Valor Mínimo de Apostas"))));
             onEditCompeticaoDTO
-                    .setValor_maximo_aposta((Double.parseDouble(textFieldEditarMaximoApostas.getText())));
+                    .setValor_maximo_aposta((Double.parseDouble(ParserHelper.parseField(textFieldEditarMaximoApostas.getText(), "Valor Máximo de Apostas"))));
             onEditCompeticaoDTO.setCompetidores(atletasParticipandoObservable);
+
             competicaoDAO.EditarPorDTO(onEditCompeticaoDTO);
             clearEdition();
             closeEditPane();
