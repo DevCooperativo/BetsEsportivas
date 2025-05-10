@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import com.betsesportivas.App;
 import com.betsesportivas.DAO.AtletaDAO;
@@ -80,7 +81,7 @@ public class DashboardCompeticoesController implements Initializable {
     @FXML
     private TableColumn<CompeticaoDTO, LocalDate> tblViewColumn_competicoes_dataCadastro;
     @FXML
-    private TableColumn<CompeticaoDTO, LocalDate> tblViewColumn_competicoes_dataTerminoApostas;
+    private TableColumn<CompeticaoDTO, LocalDate> tblViewColumn_competicoes_dataFechamentoApostas;
     @FXML
     private TableColumn<CompeticaoDTO, Double> tblViewColumn_competicoes_minimoApostas;
     @FXML
@@ -108,6 +109,8 @@ public class DashboardCompeticoesController implements Initializable {
     private ObservableList<CompetidorDTO> atletasDisponiveisObservable;
     @FXML
     private ObservableList<CompetidorDTO> atletasParticipandoObservable;
+    @FXML
+    private ObservableList<CompetidorDTO> finalizandoAtletasObservable;
 
     // #region editCompeticao
 
@@ -131,9 +134,9 @@ public class DashboardCompeticoesController implements Initializable {
     @FXML
     private TextField textField_editar_dataOcorrencia;
     @FXML
-    private DatePicker datePicker_editar_terminoApostas;
+    private DatePicker datePicker_editar_fechamentoApostas;
     @FXML
-    private TextField textField_editar_terminoApostas;
+    private TextField textField_editar_fechamentoApostas;
     @FXML
     private ComboBox<CategoriaDTO> comboBox_editar_categoria;
     @FXML
@@ -155,6 +158,10 @@ public class DashboardCompeticoesController implements Initializable {
     @FXML
     private Button btn_editar_salvar;
     @FXML
+    private Button btnEditarFinalizar;
+    @FXML
+    private Button btnFinalizarFechar;
+    @FXML
     private Button btn_editar_excluir;
 
     // #endregion
@@ -173,9 +180,9 @@ public class DashboardCompeticoesController implements Initializable {
     @FXML
     private TextField textField_criar_dataOcorrencia;
     @FXML
-    private DatePicker datePicker_criar_terminoApostas;
+    private DatePicker datePicker_criar_fechamentoApostas;
     @FXML
-    private TextField textField_criar_terminoApostas;
+    private TextField textField_criar_fechamentoApostas;
     @FXML
     private ComboBox<CategoriaDTO> comboBox_criar_categoria;
     @FXML
@@ -200,6 +207,18 @@ public class DashboardCompeticoesController implements Initializable {
     private Button btn_criarEvento;
     @FXML
     private Button btn_criar_salvar;
+
+    // #endregion
+
+    // #region
+    @FXML
+    private Pane paneFinalizar;
+    @FXML
+    private ListView<CompetidorDTO> listViewFinalizar;
+    @FXML
+    private TextField textFieldFinalizarPosicaoFinal;
+    @FXML
+    private Button btnFinalizarConfirmar;
 
     // #endregion
 
@@ -233,7 +252,7 @@ public class DashboardCompeticoesController implements Initializable {
     // TableView
     // ================================================================================
     private void populateTableViewData() throws SQLException {
-        List<CompeticaoDTO> listCompeticaoDTO = competicaoDAO.BuscarTodosOsDTO();
+        List<CompeticaoDTO> listCompeticaoDTO = competicaoDAO.BuscarDTOsEmAbertoComCompetidores();
         observableCompeticaoDTO = FXCollections.observableArrayList(listCompeticaoDTO);
         tblView_competicoes.setItems(observableCompeticaoDTO);
 
@@ -262,7 +281,7 @@ public class DashboardCompeticoesController implements Initializable {
         tblViewColumn_competicoes_dataCadastro.setCellValueFactory(new PropertyValueFactory<>("data_cadastro"));
         tblViewColumn_competicoes_dataInicioApostas
                 .setCellValueFactory(new PropertyValueFactory<>("data_abertura_apostas"));
-        tblViewColumn_competicoes_dataTerminoApostas
+        tblViewColumn_competicoes_dataFechamentoApostas
                 .setCellValueFactory(new PropertyValueFactory<>("data_fechamento_apostas"));
         tblViewColumn_competicoes_minimoApostas.setCellValueFactory(new PropertyValueFactory<>("valor_minimo_aposta"));
         tblViewColumn_competicoes_maximoApostas.setCellValueFactory(new PropertyValueFactory<>("valor_maximo_aposta"));
@@ -281,8 +300,8 @@ public class DashboardCompeticoesController implements Initializable {
             e.printStackTrace();
         }
         FieldsHelper.setHourFieldProperties(Arrays.asList(textField_editar_inicioApostas,
-                textField_editar_terminoApostas, textField_editar_dataOcorrencia, textField_criar_inicioApostas,
-                textField_criar_terminoApostas, textField_criar_dataOcorrencia));
+                textField_editar_fechamentoApostas, textField_editar_dataOcorrencia, textField_criar_inicioApostas,
+                textField_criar_fechamentoApostas, textField_criar_dataOcorrencia));
         FieldsHelper.<CategoriaDTO>setComboBoxProperties(comboBox_editar_categoria);
         FieldsHelper.<CategoriaDTO>setComboBoxProperties(comboBox_criar_categoria);
         setEvents();
@@ -314,8 +333,8 @@ public class DashboardCompeticoesController implements Initializable {
         datePicker_criar_inicioApostas.setValue(null);
         textField_criar_dataOcorrencia.setText("");
         datePicker_criar_dataOcorrencia.setValue(null);
-        textField_criar_terminoApostas.setText("");
-        datePicker_criar_terminoApostas.setValue(null);
+        textField_criar_fechamentoApostas.setText("");
+        datePicker_criar_fechamentoApostas.setValue(null);
         comboBox_criar_categoria.setValue(null);
         pane_criar_competidores_participando.setItems(null);
         pane_criar_competidores_disponiveis.setItems(null);
@@ -398,31 +417,45 @@ public class DashboardCompeticoesController implements Initializable {
             String nomeCompeticao = ParserHelper.parseField(textField_criar_nome.getText(), "Nome da competição");
 
             CategoriaDTO categoriaSelecionada = comboBox_criar_categoria.getSelectionModel().getSelectedItem();
-            if(categoriaSelecionada == null) throw new Exception("Escolha uma categoria");
+            if (categoriaSelecionada == null)
+                throw new Exception("Escolha uma categoria");
 
-
-            String dataAberturaApostasString = ParserHelper.parseField(datePicker_criar_inicioApostas.getValue(), "Data da Abertura das Apostas") + " "
+            String dataAberturaApostasString = ParserHelper.parseField(datePicker_criar_inicioApostas.getValue(),
+                    "Data da Abertura das Apostas") + " "
                     + ParserHelper.parseField(textField_criar_inicioApostas.getText(), "Hora da Abertura das Apostas");
             LocalDateTime dataAberturaApostas = DateConverterHelper
                     .ConvertStringToLocalDateTime(dataAberturaApostasString);
 
-            String dataOcorrenciaApostasString = ParserHelper.parseField(datePicker_criar_dataOcorrencia.getValue(), "Data de Ocorrência") + " "
+            String dataFechamentoApostasString = ParserHelper.parseField(datePicker_criar_fechamentoApostas.getValue(),
+                    "Data de Fechamento das Apostas") + " "
+                    + ParserHelper.parseField(textField_criar_fechamentoApostas.getText(),
+                            "Hora de Fechamento das Apostas");
+            LocalDateTime dataFechamentoApostas = DateConverterHelper
+                    .ConvertStringToLocalDateTime(dataFechamentoApostasString);
+
+            if (dataAberturaApostas.compareTo(dataFechamentoApostas) > 0)
+                throw new Exception(
+                        "A data de fechamento das apostas não pdoe ser anterior à data de abertura das apostas");
+            String dataOcorrenciaEventoString = ParserHelper.parseField(datePicker_criar_dataOcorrencia.getValue(),
+                    "Data de Ocorrência") + " "
                     + ParserHelper.parseField(textField_criar_dataOcorrencia.getText(), "Hora da ocorrência");
-            LocalDateTime dataOcorrenciaApostas = DateConverterHelper
-                    .ConvertStringToLocalDateTime(dataOcorrenciaApostasString);
+            LocalDateTime dataOcorrenciaEvento = DateConverterHelper
+                    .ConvertStringToLocalDateTime(dataOcorrenciaEventoString);
 
-            String dataTerminoApostasString = ParserHelper.parseField(datePicker_criar_terminoApostas.getValue(), "Data de Fechamento das Apostas") + " "
-                    + ParserHelper.parseField(textField_criar_terminoApostas.getText(), "Hora de Fechamento das Apostas");
-            LocalDateTime dataTeminoApostas = DateConverterHelper
-                    .ConvertStringToLocalDateTime(dataTerminoApostasString);
+            if (dataOcorrenciaEvento.compareTo(dataAberturaApostas) < 0)
+                throw new Exception("A data de ocorrência do evento deve ser posterior à abertura das apostas");
+            if (dataOcorrenciaEvento.compareTo(dataFechamentoApostas) < 0)
+                throw new Exception("A data de ocorrência do evento deve ser posterior ao término das apostas");
 
-            Double minimoApostas = Double.valueOf(ParserHelper.parseField(textFieldMinimoApostas.getText().replace(',', '.'), "Valor Mínimo de Apostas"));
-            Double maximoApostas = Double.valueOf(ParserHelper.parseField(textFieldMaximoApostas.getText().replace(',', '.'), "Valor Máximo de Apostas"));
+            Double minimoApostas = Double.valueOf(ParserHelper
+                    .parseField(textFieldMinimoApostas.getText().replace(',', '.'), "Valor Mínimo de Apostas"));
+            Double maximoApostas = Double.valueOf(ParserHelper
+                    .parseField(textFieldMaximoApostas.getText().replace(',', '.'), "Valor Máximo de Apostas"));
 
             List<CompetidorDTO> atletasSelecionados = atletasParticipandoCriacaoObservable;
 
             CompeticaoDTO competicao = new CompeticaoDTO(nomeCompeticao, categoriaSelecionada, LocalDateTime.now(),
-                    dataAberturaApostas, dataTeminoApostas, dataOcorrenciaApostas, maximoApostas, minimoApostas,
+                    dataAberturaApostas, dataFechamentoApostas, dataOcorrenciaEvento, maximoApostas, minimoApostas,
                     atletasSelecionados);
 
             competicaoDAO.CriarPorDTO(competicao);
@@ -448,9 +481,9 @@ public class DashboardCompeticoesController implements Initializable {
                 DateConverterHelper.ConvertTimestampsToFormated(onEditCompeticaoDTO.getData_ocorrencia_evento()));
         datePicker_editar_dataOcorrencia.setValue(
                 DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_ocorrencia_evento()));
-        textField_editar_terminoApostas.setText(
+        textField_editar_fechamentoApostas.setText(
                 DateConverterHelper.ConvertTimestampsToFormated(onEditCompeticaoDTO.getData_fechamento_apostas()));
-        datePicker_editar_terminoApostas.setValue(
+        datePicker_editar_fechamentoApostas.setValue(
                 DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_fechamento_apostas()));
         datePicker_editar_inicioApostas.setValue(
                 DateConverterHelper.ConvertTimestampsToLocalDate(onEditCompeticaoDTO.getData_abertura_apostas()));
@@ -463,9 +496,9 @@ public class DashboardCompeticoesController implements Initializable {
         textFieldEditarMaximoApostas.setText(ParserHelper.parseString(onEditCompeticaoDTO.getValor_maximo_aposta()));
         textFieldEditarMinimoApostas.setText(ParserHelper.parseString(onEditCompeticaoDTO.getValor_minimo_aposta()));
 
-        atletasDisponiveis = competidorDAO.BuscarCompetidoresDisponiveisDTO(onEditCompeticaoDTO.Id);
+        atletasDisponiveis = competidorDAO.BuscarCompetidoresDisponiveisDTO(onEditCompeticaoDTO.getId());
         atletasDisponiveisObservable = FXCollections.observableArrayList(atletasDisponiveis);
-        atletasParticipandoObservable = FXCollections.observableArrayList(onEditCompeticaoDTO.Competidores);
+        atletasParticipandoObservable = FXCollections.observableArrayList(onEditCompeticaoDTO.getCompetidores());
     }
 
     @FXML
@@ -473,8 +506,14 @@ public class DashboardCompeticoesController implements Initializable {
         tblView_competicoes.getSelectionModel().select(null);
         pane_editar.setVisible(false);
         pane_editar_competidores.setVisible(false);
+        closeFinalizar();
         clearEdition();
         onEditCompeticaoDTO = new CompeticaoDTO();
+    }
+
+    private void closeFinalizar() {
+        listViewFinalizar.getSelectionModel().clearSelection();
+        paneFinalizar.setVisible(false);
     }
 
     @FXML
@@ -518,21 +557,30 @@ public class DashboardCompeticoesController implements Initializable {
 
             onEditCompeticaoDTO.setNome(ParserHelper.parseField(textField_editar_nome.getText(), "Nome da competição"));
             onEditCompeticaoDTO.setData_abertura_apostas(DateConverterHelper.ConvertStringToLocalDateTime(
-                    (ParserHelper.parseField(datePicker_editar_inicioApostas.getValue(), "Data de Abertura das Apostas") + " " + ParserHelper.parseField(textField_editar_inicioApostas
-                            .getText(), "Hora de Abertura das Apoastas"))));
+                    (ParserHelper.parseField(datePicker_editar_inicioApostas.getValue(), "Data de Abertura das Apostas")
+                            + " " + ParserHelper.parseField(textField_editar_inicioApostas
+                                    .getText(), "Hora de Abertura das Apoastas"))));
             onEditCompeticaoDTO.setData_fechamento_apostas(
                     DateConverterHelper
-                            .ConvertStringToLocalDateTime((ParserHelper.parseField(datePicker_editar_terminoApostas.getValue(), "Data de Fechamento das Apoastas")
-                                    + " " + ParserHelper.parseField(textField_editar_terminoApostas.getText(), "Hora de Fechamento das Apostas"))));
+                            .ConvertStringToLocalDateTime(
+                                    (ParserHelper.parseField(datePicker_editar_fechamentoApostas.getValue(),
+                                            "Data de Fechamento das Apoastas")
+                                            + " "
+                                            + ParserHelper.parseField(textField_editar_fechamentoApostas.getText(),
+                                                    "Hora de Fechamento das Apostas"))));
             onEditCompeticaoDTO.setData_ocorrencia_evento(
                     DateConverterHelper
-                            .ConvertStringToLocalDateTime((ParserHelper.parseField(datePicker_editar_dataOcorrencia.getValue(), "Data de Ocorrência")
-                                    + " " + ParserHelper.parseField(textField_editar_dataOcorrencia.getText(), "Hora de Ocorrencia"))));
+                            .ConvertStringToLocalDateTime((ParserHelper
+                                    .parseField(datePicker_editar_dataOcorrencia.getValue(), "Data de Ocorrência")
+                                    + " " + ParserHelper.parseField(textField_editar_dataOcorrencia.getText(),
+                                            "Hora de Ocorrencia"))));
             onEditCompeticaoDTO.setCategoria(comboBox_editar_categoria.getValue());
             onEditCompeticaoDTO
-                    .setValor_minimo_aposta((Double.parseDouble(ParserHelper.parseField(textFieldEditarMinimoApostas.getText(), "Valor Mínimo de Apostas"))));
+                    .setValor_minimo_aposta((Double.parseDouble(ParserHelper
+                            .parseField(textFieldEditarMinimoApostas.getText(), "Valor Mínimo de Apostas"))));
             onEditCompeticaoDTO
-                    .setValor_maximo_aposta((Double.parseDouble(ParserHelper.parseField(textFieldEditarMaximoApostas.getText(), "Valor Máximo de Apostas"))));
+                    .setValor_maximo_aposta((Double.parseDouble(ParserHelper
+                            .parseField(textFieldEditarMaximoApostas.getText(), "Valor Máximo de Apostas"))));
             onEditCompeticaoDTO.setCompetidores(atletasParticipandoObservable);
 
             competicaoDAO.EditarPorDTO(onEditCompeticaoDTO);
@@ -561,15 +609,30 @@ public class DashboardCompeticoesController implements Initializable {
         datePicker_editar_inicioApostas.setValue(null);
         textField_editar_dataOcorrencia.setText("");
         datePicker_editar_dataOcorrencia.setValue(null);
-        textField_editar_terminoApostas.setText("");
-        datePicker_editar_terminoApostas.setValue(null);
+        textField_editar_fechamentoApostas.setText("");
+        datePicker_editar_fechamentoApostas.setValue(null);
         comboBox_editar_categoria.setValue(null);
+        textFieldEditarMaximoApostas.setText("");
+        textFieldEditarMinimoApostas.setText("");
+        listViewFinalizar.getSelectionModel().clearSelection();
         clearEditionCompetidor();
     }
 
     private void clearEditionCompetidor() {
         pane_editar_competidores_participando.setItems(null);
         pane_editar_competidores_disponiveis.setItems(null);
+    }
+
+    private void openFinalizarPane() {
+        finalizandoAtletasObservable = FXCollections.observableArrayList(onEditCompeticaoDTO.getCompetidores());
+        listViewFinalizar.setItems(finalizandoAtletasObservable);
+        paneFinalizar.setVisible(true);
+    }
+
+    private void saveFinalizar() throws SQLException {
+        competicaoDAO.FinalizarCompeticao(onEditCompeticaoDTO);
+        populateTableViewData();
+        closeEditPane();
     }
 
     // #endregion
@@ -581,18 +644,22 @@ public class DashboardCompeticoesController implements Initializable {
             try {
                 populateTableViewData();
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                ErrorHelper.ThrowErrorOnAlert(e);
             }
         });
 
         btn_criarEvento.setOnAction((ActionEvent event) -> {
             try {
-
-                onCreateCompeticaoDTO = new CompeticaoDTO();
-                openCreatePane();
-            } catch (SQLException ex) {
-                System.out.println(ex);
+                if (observableCompeticaoDTO.stream().filter(x -> !x.getEstado().equals('E'))
+                        .collect(Collectors.toList()).isEmpty()) {
+                    onCreateCompeticaoDTO = new CompeticaoDTO();
+                    openCreatePane();
+                }
+                else{
+                    throw new Exception("Você não pode cadastrar outra competição enquanto não tiver inserido o(s) resultado da anterior");
+                }
+            } catch (Exception ex) {
+                ErrorHelper.ThrowErrorOnAlert(ex);
             }
         });
 
@@ -686,6 +753,46 @@ public class DashboardCompeticoesController implements Initializable {
                 e.printStackTrace();
             }
         });
+
+        btnEditarFinalizar.setOnAction((ActionEvent event) -> {
+            try {
+                if(onEditCompeticaoDTO != null && onEditCompeticaoDTO.getData_ocorrencia_evento().compareTo(LocalDateTime.now())>0) throw new Exception("Você só pode finaliar um evento que já ocorreu");
+                openFinalizarPane();
+            } catch (Exception e) {
+                ErrorHelper.ThrowErrorOnAlert(e);
+            }
+        });
+
+        listViewFinalizar.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                textFieldFinalizarPosicaoFinal.setText(ParserHelper.parseString(newValue.getPosicao_final()));
+                textFieldFinalizarPosicaoFinal.setDisable(false);
+            } else {
+                textFieldFinalizarPosicaoFinal.setDisable(true);
+            }
+        });
+
+        textFieldFinalizarPosicaoFinal.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != "") {
+                if (listViewFinalizar.getSelectionModel().getSelectedItem() != null) {
+                    listViewFinalizar.getSelectionModel().getSelectedItem()
+                            .setPosicao_final(Integer.parseInt(newValue));
+                }
+            }
+        });
+
+        btnFinalizarConfirmar.setOnAction((ActionEvent event) -> {
+            try {
+                saveFinalizar();
+            } catch (Exception e) {
+                ErrorHelper.ThrowErrorOnAlert(e);
+            }
+        });
+
+        btnFinalizarFechar.setOnAction((ActionEvent event) -> {
+            closeFinalizar();
+        });
+
         btn_editar_excluir.setOnAction((ActionEvent event) -> {
             try {
                 competicaoDAO.Excluir(onEditCompeticaoDTO.getId());

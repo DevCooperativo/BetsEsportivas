@@ -3,6 +3,7 @@ package com.betsesportivas.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import com.betsesportivas.App;
@@ -58,7 +59,6 @@ public class DashboardApostasController implements Initializable {
     private ObservableList<CompetidorDTO> observableCompetidor;
     @FXML
     private ObservableList<CompeticaoDTO> observableCompeticao;
-
 
     @FXML
     private TableView<ApostaDTO> tblViewApostas;
@@ -237,26 +237,29 @@ public class DashboardApostasController implements Initializable {
     private void saveCreate() throws SQLException {
         try {
             JogadorDTO jogador = comboBoxJogador.getValue();
-            if (jogador == null) {
+            if (jogador == null)
                 throw new Exception("Escolha um jogador");
-            }
+
             CompeticaoDTO competicao = comboBoxCompeticao.getValue();
-            if (competicao == null) {
+            if (competicao == null)
                 throw new Exception("Escolha uma competição");
-            }
+            if(LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas())>=0) throw new Exception(String.format("A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s", competicao.getData_fechamento_apostas()));
+
             CompetidorDTO competidor = comboBoxCompetidor.getValue();
-            if (competidor == null) {
+            if (competidor == null)
                 throw new Exception("Escolha um competidor");
-            }
+
             double valor = Double.parseDouble(textFieldValor.getText());
-            if (valor > jogador.getSaldo()) {
+            if (valor > jogador.getSaldo())
                 throw new Exception("O jogador não possui saldo suficiente");
-            }
+
             if (valor < 0
-                    || (valor > competicao.getValor_maximo_aposta() || valor < competicao.getValor_minimo_aposta())) {
+                    || (valor > competicao.getValor_maximo_aposta() || valor < competicao.getValor_minimo_aposta()))
                 throw new Exception("Insira um valor dentro dos limites da competição");
-            }
-            double odd = sliderOdd.getValue();
+
+            double odd = Double.parseDouble(ParserHelper.parseField(sliderOdd.getValue(), "Odd"));
+            if (odd == 0)
+                throw new Exception("Insira uma Odd válida");
             apostaDAO.CriarPorDTO(
                     new ApostaDTO(jogador.getId(), valor, competidor.getAtleta_id(), competicao.getId(), odd));
             populateTableView();
@@ -316,6 +319,7 @@ public class DashboardApostasController implements Initializable {
             if (competicao == null) {
                 throw new Exception("Escolha uma competição");
             }
+            if(LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas())>=0) throw new Exception(String.format("A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s", competicao.getData_fechamento_apostas()));
 
             CompetidorDTO competidor = comboBoxEditarCompetidor.getValue();
             if (competidor == null) {
@@ -357,7 +361,7 @@ public class DashboardApostasController implements Initializable {
         comboBoxJogador.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 try {
-                    observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO());
+                    observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarDTOsEmAberto());
                     comboBoxCompeticao.setItems(observableCompeticao);
                     comboBoxCompeticao.setDisable(false);
                     textSaldo.setText(newValue.getSaldo().toString());
@@ -413,7 +417,7 @@ public class DashboardApostasController implements Initializable {
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         try {
-                            observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarTodosOsDTO());
+                            observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarDTOsEmAberto());
                             comboBoxEditarCompeticao.setItems(observableCompeticao);
                             comboBoxEditarCompetidor.setDisable(false);
                             textEditarSaldo.setText(newValue.getSaldo().toString());

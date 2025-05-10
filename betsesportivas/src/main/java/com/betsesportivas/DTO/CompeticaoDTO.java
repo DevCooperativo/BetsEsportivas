@@ -19,6 +19,7 @@ public class CompeticaoDTO implements IBaseDTO {
     public double Valor_maximo_aposta;
     public double Valor_minimo_aposta;
     public String Status;
+    private Character Estado;
     public List<CompetidorDTO> Competidores;
 
     public CompeticaoDTO() {
@@ -204,6 +205,14 @@ public class CompeticaoDTO implements IBaseDTO {
     @Override
     public String getNomeFormatado() {
         return Nome;
+    }
+
+    public Character getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(Character Estado) {
+        this.Estado = Estado;
     }
 
 }

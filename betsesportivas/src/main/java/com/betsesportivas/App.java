@@ -26,6 +26,7 @@ public class App extends Application {
         _stage = stage;
         scene = new Scene(loadFXML("DashboardCompeticoes"), 800, 600);
         _stage.setScene(scene);
+        _stage.setResizable(false);
         _stage.show();
     }
 

@@ -56,7 +56,7 @@
                     <columns>
                         <TableColumn fx:id="tblViewColumn_competicoes_categoria" prefWidth="77.0" style="-fx-font-size: 12;" text="Nome" />
                       <TableColumn fx:id="tblViewColumn_competicoes_inicioApostas" prefWidth="95.0" style="-fx-font-size: 12;" text="Email" />
-                      <TableColumn fx:id="tblViewColumn_competicoes_terminoApostas" prefWidth="73.0" text="Saldo" />
+                      <TableColumn fx:id="tblViewColumn_competicoes_fechamentoApostas" prefWidth="73.0" text="Saldo" />
                         <TableColumn fx:id="tblViewColumn_competicoes_dataOcorrencia" prefWidth="129.0" text="Número de apostas" />
                         <TableColumn fx:id="tblViewColumn_competicoes_qtdApostas" prefWidth="69.0" text="Vitórias" />
                         <TableColumn fx:id="tblViewColumn_competicoes_valorEmJogo" prefWidth="122.0" text="\% Vitórias/derrotas" />
