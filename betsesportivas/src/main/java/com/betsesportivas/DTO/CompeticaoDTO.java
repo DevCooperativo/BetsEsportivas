@@ -19,9 +19,22 @@ public class CompeticaoDTO implements IBaseDTO {
     public double Valor_maximo_aposta;
     public double Valor_minimo_aposta;
     public String Status;
+    private Character Estado;
     public List<CompetidorDTO> Competidores;
 
     public CompeticaoDTO() {
+    }
+
+    public CompeticaoDTO(int id, String nome, LocalDateTime data_abertura_apostas,
+            LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento, double valor_maximo_aposta,
+            double valor_minimo_aposta) {
+        Id = id;
+        Nome = nome;
+        Data_abertura_apostas = data_abertura_apostas;
+        Data_fechamento_apostas = data_fechamento_apostas;
+        Data_ocorrencia_evento = data_ocorrencia_evento;
+        Valor_maximo_aposta = valor_maximo_aposta;
+        Valor_minimo_aposta = valor_minimo_aposta;
     }
 
     public CompeticaoDTO(int id, String nome, CategoriaDTO categoria, LocalDateTime data_cadastro,
@@ -39,14 +52,14 @@ public class CompeticaoDTO implements IBaseDTO {
         ValorEmJogo = valorEmJogo;
         Status = status;
         Competidores = competidores;
-        Valor_maximo_aposta=valor_maximo_aposta;
-        Valor_minimo_aposta=valor_minimo_aposta;
+        Valor_maximo_aposta = valor_maximo_aposta;
+        Valor_minimo_aposta = valor_minimo_aposta;
     }
 
-    
     public CompeticaoDTO(String nome, CategoriaDTO categoria, LocalDateTime data_cadastro,
             LocalDateTime data_abertura_apostas,
-            LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento, double valor_maximo_aposta, double valor_minimo_aposta,
+            LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento, double valor_maximo_aposta,
+            double valor_minimo_aposta,
             List<CompetidorDTO> competidores) {
         Nome = nome;
         Categoria = categoria;
@@ -54,13 +67,15 @@ public class CompeticaoDTO implements IBaseDTO {
         Data_abertura_apostas = data_abertura_apostas;
         Data_fechamento_apostas = data_fechamento_apostas;
         Data_ocorrencia_evento = data_ocorrencia_evento;
-        Valor_maximo_aposta=valor_maximo_aposta;
-        Valor_minimo_aposta=valor_minimo_aposta;
+        Valor_maximo_aposta = valor_maximo_aposta;
+        Valor_minimo_aposta = valor_minimo_aposta;
         Competidores = competidores;
     }
+
     public CompeticaoDTO(int id, String nome, CategoriaDTO categoria, LocalDateTime data_cadastro,
             LocalDateTime data_abertura_apostas,
-            LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento, double valor_maximo_aposta, double valor_minimo_aposta,
+            LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento, double valor_maximo_aposta,
+            double valor_minimo_aposta,
             List<CompetidorDTO> competidores) {
         Id = id;
         Nome = nome;
@@ -69,10 +84,11 @@ public class CompeticaoDTO implements IBaseDTO {
         Data_abertura_apostas = data_abertura_apostas;
         Data_fechamento_apostas = data_fechamento_apostas;
         Data_ocorrencia_evento = data_ocorrencia_evento;
-        Valor_maximo_aposta=valor_maximo_aposta;
-        Valor_minimo_aposta=valor_minimo_aposta;
+        Valor_maximo_aposta = valor_maximo_aposta;
+        Valor_minimo_aposta = valor_minimo_aposta;
         Competidores = competidores;
     }
+
     public int getId() {
         return Id;
     }
@@ -181,6 +197,22 @@ public class CompeticaoDTO implements IBaseDTO {
         this.Valor_maximo_aposta = Valor_maximo_aposta;
     }
 
+    @Override
+    public String toString() {
+        return Nome;
+    }
 
+    @Override
+    public String getNomeFormatado() {
+        return Nome;
+    }
+
+    public Character getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(Character Estado) {
+        this.Estado = Estado;
+    }
 
 }

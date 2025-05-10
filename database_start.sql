@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS competicao (
     categoria_id INTEGER NOT NULL,
     valor_maximo_aposta NUMERIC(11,2) NOT NULL,
     valor_minimo_aposta NUMERIC(11,2) NOT NULL,
+    estado CHARACTER(1) NOT NULL,
 
     data_cadastro TIMESTAMP NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categoria (id)

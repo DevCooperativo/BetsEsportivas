@@ -75,8 +75,12 @@ public class CompetidorDTO implements IBaseDTO {
         return this.AtletaDTO.getNome() + " " + this.AtletaDTO.getSobrenome();
     }
 
-    @Override
     public String getNome() {
         return this.AtletaDTO.getNome();
+    }
+
+    @Override
+    public String getNomeFormatado() {
+        return this.AtletaDTO.getNome() + " " + this.AtletaDTO.getSobrenome();
     }
 }

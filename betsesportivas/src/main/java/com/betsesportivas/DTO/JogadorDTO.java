@@ -12,6 +12,12 @@ public class JogadorDTO implements IBaseDTO {
     private String email;
     private boolean isAtivado;
 
+    public JogadorDTO(int id, String nome, Double saldo) {
+        this.id = id;
+        this.nome = nome;
+        this.saldo = saldo;
+    }
+
     public JogadorDTO(Jogador jogador) {
         id = jogador.getId();
         nome = jogador.getNome();
@@ -70,13 +76,22 @@ public class JogadorDTO implements IBaseDTO {
         this.isAtivado = isAtivado;
     }
 
-    @Override
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public String toString(){
+        return nome;
+    }
+
+    @Override
+    public String getNomeFormatado() {
+        return nome;
     }
 
 }

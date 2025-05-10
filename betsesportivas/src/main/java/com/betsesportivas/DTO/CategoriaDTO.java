@@ -60,7 +60,7 @@ public class CategoriaDTO implements IBaseDTO{
     public void setId(int Id) {
         this.Id = Id;
     }
-
+    
     public String getNome() {
         return Nome;
     }
@@ -80,5 +80,10 @@ public class CategoriaDTO implements IBaseDTO{
     @Override
     public String toString(){
         return this.Nome;
+    }
+
+    @Override
+    public String getNomeFormatado() {
+        return Nome;
     }
 }

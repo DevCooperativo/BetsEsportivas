@@ -4,6 +4,7 @@ module com.betsesportivas {
     requires java.sql;
     requires javafx.base;
     requires javafx.graphics;
+    requires java.desktop;
 
     opens com.betsesportivas to javafx.fxml;
     opens com.betsesportivas.DAO;

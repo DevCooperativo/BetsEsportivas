@@ -33,7 +33,7 @@ public class FieldsHelper {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getNome()); // ou o campo que você quiser exibir
+                    setText(item.getNomeFormatado()); // ou o campo que você quiser exibir
                 }
             }
         });
@@ -45,7 +45,7 @@ public class FieldsHelper {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getNome()); // igual ao acima
+                    setText(item.getNomeFormatado()); // igual ao acima
                 }
             }
         });
