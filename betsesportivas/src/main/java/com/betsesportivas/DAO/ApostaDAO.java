@@ -7,12 +7,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.betsesportivas.DTO.ApostaDTO;
 import com.betsesportivas.Domain.Aposta;
 import com.betsesportivas.QueryBuilder.QueryBuilder;
 
-public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
+public class ApostaDAO implements IApostaDAO<Aposta, ApostaDTO> {
     private Connection _conn;
 
     @Override
@@ -157,6 +158,24 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
             throw e;
         }
 
+    }
+
+    @Override
+    public Map<String, Integer> RecuperarQuantidadeApostasPorCompeticao() throws SQLException {
+        String sqlQuery = "SELECT c.nome AS nome_competicao, COUNT(a.id) AS quantidade_apostas FROM competicao c LEFT JOIN aposta a ON a.competicao_id = c.id GROUP BY c.nome ORDER BY quantidade_apostas DESC; ";
+
+        PreparedStatement sql = _conn.prepareStatement(sqlQuery);
+        ResultSet result = sql.executeQuery();
+
+        Map<String, Integer> apostasPorCompeticao = new java.util.Hashtable<>();
+
+        while (result.next()) {
+            String nomeCompeticao = result.getString("nome_competicao");
+            int quantidade = result.getInt("quantidade_apostas");
+            apostasPorCompeticao.put(nomeCompeticao, quantidade);
+        }
+
+        return apostasPorCompeticao;
     }
 
 }
