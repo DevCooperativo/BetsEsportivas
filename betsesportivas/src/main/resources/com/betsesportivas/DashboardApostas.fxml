@@ -17,7 +17,7 @@
 
 <AnchorPane fx:id="anchorPane_dashboard" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.betsesportivas.Controllers.DashboardApostasController">
    <children>
-      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="800.0">
+      <MenuBar prefHeight="25.0" prefWidth="800.0">
          <menus>
             <Menu fx:id="menu_dashboard" mnemonicParsing="false" text="Competicoes">
                <items>
@@ -70,18 +70,15 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <Button fx:id="btn_refresh" layoutX="762.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="24.0" text="↺" />
-                  <Button fx:id="btnCriarAposta" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="24.0" text="+">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Button>
+                  <Button fx:id="btn_refresh" layoutX="762.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="↺" />
+                  <Button fx:id="btnCriarAposta" layoutX="14.0" layoutY="10.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="+" />
                </children>
             </AnchorPane>
          </children>
       </Pane>
       <Pane fx:id="paneCriar" layoutX="91.0" layoutY="125.0" prefHeight="315.0" prefWidth="625.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
          <children>
-            <Button fx:id="btnFechar" layoutX="584.0" layoutY="6.0" mnemonicParsing="false" style="-fx-background-color: red;" text="X" textFill="WHITE">
+            <Button fx:id="btnFechar" layoutX="584.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: red;" text="X" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
@@ -107,7 +104,7 @@
             </Text>
             <Text fx:id="textValorMinimo" layoutX="420.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Text fx:id="textValorMaximo" layoutX="524.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-            <Label layoutX="240.0" layoutY="18.0" text="Cadastro de aposta">
+            <Label layoutX="241.0" layoutY="12.0" text="Cadastro de aposta">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
