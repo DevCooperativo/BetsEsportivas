@@ -105,20 +105,17 @@ public class DashboardCategoriasController implements Initializable {
     // #region menus
     @FXML
     private MenuItem menu_competicoes_dashboard;
-    @FXML
-    private MenuItem menu_competicoes_relatorio;
+ 
     @FXML
     private MenuItem menu_apostas_dashboard;
     @FXML
     private MenuItem menu_apostas_relatorio;
     @FXML
     private MenuItem menu_atletas_dashboard;
-    @FXML
-    private MenuItem menu_atletas_relatorio;
+ 
     @FXML
     private MenuItem menu_categorias_dashboard;
-    @FXML
-    private MenuItem menu_categorias_relatorio;
+ 
     @FXML
     private MenuItem menu_jogadores_dashboard;
     @FXML
@@ -339,13 +336,7 @@ public class DashboardCategoriasController implements Initializable {
                 e.getStackTrace();
             }
         });
-        menu_categorias_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioCategorias");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
+ 
         menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("DashboardCompeticoes");
@@ -353,13 +344,7 @@ public class DashboardCategoriasController implements Initializable {
                 ex.getStackTrace();
             }
         });
-        menu_competicoes_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioCompeticoes");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
+ 
 
         menu_apostas_dashboard.setOnAction((ActionEvent event) -> {
             try {
@@ -384,13 +369,7 @@ public class DashboardCategoriasController implements Initializable {
             }
         });
 
-        menu_atletas_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioAtletas");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
+ 
 
         menu_jogadores_dashboard.setOnAction((ActionEvent event) -> {
             try {

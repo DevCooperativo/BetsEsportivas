@@ -141,20 +141,17 @@ public class DashboardApostasController implements Initializable {
     // #region menus
     @FXML
     private MenuItem menu_competicoes_dashboard;
-    @FXML
-    private MenuItem menu_competicoes_relatorio;
+
     @FXML
     private MenuItem menu_apostas_dashboard;
     @FXML
     private MenuItem menu_apostas_relatorio;
     @FXML
     private MenuItem menu_atletas_dashboard;
-    @FXML
-    private MenuItem menu_atletas_relatorio;
+
     @FXML
     private MenuItem menu_categorias_dashboard;
-    @FXML
-    private MenuItem menu_categorias_relatorio;
+
     @FXML
     private MenuItem menu_jogadores_dashboard;
     @FXML
@@ -279,7 +276,10 @@ public class DashboardApostasController implements Initializable {
             CompeticaoDTO competicao = comboBoxCompeticao.getValue();
             if (competicao == null)
                 throw new Exception("Escolha uma competição");
-            if(LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas())>=0) throw new Exception(String.format("A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s", competicao.getData_fechamento_apostas()));
+            if (LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas()) >= 0)
+                throw new Exception(String.format(
+                        "A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s",
+                        competicao.getData_fechamento_apostas()));
 
             CompetidorDTO competidor = comboBoxCompetidor.getValue();
             if (competidor == null)
@@ -355,7 +355,10 @@ public class DashboardApostasController implements Initializable {
             if (competicao == null) {
                 throw new Exception("Escolha uma competição");
             }
-            if(LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas())>=0) throw new Exception(String.format("A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s", competicao.getData_fechamento_apostas()));
+            if (LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas()) >= 0)
+                throw new Exception(String.format(
+                        "A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s",
+                        competicao.getData_fechamento_apostas()));
 
             CompetidorDTO competidor = comboBoxEditarCompetidor.getValue();
             if (competidor == null) {
@@ -453,7 +456,8 @@ public class DashboardApostasController implements Initializable {
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         try {
-                            observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarDTOsEmAberto());
+                            observableCompeticao = FXCollections
+                                    .observableArrayList(competicaoDAO.BuscarDTOsEmAberto());
                             comboBoxEditarCompeticao.setItems(observableCompeticao);
                             comboBoxEditarCompetidor.setDisable(false);
                             textEditarSaldo.setText(newValue.getSaldo().toString());
@@ -569,23 +573,10 @@ public class DashboardApostasController implements Initializable {
                 e.getStackTrace();
             }
         });
-        menu_categorias_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioCategorias");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
+
         menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("DashboardCompeticoes");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
-        menu_competicoes_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioCompeticoes");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }
@@ -609,14 +600,6 @@ public class DashboardApostasController implements Initializable {
         menu_atletas_dashboard.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("DashboardAtletas");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
-
-        menu_atletas_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioAtletas");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }

@@ -21,24 +21,24 @@ INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, da
 
 
 INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (1, 1, 10, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (1, 2, 10, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (1, 3, 10, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (1, 4, 10, 1, 1);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (1, 2, 10, 1, 2);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (1, 3, 10, 1, 3);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (1, 4, 10, 1, 4);
 
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (2, 1, 23, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (2, 2, 23, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (2, 3, 23, 1, 1);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (2, 1, 23, 1, 4);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (2, 2, 23, 1, 3);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (2, 3, 23, 1, 2);
 INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (2, 4, 23, 1, 1);
 
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (3, 1, 100, 1, 1);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (3, 1, 100, 1, 4);
 INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (3, 2, 100, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (3, 3, 100, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (3, 4, 100, 1, 1);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (3, 3, 100, 1, 2);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (3, 4, 100, 1, 3);
 
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (4, 1, 1, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (4, 2, 1, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (4, 3, 1, 1, 1);
-INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (4, 4, 1, 1, 1);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (4, 1, 1, 1, 0);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (4, 2, 1, 1, 0);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (4, 3, 1, 1, 0);
+INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posicao_final) VALUES (4, 4, 1, 1, 0);
 
 
 

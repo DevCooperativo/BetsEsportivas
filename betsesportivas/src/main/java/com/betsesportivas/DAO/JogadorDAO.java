@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.betsesportivas.DTO.JogadorDTO;
+import com.betsesportivas.DTO.RelatorioJogadoresDTO;
 import com.betsesportivas.Domain.Jogador;
 import com.betsesportivas.Helpers.DateConverterHelper;
 
@@ -154,6 +155,28 @@ public class JogadorDAO implements IJogadorDAO<Jogador, JogadorDTO> {
         sql.setTimestamp(4, DateConverterHelper.ConvertLocalDateToTimestamp(valor.getNascimento()));
         sql.execute();
         return valor;
+    }
+
+    @Override
+    public List<RelatorioJogadoresDTO> buscarRelatorioLucroPorCliente() throws SQLException {
+        List<RelatorioJogadoresDTO> relatorio = new ArrayList<>();
+
+        String query = "SELECT a.jogador_id, j.nome AS nome_jogador, SUM(a.valor) AS total_apostado, SUM(CASE WHEN cp.posicao_final = 1 THEN a.valor * a.odd ELSE 0 END) AS total_ganho, SUM(CASE WHEN cp.posicao_final = 1 THEN a.valor * a.odd ELSE 0 END) - SUM(a.valor) AS lucro FROM aposta a JOIN jogador j ON j.id = a.jogador_id LEFT JOIN competidor cp ON cp.competicao_id = a.competicao_id AND cp.atleta_id = a.atleta_id GROUP BY a.jogador_id, j.nome ORDER BY a.jogador_id;";
+
+        try (PreparedStatement stmt = _conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                int clienteId = rs.getInt("jogador_id");
+                String nomeJogador = rs.getString("nome_jogador");
+                double totalApostado = rs.getDouble("total_apostado");
+                double totalGanho = rs.getDouble("total_ganho");
+                double lucro = rs.getDouble("lucro");
+
+                relatorio.add(new RelatorioJogadoresDTO(clienteId, nomeJogador, totalApostado, totalGanho, lucro));
+            }
+        }
+
+        return relatorio;
     }
 
 }

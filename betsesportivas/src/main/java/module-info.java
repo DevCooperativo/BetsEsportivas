@@ -5,6 +5,7 @@ module com.betsesportivas {
     requires javafx.base;
     requires javafx.graphics;
     requires java.desktop;
+    requires jasperreports;
 
     opens com.betsesportivas to javafx.fxml;
     opens com.betsesportivas.DAO;
