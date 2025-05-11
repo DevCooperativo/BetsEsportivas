@@ -3,6 +3,8 @@ package com.betsesportivas.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
@@ -10,21 +12,29 @@ import com.betsesportivas.App;
 import com.betsesportivas.DAO.ApostaDAO;
 import com.betsesportivas.DAO.CompeticaoDAO;
 import com.betsesportivas.DAO.CompetidorDAO;
+import com.betsesportivas.DAO.IApostaDAO;
 import com.betsesportivas.DAO.JogadorDAO;
 import com.betsesportivas.DTO.ApostaDTO;
+import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.DTO.CompeticaoDTO;
 import com.betsesportivas.DTO.CompetidorDTO;
 import com.betsesportivas.DTO.JogadorDTO;
 import com.betsesportivas.Database.Db;
+import com.betsesportivas.Domain.Aposta;
 import com.betsesportivas.Helpers.ErrorHelper;
 import com.betsesportivas.Helpers.FieldsHelper;
 import com.betsesportivas.Helpers.ParserHelper;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
@@ -39,7 +49,7 @@ import javafx.scene.text.Text;
 public class DashboardApostasController implements Initializable {
 
     private Db database = new Db();
-    private ApostaDAO apostaDAO = new ApostaDAO();
+    private IApostaDAO<Aposta, ApostaDTO> apostaDAO = new ApostaDAO();
     private CompetidorDAO competidorDAO = new CompetidorDAO();
     private CompeticaoDAO competicaoDAO = new CompeticaoDAO();
     private JogadorDAO jogadorDAO = new JogadorDAO();
@@ -131,25 +141,29 @@ public class DashboardApostasController implements Initializable {
     // #region menus
     @FXML
     private MenuItem menu_competicoes_dashboard;
-    @FXML
-    private MenuItem menu_competicoes_relatorio;
+
     @FXML
     private MenuItem menu_apostas_dashboard;
     @FXML
     private MenuItem menu_apostas_relatorio;
     @FXML
     private MenuItem menu_atletas_dashboard;
-    @FXML
-    private MenuItem menu_atletas_relatorio;
+
     @FXML
     private MenuItem menu_categorias_dashboard;
-    @FXML
-    private MenuItem menu_categorias_relatorio;
+
     @FXML
     private MenuItem menu_jogadores_dashboard;
     @FXML
     private MenuItem menu_jogadores_relatorio;
     // #endregion
+
+    @FXML
+    private BarChart<String, Integer> chartApostasPorCompeticao;
+    @FXML
+    private CategoryAxis categoryAxis;
+    @FXML
+    private NumberAxis numberAxis;
 
     private void setTableViewFields() throws SQLException {
         tblViewColumnApostasCompeticao.setCellValueFactory(new PropertyValueFactory<>("CompeticaoDTO"));
@@ -198,9 +212,28 @@ public class DashboardApostasController implements Initializable {
             setFields();
             setEvents();
             clearCreate();
+            populateGrafico();
         } catch (SQLException e) {
             ErrorHelper.ThrowErrorOnAlert(e);
         }
+    }
+
+    public void populateGrafico() throws SQLException {
+        Map<String, Integer> dados = apostaDAO.RecuperarQuantidadeApostasPorCompeticao();
+
+        XYChart.Series<String, Integer> series = new XYChart.Series<>();
+
+        chartApostasPorCompeticao.setLegendVisible(false);
+
+        for (Map.Entry<String, Integer> dadosItem : dados.entrySet()) {
+            String nomeCategoria = dadosItem.getKey();
+            Integer quantidade = dadosItem.getValue();
+            XYChart.Data<String, Integer> data = new XYChart.Data<>(nomeCategoria, quantidade);
+            series.getData().add(data);
+        }
+
+        chartApostasPorCompeticao.getData().clear();
+        chartApostasPorCompeticao.getData().add(series);
     }
 
     private void clearCreate() {
@@ -243,7 +276,10 @@ public class DashboardApostasController implements Initializable {
             CompeticaoDTO competicao = comboBoxCompeticao.getValue();
             if (competicao == null)
                 throw new Exception("Escolha uma competição");
-            if(LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas())>=0) throw new Exception(String.format("A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s", competicao.getData_fechamento_apostas()));
+            if (LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas()) >= 0)
+                throw new Exception(String.format(
+                        "A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s",
+                        competicao.getData_fechamento_apostas()));
 
             CompetidorDTO competidor = comboBoxCompetidor.getValue();
             if (competidor == null)
@@ -319,7 +355,10 @@ public class DashboardApostasController implements Initializable {
             if (competicao == null) {
                 throw new Exception("Escolha uma competição");
             }
-            if(LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas())>=0) throw new Exception(String.format("A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s", competicao.getData_fechamento_apostas()));
+            if (LocalDateTime.now().compareTo(competicao.getData_fechamento_apostas()) >= 0)
+                throw new Exception(String.format(
+                        "A aposta não pode ser realizada pois o período de apostas para esta competição foi encerrado às %s",
+                        competicao.getData_fechamento_apostas()));
 
             CompetidorDTO competidor = comboBoxEditarCompetidor.getValue();
             if (competidor == null) {
@@ -417,7 +456,8 @@ public class DashboardApostasController implements Initializable {
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         try {
-                            observableCompeticao = FXCollections.observableArrayList(competicaoDAO.BuscarDTOsEmAberto());
+                            observableCompeticao = FXCollections
+                                    .observableArrayList(competicaoDAO.BuscarDTOsEmAberto());
                             comboBoxEditarCompeticao.setItems(observableCompeticao);
                             comboBoxEditarCompetidor.setDisable(false);
                             textEditarSaldo.setText(newValue.getSaldo().toString());
@@ -533,23 +573,10 @@ public class DashboardApostasController implements Initializable {
                 e.getStackTrace();
             }
         });
-        menu_categorias_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioCategorias");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
+
         menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("DashboardCompeticoes");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
-        menu_competicoes_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioCompeticoes");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }
@@ -573,14 +600,6 @@ public class DashboardApostasController implements Initializable {
         menu_atletas_dashboard.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("DashboardAtletas");
-            } catch (IOException ex) {
-                ex.getStackTrace();
-            }
-        });
-
-        menu_atletas_relatorio.setOnAction((ActionEvent event) -> {
-            try {
-                App.setNewScene("RelatorioAtletas");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }

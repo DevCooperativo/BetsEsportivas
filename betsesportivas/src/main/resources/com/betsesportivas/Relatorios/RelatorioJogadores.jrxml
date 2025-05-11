@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioJogadores" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3ee54472-c9aa-4147-96e0-8a135af15c26">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="betsesportivas"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT a.jogador_id, j.nome AS nome_jogador, SUM(a.valor) AS total_apostado, SUM(CASE WHEN cp.posicao_final = 1 THEN a.valor * a.odd ELSE 0 END) AS total_ganho, SUM(CASE WHEN cp.posicao_final = 1 THEN a.valor * a.odd ELSE 0 END) - SUM(a.valor) AS lucro FROM aposta a JOIN jogador j ON j.id = a.jogador_id LEFT JOIN competidor cp ON cp.competicao_id = a.competicao_id AND cp.atleta_id = a.atleta_id GROUP BY a.jogador_id, j.nome ORDER BY a.jogador_id;]]>
+	</queryString>
+	<field name="nome_jogador" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome_jogador"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jogador"/>
+	</field>
+	<field name="total_apostado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="total_apostado"/>
+	</field>
+	<field name="total_ganho" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="total_ganho"/>
+	</field>
+	<field name="lucro" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="lucro"/>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="7a39c7a6-35d7-46e5-bd14-40348c24f6d5"/>
+				<staticText>
+					<reportElement x="20" y="20" width="414" height="43" forecolor="#FFFFFF" uuid="2728fad7-8aea-4eb2-ae64-c6f07a9887b8"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Relatório jogadores]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="c2682e8e-6d26-4749-8377-a40476b66259"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Lucro total por jogador]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="6c1f0801-b620-4bae-b048-aa4f212dd4ee"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="138" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="64f09238-7ef1-467d-9876-d1e3b559aa7c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="df57e00c-e198-4245-9527-5c65a0384847"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jogador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="138" y="0" width="138" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="d797fbd1-adec-4b1c-ae3b-ce7f7ce306d9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ca273268-545b-4ac0-bfce-eaf3bd9777ad"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total apostado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="276" y="0" width="138" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f6f246c4-5235-48ae-93dc-b16e35c85e87">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7f54bca8-7670-4c23-8f70-4caef8ce047c"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total ganho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="414" y="0" width="138" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="a03d9c79-25bb-42cf-ac16-26e13f3532bb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2012d03d-f17f-4038-a325-5e703c2b3271"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total lucro]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="73fd6b35-fdaf-411a-9a2f-f8b96f124b19"/>
+			</line>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="0" width="138" height="20" uuid="577f2dd1-7fd8-428f-9f1a-b1f7fc818baa">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="df57e00c-e198-4245-9527-5c65a0384847"/>
+				</reportElement>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_jogador}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="138" y="0" width="138" height="20" uuid="af8c47df-017c-4f2d-b9ee-172b2d2c5701">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ca273268-545b-4ac0-bfce-eaf3bd9777ad"/>
+				</reportElement>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_apostado}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="276" y="0" width="138" height="20" uuid="def625f2-ff02-418c-816c-0e6cb4831101">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7f54bca8-7670-4c23-8f70-4caef8ce047c"/>
+				</reportElement>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_ganho}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="414" y="0" width="138" height="20" uuid="02736a6d-430d-46cc-ba6c-41e80440953c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2012d03d-f17f-4038-a325-5e703c2b3271"/>
+				</reportElement>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lucro}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="12fd4bea-d5f3-40b9-a9e3-6d77f24118eb"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="25b69964-5d9c-4b49-a6db-96ff3420318d"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="e54a0c0a-8ae6-4790-ab2e-9ae50e328ddc"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

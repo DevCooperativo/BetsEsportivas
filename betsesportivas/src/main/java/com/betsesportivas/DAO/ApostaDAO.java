@@ -8,16 +8,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.betsesportivas.DTO.ApostaDTO;
 import com.betsesportivas.DTO.AtletaDTO;
 import com.betsesportivas.DTO.CompeticaoDTO;
 import com.betsesportivas.DTO.CompetidorDTO;
 import com.betsesportivas.DTO.JogadorDTO;
+import com.betsesportivas.DTO.RelatorioApostasDTO;
 import com.betsesportivas.Domain.Aposta;
 import com.betsesportivas.QueryBuilder.QueryBuilder;
 
-public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
+public class ApostaDAO implements IApostaDAO<Aposta, ApostaDTO> {
     private Connection _conn;
 
     @Override
@@ -275,6 +277,44 @@ public class ApostaDAO implements IBaseDAO<Aposta, ApostaDTO> {
             throw e;
         }
 
+    }
+
+    @Override
+    public Map<String, Integer> RecuperarQuantidadeApostasPorCompeticao() throws SQLException {
+        String sqlQuery = "SELECT c.nome AS nome_competicao, COUNT(a.id) AS quantidade_apostas FROM competicao c LEFT JOIN aposta a ON a.competicao_id = c.id GROUP BY c.nome ORDER BY quantidade_apostas DESC; ";
+
+        PreparedStatement sql = _conn.prepareStatement(sqlQuery);
+        ResultSet result = sql.executeQuery();
+
+        Map<String, Integer> apostasPorCompeticao = new java.util.Hashtable<>();
+
+        while (result.next()) {
+            String nomeCompeticao = result.getString("nome_competicao");
+            int quantidade = result.getInt("quantidade_apostas");
+            apostasPorCompeticao.put(nomeCompeticao, quantidade);
+        }
+
+        return apostasPorCompeticao;
+    }
+
+    @Override
+    public List<RelatorioApostasDTO> RecuperarRelatorioApostas() throws SQLException {
+        List<RelatorioApostasDTO> relatorio = new ArrayList<>();
+
+        String query = "SELECT c.nome AS nome_competicao, COUNT(DISTINCT CASE WHEN cp.posicao_final = 1 AND a.atleta_id = cp.atleta_id THEN a.jogador_id END) AS vencedores FROM competicao c LEFT JOIN aposta a ON a.competicao_id = c.id LEFT JOIN competidor cp ON cp.competicao_id = c.id AND cp.atleta_id = a.atleta_id WHERE c.estado = 'E' GROUP BY c.nome ORDER BY c.nome;";
+
+        try (PreparedStatement stmt = _conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String nomeCompeticao = rs.getString("nome_competicao");
+                int vencedores = rs.getInt("vencedores");
+
+                relatorio.add(new RelatorioApostasDTO(nomeCompeticao, vencedores));
+            }
+        }
+
+        return relatorio;
     }
 
 }

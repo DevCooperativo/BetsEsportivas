@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -22,19 +25,16 @@
             <Menu fx:id="menu_dashboard" mnemonicParsing="false" text="Competicoes">
                <items>
                   <MenuItem fx:id="menu_competicoes_dashboard" mnemonicParsing="false" text="Dashboard" />
-                  <MenuItem fx:id="menu_competicoes_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
             <Menu fx:id="menu_jogadores1" mnemonicParsing="false" text="Categorias">
                <items>
                   <MenuItem fx:id="menu_categorias_dashboard" mnemonicParsing="false" text="Dashboard" />
-                  <MenuItem fx:id="menu_categorias_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
             <Menu fx:id="menu_atletas" mnemonicParsing="false" text="Atletas">
                <items>
                   <MenuItem fx:id="menu_atletas_dashboard" mnemonicParsing="false" text="Dashboard" />
-                  <MenuItem fx:id="menu_atletas_relatorio" mnemonicParsing="false" text="Relatório" />
                </items>
             </Menu>
             <Menu fx:id="menu_apostas" mnemonicParsing="false" text="Apostas">
@@ -59,7 +59,7 @@
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font></Label>
-                  <TableView fx:id="tblViewApostas" layoutY="40.0" prefHeight="489.0" prefWidth="800.0">
+                  <TableView fx:id="tblViewApostas" layoutY="234.0" prefHeight="295.0" prefWidth="800.0">
                     <columns>
                         <TableColumn fx:id="tblViewColumnApostasJogador" prefWidth="174.0" style="-fx-font-size: 12;" text="Jogador" />
                         <TableColumn fx:id="tblViewColumnApostasValor" prefWidth="112.0" style="-fx-font-size: 12;" text="Valor" />
@@ -70,8 +70,19 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <Button fx:id="btn_refresh" layoutX="762.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="↺" />
-                  <Button fx:id="btnCriarAposta" layoutX="14.0" layoutY="10.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="+" />
+                  <Button fx:id="btn_refresh" layoutX="762.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="24.0" text="↺" />
+                  <Button fx:id="btnCriarAposta" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="24.0" text="+">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+                  <BarChart fx:id="chartApostasPorCompeticao" layoutX="151.0" layoutY="38.0" prefHeight="198.0" prefWidth="498.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BarChart>
                </children>
             </AnchorPane>
          </children>

@@ -5,13 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.Domain.Categoria;
 
-public class CategoriaDAO implements IBaseDAO<Categoria, CategoriaDTO> {
+public class CategoriaDAO implements ICategoriaDAO<Categoria, CategoriaDTO> {
     private Connection _conn;
 
     public CategoriaDAO() {
@@ -109,7 +111,8 @@ public class CategoriaDAO implements IBaseDAO<Categoria, CategoriaDTO> {
             String cor = result.getString("cor");
             boolean isAtiva = result.getBoolean("is_ativada");
             int vezesUtilizada = result.getInt("vezesUtilizada");
-            categoriaDTO.add(new CategoriaDTO(resultId, nome, descricao, cor, vezesUtilizada, maxParticipantes, isAtiva));
+            categoriaDTO
+                    .add(new CategoriaDTO(resultId, nome, descricao, cor, vezesUtilizada, maxParticipantes, isAtiva));
         }
         return categoriaDTO;
     }
@@ -145,4 +148,24 @@ public class CategoriaDAO implements IBaseDAO<Categoria, CategoriaDTO> {
         return valor;
     }
 
+    @Override
+    public Map<String, Integer> RecuperarQuantidadeCompeticoesPorCategoria() throws SQLException {
+        PreparedStatement sql = _conn.prepareStatement("SELECT \r\n" +
+                "    cat.nome AS nome_categoria,\r\n" +
+                "    COUNT(comp.id) AS quantidade_competicoes\r\n" +
+                "FROM categoria cat\r\n" +
+                "LEFT JOIN competicao comp ON comp.categoria_id = cat.id\r\n" +
+                "GROUP BY cat.nome\r\n" +
+                "ORDER BY quantidade_competicoes DESC;");
+        ResultSet result = sql.executeQuery();
+        Map<String, Integer> competicoesCategoria = new Hashtable<>();
+
+        while (result.next()) {
+            String nomeCategoria = result.getString("nome_categoria");
+            int quantidade = result.getInt("quantidade_competicoes");
+            competicoesCategoria.put(nomeCategoria, quantidade);
+        }
+
+        return competicoesCategoria;
+    }
 }
