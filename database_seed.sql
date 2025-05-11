@@ -15,7 +15,7 @@ INSERT INTO atleta (nome, sobrenome, nascimento, sexo, vitorias, participacoes) 
 
 INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('Copa do Mundo', '2025-06-01 00:00:00', '2025-07-01 00:00:00','2025-07-01 15:00:00' ,'A', 1, 100000.00, 10.00, '2025-01-01 00:00:00');
 INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('NBA Finals', '2025-06-15 00:00:00', '2025-07-15 00:00:00','2025-07-15 15:00:00' ,'A', 2, 100000.00, 10.00, '2025-03-01 00:00:00');
-INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('Maratona de Nova York', '2025-07-01 00:00:00','2025-07-01 15:00:00' ,'A', '2025-07-10 00:00:00', 3, 100000.00, 10.00, '2025-02-01 00:00:00');
+INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('Maratona de Nova York', '2025-07-01 00:00:00','2025-07-01 15:00:00', '2025-07-10 00:00:00', 'A', 3, 100000.00, 10.00, '2025-02-01 00:00:00');
 INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('US Open de Tênis', '2025-08-01 00:00:00', '2025-08-15 00:00:00','2025-08-15 15:00:00' ,'A', 4, 100000.00, 10.00, '2025-04-01 00:00:00');
 
 
