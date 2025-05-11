@@ -13,10 +13,10 @@ INSERT INTO atleta (nome, sobrenome, nascimento, sexo, vitorias, participacoes) 
 INSERT INTO atleta (nome, sobrenome, nascimento, sexo, vitorias, participacoes) VALUES ('Usain', 'Bolt', '1986-08-21 00:00:00', 'M', 120, 130);
 INSERT INTO atleta (nome, sobrenome, nascimento, sexo, vitorias, participacoes) VALUES ('Serena', 'Williams', '1981-09-26 00:00:00', 'F', 150, 180);
 
-INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('Copa do Mundo', '2025-06-01 00:00:00', '2025-07-01 00:00:00','2025-07-01 15:00:00' ,'A', 1, 100000.00, 10.00, '2025-01-01 00:00:00');
-INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('NBA Finals', '2025-06-15 00:00:00', '2025-07-15 00:00:00','2025-07-15 15:00:00' ,'A', 2, 100000.00, 10.00, '2025-03-01 00:00:00');
-INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('Maratona de Nova York', '2025-07-01 00:00:00','2025-07-01 15:00:00', '2025-07-10 00:00:00', 'A', 3, 100000.00, 10.00, '2025-02-01 00:00:00');
-INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('US Open de Tênis', '2025-08-01 00:00:00', '2025-08-15 00:00:00','2025-08-15 15:00:00' ,'A', 4, 100000.00, 10.00, '2025-04-01 00:00:00');
+INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('Copa do Mundo', '2025-05-11 00:00:00', '2025-05-13 00:00:00','2025-05-13 12:00:00' ,'E', 1, 100000.00, 10.00, '2025-05-01 00:00:00');
+INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('NBA Finals', '2025-05-11 00:00:00', '2025-05-13 00:00:00','2025-05-13 12:00:00' ,'E', 2, 100000.00, 10.00, '2025-05-01 00:00:00');
+INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('Maratona de Nova York', '2025-05-11 00:00:00','2025-05-13 15:00:00', '2025-05-13 02:00:00', 'E', 3, 100000.00, 10.00, '2025-05-01 00:00:00');
+INSERT INTO competicao (nome, data_abertura_apostas, data_fechamento_apostas, data_ocorrencia_evento, estado, categoria_id, valor_maximo_aposta, valor_minimo_aposta, data_cadastro) VALUES ('US Open de Tênis', '2025-05-11 00:00:00', '2025-05-13 00:00:00','2025-05-13 12:00:00' ,'A', 4, 100000.00, 10.00, '2025-05-01 00:00:00');
 
 
 
@@ -42,7 +42,26 @@ INSERT INTO competidor (atleta_id, competicao_id, numero, posicao_inicial, posic
 
 
 
-INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (1, 100.00, 1, 1, 16.5);
-INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (2, 50.00, 2, 2, 5.2);
-INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (3, 25.00, 3, 3, 3.1);
-INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (4, 200.00, 4, 4, 7.8);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (1, 100.00, 1, 1, 1.5);
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (2, 50.00, 2, 2, 1.3);
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (3, 25.00, 3, 3, 1.5);
+
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (1, 14.00, 1, 4, 2.3);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (1, 23.00, 2, 4, 2.1);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (1, 21.00, 3, 4, 2.0);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (1, 20.00, 4, 4, 2.8); 
+
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (2, 14.00, 1, 4, 2.3);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (2, 23.00, 2, 4, 2.1);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (2, 21.00, 3, 4, 2.0);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (2, 30.00, 4, 4, 2.8);  
+
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (3, 14.00, 1, 4, 2.3);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (3, 23.00, 2, 4, 2.1);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (3, 21.00, 3, 4, 2.0);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (3, 200.00, 4, 4, 2.8);  
+
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (4, 14.00, 1, 4, 2.3);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (4, 23.00, 2, 4, 2.1);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (4, 21.00, 3, 4, 2.0);  
+INSERT INTO aposta (jogador_id, valor, atleta_id, competicao_id, odd) VALUES (4, 200.00, 4, 4, 2.8);  
