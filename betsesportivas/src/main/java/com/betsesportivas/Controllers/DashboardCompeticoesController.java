@@ -228,17 +228,17 @@ public class DashboardCompeticoesController implements Initializable {
     // #region menus
     @FXML
     private MenuItem menu_competicoes_dashboard;
- 
+
     @FXML
     private MenuItem menu_apostas_dashboard;
     @FXML
     private MenuItem menu_apostas_relatorio;
     @FXML
     private MenuItem menu_atletas_dashboard;
- 
+
     @FXML
     private MenuItem menu_categorias_dashboard;
- 
+
     @FXML
     private MenuItem menu_jogadores_dashboard;
     @FXML
@@ -249,7 +249,7 @@ public class DashboardCompeticoesController implements Initializable {
     // TableView
     // ================================================================================
     private void populateTableViewData() throws SQLException {
-        List<CompeticaoDTO> listCompeticaoDTO = competicaoDAO.BuscarDTOsEmAbertoComCompetidores();
+        List<CompeticaoDTO> listCompeticaoDTO = competicaoDAO.BuscarDTOsComCompetidores();
         observableCompeticaoDTO = FXCollections.observableArrayList(listCompeticaoDTO);
         tblView_competicoes.setItems(observableCompeticaoDTO);
 
@@ -468,6 +468,38 @@ public class DashboardCompeticoesController implements Initializable {
     // #region edit
     @FXML
     private void openEditPane() throws SQLException {
+        if (onEditCompeticaoDTO.getEstado().equals('E')) {
+            textField_editar_fechamentoApostas.setDisable(true);
+            textField_editar_inicioApostas.setDisable(true);
+            textField_editar_nome.setDisable(true);
+            textFieldEditarMinimoApostas.setDisable(true);
+            textFieldEditarMaximoApostas.setDisable(true);
+            textField_editar_dataOcorrencia.setDisable(true);
+            datePicker_editar_dataOcorrencia.setDisable(true);
+            datePicker_editar_fechamentoApostas.setDisable(true);
+            datePicker_editar_inicioApostas.setDisable(true);
+            comboBox_editar_categoria.setDisable(true);
+            btn_editar_competidores.setDisable(true);
+            btn_editar_salvar.setDisable(true);
+            btn_editar_excluir.setDisable(true);
+            btnEditarFinalizar.setVisible(false);
+        }
+        else{
+            textField_editar_fechamentoApostas.setDisable(false);
+            textField_editar_inicioApostas.setDisable(false);
+            textField_editar_nome.setDisable(false);
+            textFieldEditarMinimoApostas.setDisable(false);
+            textFieldEditarMaximoApostas.setDisable(false);
+            textField_editar_dataOcorrencia.setDisable(false);
+            datePicker_editar_dataOcorrencia.setDisable(false);
+            datePicker_editar_fechamentoApostas.setDisable(false);
+            datePicker_editar_inicioApostas.setDisable(false);
+            comboBox_editar_categoria.setDisable(false);
+            btn_editar_competidores.setDisable(false);
+            btn_editar_salvar.setDisable(false);
+            btn_editar_excluir.setDisable(false);
+            btnEditarFinalizar.setVisible(true);
+        }
         pane_editar.setVisible(true);
         textField_editar_nome.setText(onEditCompeticaoDTO.getNome());
         textField_editar_inicioApostas.setText(
@@ -651,9 +683,9 @@ public class DashboardCompeticoesController implements Initializable {
                         .collect(Collectors.toList()).isEmpty()) {
                     onCreateCompeticaoDTO = new CompeticaoDTO();
                     openCreatePane();
-                }
-                else{
-                    throw new Exception("Você não pode cadastrar outra competição enquanto não tiver inserido o(s) resultado da anterior");
+                } else {
+                    throw new Exception(
+                            "Você não pode cadastrar outra competição enquanto não tiver inserido o(s) resultado da anterior");
                 }
             } catch (Exception ex) {
                 ErrorHelper.ThrowErrorOnAlert(ex);
@@ -753,7 +785,9 @@ public class DashboardCompeticoesController implements Initializable {
 
         btnEditarFinalizar.setOnAction((ActionEvent event) -> {
             try {
-                if(onEditCompeticaoDTO != null && onEditCompeticaoDTO.getData_ocorrencia_evento().compareTo(LocalDateTime.now())>0) throw new Exception("Você só pode finaliar um evento que já ocorreu");
+                if (onEditCompeticaoDTO != null
+                        && onEditCompeticaoDTO.getData_ocorrencia_evento().compareTo(LocalDateTime.now()) > 0)
+                    throw new Exception("Você só pode finaliar um evento que já ocorreu");
                 openFinalizarPane();
             } catch (Exception e) {
                 ErrorHelper.ThrowErrorOnAlert(e);
@@ -813,7 +847,7 @@ public class DashboardCompeticoesController implements Initializable {
                 e.getStackTrace();
             }
         });
- 
+
         menu_competicoes_dashboard.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("DashboardCompeticoes");
@@ -821,7 +855,6 @@ public class DashboardCompeticoesController implements Initializable {
                 ex.getStackTrace();
             }
         });
- 
 
         menu_apostas_dashboard.setOnAction((ActionEvent event) -> {
             try {
@@ -845,8 +878,6 @@ public class DashboardCompeticoesController implements Initializable {
                 ex.getStackTrace();
             }
         });
-
- 
 
         menu_jogadores_dashboard.setOnAction((ActionEvent event) -> {
             try {
