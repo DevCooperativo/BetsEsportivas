@@ -55,6 +55,25 @@ public class CompeticaoDTO implements IBaseDTO {
         Valor_maximo_aposta = valor_maximo_aposta;
         Valor_minimo_aposta = valor_minimo_aposta;
     }
+    public CompeticaoDTO(int id, String nome, CategoriaDTO categoria, LocalDateTime data_cadastro,
+            LocalDateTime data_abertura_apostas,
+            LocalDateTime data_fechamento_apostas, LocalDateTime data_ocorrencia_evento,
+            double valorEmJogo, String status,
+            List<CompetidorDTO> competidores, double valor_maximo_aposta, double valor_minimo_aposta, Character estado) {
+        Id = id;
+        Nome = nome;
+        Categoria = categoria;
+        Data_cadastro = data_cadastro;
+        Data_abertura_apostas = data_abertura_apostas;
+        Data_fechamento_apostas = data_fechamento_apostas;
+        Data_ocorrencia_evento = data_ocorrencia_evento;
+        ValorEmJogo = valorEmJogo;
+        Status = status;
+        Competidores = competidores;
+        Valor_maximo_aposta = valor_maximo_aposta;
+        Valor_minimo_aposta = valor_minimo_aposta;
+        Estado=estado;
+    }
 
     public CompeticaoDTO(String nome, CategoriaDTO categoria, LocalDateTime data_cadastro,
             LocalDateTime data_abertura_apostas,

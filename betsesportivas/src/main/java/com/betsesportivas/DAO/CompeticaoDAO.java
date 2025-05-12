@@ -168,6 +168,7 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                     .toLocalDateTime();
             double maximoApostas = result.getDouble("valor_maximo_aposta");
             double minimoApostas = result.getDouble("valor_minimo_aposta");
+            Character estado = result.getString("estado").charAt(0);
             CategoriaDTO categoriaDTO = _categoriaDAO.BuscarDTOPorId(result.getInt("categoria_id"));
             double valorEmJogo = result.getDouble("valorEmJogo");
             String status = result.getString("Status");
@@ -197,7 +198,7 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
             }
             competicoes.add(new CompeticaoDTO(id, nome, categoriaDTO, data_cadastro, data_abertura_apostas,
                     data_fechamento_apostas, data_ocorrencia_evento,
-                    valorEmJogo, status, competidorDTO, maximoApostas, minimoApostas));
+                    valorEmJogo, status, competidorDTO, maximoApostas, minimoApostas, estado));
         }
 
         return competicoes;
@@ -474,7 +475,7 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
     }
 
     @Override
-    public List<CompeticaoDTO> BuscarDTOsEmAbertoComCompetidores() throws SQLException {
+    public List<CompeticaoDTO> BuscarDTOsComCompetidores() throws SQLException {
         try {
             _conn.setAutoCommit(false);
             List<CompeticaoDTO> competicoes = new ArrayList<>();
@@ -495,7 +496,6 @@ public class CompeticaoDAO implements ICompeticaoDAO<Competicao, CompeticaoDTO> 
                             "\tFROM competicao com \r\n" + //
                             "\tLEFT JOIN aposta ap ON ap.competicao_id = com.id \r\n" + //
                             "\tJOIN categoria cat ON cat.id=com.categoria_id \r\n" + //
-                            "\tWHERE NOT estado = 'E'  \r\n" + //
                             "\tGROUP BY com.id, cat.id;");
             ResultSet result = sql.executeQuery();
             while (result.next()) {
