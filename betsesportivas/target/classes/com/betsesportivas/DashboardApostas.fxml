@@ -20,14 +20,14 @@
 
 <AnchorPane fx:id="anchorPane_dashboard" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.betsesportivas.Controllers.DashboardApostasController">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="800.0">
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="800.0">
          <menus>
             <Menu fx:id="menu_dashboard" mnemonicParsing="false" text="Competicoes">
                <items>
                   <MenuItem fx:id="menu_competicoes_dashboard" mnemonicParsing="false" text="Dashboard" />
                </items>
             </Menu>
-            <Menu fx:id="menu_jogadores1" mnemonicParsing="false" text="Categorias">
+            <Menu fx:id="menu_categorias" mnemonicParsing="false" text="Categorias">
                <items>
                   <MenuItem fx:id="menu_categorias_dashboard" mnemonicParsing="false" text="Dashboard" />
                </items>
@@ -47,6 +47,11 @@
                <items>
                   <MenuItem fx:id="menu_jogadores_dashboard" mnemonicParsing="false" text="Dashboard" />
                   <MenuItem fx:id="menu_jogadores_relatorio" mnemonicParsing="false" text="Relatório" />
+               </items>
+            </Menu>
+            <Menu fx:id="menu_grupos" mnemonicParsing="false" text="Grupos">
+               <items>
+                  <MenuItem fx:id="menu_grupos_dashboard" mnemonicParsing="false" text="Dashboard" />
                </items>
             </Menu>
          </menus>

@@ -104,6 +104,8 @@ public class DashboardJogadoresController implements Initializable {
     private MenuItem menu_jogadores_dashboard;
     @FXML
     private MenuItem menu_jogadores_relatorio;
+    @FXML
+    private MenuItem menu_grupos_dashboard;
     // #endregion
 
     public DashboardJogadoresController() throws SQLException {
@@ -344,6 +346,13 @@ public class DashboardJogadoresController implements Initializable {
         menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("RelatorioJogadores");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_grupos_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardGrupos");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }

@@ -11,5 +11,6 @@ module com.betsesportivas {
     opens com.betsesportivas.DAO;
     opens com.betsesportivas.Controllers;
     opens com.betsesportivas.DTO;
+    opens com.betsesportivas.Runnable;
     exports com.betsesportivas;
 }

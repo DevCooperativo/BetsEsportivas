@@ -3,9 +3,8 @@ package com.betsesportivas.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.betsesportivas.App;
@@ -15,7 +14,6 @@ import com.betsesportivas.DAO.CompetidorDAO;
 import com.betsesportivas.DAO.IApostaDAO;
 import com.betsesportivas.DAO.JogadorDAO;
 import com.betsesportivas.DTO.ApostaDTO;
-import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.DTO.CompeticaoDTO;
 import com.betsesportivas.DTO.CompetidorDTO;
 import com.betsesportivas.DTO.JogadorDTO;
@@ -25,7 +23,6 @@ import com.betsesportivas.Helpers.ErrorHelper;
 import com.betsesportivas.Helpers.FieldsHelper;
 import com.betsesportivas.Helpers.ParserHelper;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -156,6 +153,10 @@ public class DashboardApostasController implements Initializable {
     private MenuItem menu_jogadores_dashboard;
     @FXML
     private MenuItem menu_jogadores_relatorio;
+
+    @FXML
+    private MenuItem menu_grupos_dashboard;
+
     // #endregion
 
     @FXML
@@ -615,6 +616,13 @@ public class DashboardApostasController implements Initializable {
         menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("RelatorioJogadores");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_grupos_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardGrupos");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }
