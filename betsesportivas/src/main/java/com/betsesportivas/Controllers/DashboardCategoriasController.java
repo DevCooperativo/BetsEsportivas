@@ -10,14 +10,10 @@ import java.util.stream.Collectors;
 
 import com.betsesportivas.App;
 import com.betsesportivas.DAO.CategoriaDAO;
-import com.betsesportivas.DAO.CompetidorDAO;
 import com.betsesportivas.DAO.ICategoriaDAO;
-import com.betsesportivas.DAO.ICompetidorDAO;
 import com.betsesportivas.DTO.CategoriaDTO;
-import com.betsesportivas.DTO.CompetidorDTO;
 import com.betsesportivas.Database.Db;
 import com.betsesportivas.Domain.Categoria;
-import com.betsesportivas.Domain.Competidor;
 import com.betsesportivas.Helpers.ColorHelper;
 import com.betsesportivas.Helpers.ErrorHelper;
 import com.betsesportivas.Helpers.ParserHelper;
@@ -120,6 +116,8 @@ public class DashboardCategoriasController implements Initializable {
     private MenuItem menu_jogadores_dashboard;
     @FXML
     private MenuItem menu_jogadores_relatorio;
+    @FXML
+    private MenuItem menu_grupos_dashboard;
     // #endregion
 
     @FXML
@@ -381,6 +379,13 @@ public class DashboardCategoriasController implements Initializable {
         menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("RelatorioJogadores");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_grupos_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardGrupos");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }

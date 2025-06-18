@@ -61,12 +61,11 @@ CREATE TABLE IF NOT EXISTS competidor (
 
 CREATE TABLE IF NOT EXISTS aposta (
     id SERIAL PRIMARY KEY,
-    
-    jogador_id INTEGER NOT NULL,
-    valor NUMERIC(10, 2) NOT NULL,
-    atleta_id INTEGER NOT NULL,
-    competicao_id INTEGER NOT NULL,
-    odd NUMERIC(5,2) NOT NULL DEFAULT 1.00,
+    jogador_id integer NOT NULL,
+    valor numeric(10,2) NOT NULL,
+    atleta_id integer NOT NULL,
+    competicao_id integer NOT NULL,
+    odd numeric(5,2) DEFAULT 1.00 NOT NULL,
 
     FOREIGN KEY (jogador_id) REFERENCES jogador (id),
     FOREIGN KEY (atleta_id, competicao_id) REFERENCES competidor (atleta_id, competicao_id),

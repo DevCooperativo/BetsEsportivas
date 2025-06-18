@@ -18,22 +18,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchorPane_dashboard" prefHeight="557.0" prefWidth="800.0"
-   xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-   fx:controller="com.betsesportivas.Controllers.DashboardCategoriasController">
+<AnchorPane fx:id="anchorPane_dashboard" prefHeight="557.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.betsesportivas.Controllers.DashboardCategoriasController">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="800.0">
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="800.0">
          <menus>
             <Menu fx:id="menu_dashboard" mnemonicParsing="false" text="Competicoes">
                <items>
-                  <MenuItem fx:id="menu_competicoes_dashboard" mnemonicParsing="false"
-                     text="Dashboard" />
+                  <MenuItem fx:id="menu_competicoes_dashboard" mnemonicParsing="false" text="Dashboard" />
                </items>
             </Menu>
-            <Menu fx:id="menu_jogadores1" mnemonicParsing="false" text="Categorias">
+            <Menu fx:id="menu_categorias" mnemonicParsing="false" text="Categorias">
                <items>
-                  <MenuItem fx:id="menu_categorias_dashboard" mnemonicParsing="false"
-                     text="Dashboard" />
+                  <MenuItem fx:id="menu_categorias_dashboard" mnemonicParsing="false" text="Dashboard" />
                </items>
             </Menu>
             <Menu fx:id="menu_atletas" mnemonicParsing="false" text="Atletas">
@@ -49,45 +45,40 @@
             </Menu>
             <Menu fx:id="menu_jogadores" mnemonicParsing="false" text="Jogadores">
                <items>
-                  <MenuItem fx:id="menu_jogadores_dashboard" mnemonicParsing="false"
-                     text="Dashboard" />
-                  <MenuItem fx:id="menu_jogadores_relatorio" mnemonicParsing="false"
-                     text="Relatório" />
+                  <MenuItem fx:id="menu_jogadores_dashboard" mnemonicParsing="false" text="Dashboard" />
+                  <MenuItem fx:id="menu_jogadores_relatorio" mnemonicParsing="false" text="Relatório" />
+               </items>
+            </Menu>
+            <Menu fx:id="menu_grupos" mnemonicParsing="false" text="Grupos">
+               <items>
+                  <MenuItem fx:id="menu_grupos_dashboard" mnemonicParsing="false" text="Dashboard" />
                </items>
             </Menu>
          </menus>
       </MenuBar>
-      <AnchorPane layoutY="25.0" minHeight="0.0" minWidth="0.0" prefHeight="527.0" prefWidth="800.0"
-         style="-fx-background-color: white;">
+      <AnchorPane layoutY="25.0" minHeight="0.0" minWidth="0.0" prefHeight="527.0" prefWidth="800.0" style="-fx-background-color: white;">
          <children>
-            <Label layoutX="360.0" layoutY="8.0" style="-fx-font-size: 16; -fx-font-weight: bold;"
-               text="Categorias" />
-            <Button fx:id="btn_refresh" layoutX="758.0" layoutY="6.0" mnemonicParsing="false"
-               prefHeight="25.0" prefWidth="24.0" text="↺">
+            <Label layoutX="360.0" layoutY="8.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Categorias" />
+            <Button fx:id="btn_refresh" layoutX="758.0" layoutY="6.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="24.0" text="↺">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <TableView fx:id="tblView_categorias" layoutY="247.0" prefHeight="280.0"
-               prefWidth="800.0">
+            <TableView fx:id="tblView_categorias" layoutY="247.0" prefHeight="280.0" prefWidth="800.0">
                <columns>
-                  <TableColumn fx:id="tblViewColumn_categorias_nome" prefWidth="401.0"
-                     style="-fx-font-size: 12;" text="Nome" />
-                  <TableColumn fx:id="tblViewColumn_categorias_vezesUtilizadas" prefWidth="397.0"
-                     style="-fx-font-size: 12;" text="Vezes utilizada" />
+                  <TableColumn fx:id="tblViewColumn_categorias_nome" prefWidth="401.0" style="-fx-font-size: 12;" text="Nome" />
+                  <TableColumn fx:id="tblViewColumn_categorias_vezesUtilizadas" prefWidth="397.0" style="-fx-font-size: 12;" text="Vezes utilizada" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button fx:id="btn_criarCategoria" layoutX="14.0" layoutY="6.0" mnemonicParsing="false"
-               prefHeight="25.0" prefWidth="33.0" text="+">
+            <Button fx:id="btn_criarCategoria" layoutX="14.0" layoutY="6.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="33.0" text="+">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <BarChart fx:id="chartCategorias" layoutX="172.0" layoutY="36.0" prefHeight="198.0"
-               prefWidth="456.0">
+            <BarChart fx:id="chartCategorias" layoutX="172.0" layoutY="36.0" prefHeight="198.0" prefWidth="456.0">
                <xAxis>
                   <CategoryAxis fx:id="categoryAxis" side="BOTTOM" />
                </xAxis>
@@ -97,13 +88,9 @@
             </BarChart>
          </children>
       </AnchorPane>
-      <Pane fx:id="pane_criar" layoutX="230.0" layoutY="84.0" prefHeight="280.0" prefWidth="285.0"
-         style="-fx-background-color: rgb(210,210,210);" visible="false">
+      <Pane fx:id="pane_criar" layoutX="230.0" layoutY="84.0" prefHeight="280.0" prefWidth="285.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
          <children>
-            <Button fx:id="btn_pane_criar_fechar" layoutX="249.0" layoutY="8.0"
-               mnemonicParsing="false"
-               style="-fx-background-color: rgb(187, 45, 59); -fx-background-color: hover: rgba(200, 12, 64, 1);"
-               text="X" textFill="WHITE">
+            <Button fx:id="btn_pane_criar_fechar" layoutX="249.0" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: rgb(187, 45, 59); -fx-background-color: hover: rgba(200, 12, 64, 1);" text="X" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -113,55 +100,36 @@
             <Label layoutX="22.0" layoutY="129.0" text="Descricao" />
             <TextField fx:id="textField_pane_criar_descricao" layoutX="124.0" layoutY="125.0" />
             <Label layoutX="22.0" layoutY="165.0" text="Máx. participantes" />
-            <TextField fx:id="textField_pane_criar_max_participantes" layoutX="125.0"
-               layoutY="161.0" />
-            <ColorPicker fx:id="colorPicker_pane_criar_max_participantes" layoutX="125.0"
-               layoutY="197.0" prefHeight="25.0" prefWidth="149.0" />
+            <TextField fx:id="textField_pane_criar_max_participantes" layoutX="125.0" layoutY="161.0" />
+            <ColorPicker fx:id="colorPicker_pane_criar_max_participantes" layoutX="125.0" layoutY="197.0" prefHeight="25.0" prefWidth="149.0" />
             <Label layoutX="22.0" layoutY="201.0" text="Cor" />
-            <Button fx:id="btn_pane_criar_criar" layoutX="80.0" layoutY="241.0"
-               mnemonicParsing="false" onAction="#criarCategoriaHandler" prefHeight="25.0"
-               prefWidth="125.0" style="-fx-background-color: rgb(21, 115, 71);" text="Criar"
-               textFill="WHITE" />
-            <Text layoutX="93.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0"
-               text="Criar Categoria">
+            <Button fx:id="btn_pane_criar_criar" layoutX="80.0" layoutY="241.0" mnemonicParsing="false" onAction="#criarCategoriaHandler" prefHeight="25.0" prefWidth="125.0" style="-fx-background-color: rgb(21, 115, 71);" text="Criar" textFill="WHITE" />
+            <Text layoutX="93.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Criar Categoria">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Text>
          </children>
       </Pane>
-      <Pane fx:id="pane_editar" layoutX="214.0" layoutY="84.0" prefHeight="280.0" prefWidth="300.0"
-         style="-fx-background-color: rgb(210,210,210);" visible="false">
+      <Pane fx:id="pane_editar" layoutX="214.0" layoutY="84.0" prefHeight="280.0" prefWidth="300.0" style="-fx-background-color: rgb(210,210,210);" visible="false">
          <children>
-            <Button fx:id="btn_pane_editar_fechar" layoutX="256.0" layoutY="14.0"
-               mnemonicParsing="false"
-               style="-fx-background-color: red; -fx-background-color:hover: rgba(200, 12, 64, 1);"
-               text="X" textFill="WHITE">
+            <Button fx:id="btn_pane_editar_fechar" layoutX="256.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: red; -fx-background-color:hover: rgba(200, 12, 64, 1);" text="X" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btn_pane_editar_excluir" layoutX="45.0" layoutY="231.0"
-               mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0"
-               style="-fx-background-color: rgb(250, 91, 22);" text="Excluir" textFill="WHITE" />
-            <Button fx:id="btn_pane_editar_salvar" layoutX="188.0" layoutY="231.0"
-               mnemonicParsing="false" onAction="#editarCategoriaHandler" prefHeight="25.0"
-               prefWidth="68.0" style="-fx-background-color: rgb(21, 115, 71);" text="Salvar"
-               textFill="WHITE" />
+            <Button fx:id="btn_pane_editar_excluir" layoutX="45.0" layoutY="231.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" style="-fx-background-color: rgb(250, 91, 22);" text="Excluir" textFill="WHITE" />
+            <Button fx:id="btn_pane_editar_salvar" layoutX="188.0" layoutY="231.0" mnemonicParsing="false" onAction="#editarCategoriaHandler" prefHeight="25.0" prefWidth="68.0" style="-fx-background-color: rgb(21, 115, 71);" text="Salvar" textFill="WHITE" />
             <Label layoutX="29.0" layoutY="58.0" text="Nome" />
             <TextField fx:id="textField_pane_editar_nome" layoutX="132.0" layoutY="54.0" />
             <Label layoutX="27.0" layoutY="91.0" text="Descricao" />
             <TextField fx:id="textField_pane_editar_descricao" layoutX="131.0" layoutY="87.0" />
             <Label layoutX="25.0" layoutY="127.0" text="Máx. participantes" />
-            <TextField fx:id="textField_pane_editar_max_participantes" layoutX="132.0"
-               layoutY="123.0" />
-            <ColorPicker fx:id="colorPicker_pane_editar_max_participantes" layoutX="132.0"
-               layoutY="159.0" prefHeight="25.0" prefWidth="149.0" />
+            <TextField fx:id="textField_pane_editar_max_participantes" layoutX="132.0" layoutY="123.0" />
+            <ColorPicker fx:id="colorPicker_pane_editar_max_participantes" layoutX="132.0" layoutY="159.0" prefHeight="25.0" prefWidth="149.0" />
             <Label layoutX="27.0" layoutY="163.0" text="Cor" />
-            <CheckBox fx:id="checkBoxAtivoEditar" layoutX="126.0" layoutY="201.0"
-               mnemonicParsing="false" text="Ativo" />
-            <Text layoutX="103.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0"
-               text="Editar Categoria">
+            <CheckBox fx:id="checkBoxAtivoEditar" layoutX="126.0" layoutY="201.0" mnemonicParsing="false" text="Ativo" />
+            <Text layoutX="103.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Editar Categoria">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

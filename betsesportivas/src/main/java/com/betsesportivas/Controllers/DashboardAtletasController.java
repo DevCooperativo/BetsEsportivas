@@ -53,6 +53,8 @@ public class DashboardAtletasController implements Initializable {
     @FXML
     private MenuItem menu_jogadores_relatorio;
     @FXML
+    private MenuItem menu_grupos_dashboard;
+    @FXML
     private TextField textFieldNomeAtleta;
     @FXML
     private TextField textFieldSobrenomeAtleta;
@@ -278,6 +280,13 @@ public class DashboardAtletasController implements Initializable {
         menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("RelatorioJogadores");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_grupos_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardGrupos");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }

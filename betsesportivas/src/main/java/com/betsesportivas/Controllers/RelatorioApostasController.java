@@ -1,7 +1,6 @@
 package com.betsesportivas.Controllers;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -11,7 +10,6 @@ import com.betsesportivas.App;
 import com.betsesportivas.DAO.ApostaDAO;
 import com.betsesportivas.DAO.IApostaDAO;
 import com.betsesportivas.DTO.ApostaDTO;
-import com.betsesportivas.DTO.CategoriaDTO;
 import com.betsesportivas.DTO.RelatorioApostasDTO;
 import com.betsesportivas.Database.Db;
 import com.betsesportivas.Domain.Aposta;
@@ -52,6 +50,8 @@ public class RelatorioApostasController implements Initializable {
     private MenuItem menu_jogadores_dashboard;
     @FXML
     private MenuItem menu_jogadores_relatorio;
+    @FXML
+    private MenuItem menu_grupos_dashboard;
     // #endregion
 
     @FXML
@@ -154,6 +154,13 @@ public class RelatorioApostasController implements Initializable {
         menu_jogadores_relatorio.setOnAction((ActionEvent event) -> {
             try {
                 App.setNewScene("RelatorioJogadores");
+            } catch (IOException ex) {
+                ex.getStackTrace();
+            }
+        });
+        menu_grupos_dashboard.setOnAction((ActionEvent event) -> {
+            try {
+                App.setNewScene("DashboardGrupos");
             } catch (IOException ex) {
                 ex.getStackTrace();
             }
