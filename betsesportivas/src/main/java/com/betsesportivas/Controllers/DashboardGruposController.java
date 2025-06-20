@@ -26,8 +26,8 @@ import sockets.thread.ContadorGrupo;
 public class DashboardGruposController implements Initializable {
 
     private final int idGrupo = 2;
-    private final String ipDestino = "127.0.0.1";
-    // private final String ipDestino = "34.41.27.130";
+    // private final String ipDestino = "127.0.0.1";
+    private final String ipDestino = "34.41.27.130";
     private final int portaDestino = 12345;
 
     @FXML
