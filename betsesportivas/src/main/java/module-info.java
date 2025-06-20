@@ -12,5 +12,6 @@ module com.betsesportivas {
     opens com.betsesportivas.Controllers;
     opens com.betsesportivas.DTO;
     opens com.betsesportivas.Runnable;
+    opens sockets.thread;
     exports com.betsesportivas;
 }

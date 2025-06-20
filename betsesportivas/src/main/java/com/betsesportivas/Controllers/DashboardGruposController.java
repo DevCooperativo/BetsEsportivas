@@ -3,20 +3,31 @@ package com.betsesportivas.Controllers;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.betsesportivas.App;
+import com.betsesportivas.DTO.JogadorDTO;
 import com.betsesportivas.Runnable.RunnableClient;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import sockets.thread.ContadorGrupo;
 
 public class DashboardGruposController implements Initializable {
 
-    private final int idGrupo = 4;
-    private final String ipDestino = "127.0.0.1";
+    private final int idGrupo = 2;
+    // private final String ipDestino = "127.0.0.1";
+    private final String ipDestino = "34.41.27.130";
     private final int portaDestino = 12345;
 
     @FXML
@@ -37,12 +48,44 @@ public class DashboardGruposController implements Initializable {
     @FXML
     private MenuItem menu_grupos_dashboard;
 
+    // @FXML
+    // private List<ContadorGrupo> listJogadoresDTO;
+    @FXML
+    private ObservableList<ContadorGrupo> observableContadorGrupos;
+
+    @FXML
+    private TableView<ContadorGrupo> tblViewGrupo;
+    @FXML
+    private TableColumn<ContadorGrupo, Integer> tblColGrupoPos;
+    @FXML
+    private TableColumn<ContadorGrupo, String> tblColGrupoGrupo;
+    @FXML
+    private TableColumn<ContadorGrupo, Integer> tblColGrupoUtilizacoes;
+
+    @FXML
+    private Label labelLog;
+
+    @FXML
+    private void initializeTableView() {
+        tblColGrupoPos.setCellValueFactory(new PropertyValueFactory<>("idGrupo"));
+        tblColGrupoGrupo.setCellValueFactory(new PropertyValueFactory<>("nomeGrupo"));
+        tblColGrupoUtilizacoes.setCellValueFactory(new PropertyValueFactory<>("quantidadeUtilizacoes"));
+        tblViewGrupo.setItems(observableContadorGrupos);
+    }
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         try {
             Socket socket = new Socket(ipDestino, portaDestino);
-            Thread thread = new Thread(new RunnableClient(socket, idGrupo));
+            RunnableClient runnable = new RunnableClient(socket, idGrupo, tblViewGrupo, labelLog);
+            initializeTableView();
+            Thread thread = new Thread(runnable);
             thread.start();
+            
+            // espera a thread terminar
+            // thread.join();
+            // observableContadorGrupos = FXCollections.observableArrayList(runnable.getContadorGrupos());
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }

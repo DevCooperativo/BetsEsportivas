@@ -58,8 +58,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Text>
-                  <Text layoutX="373.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Grupo" />
-                  <Label fx:id="labelGrupo" layoutX="413.0" layoutY="47.0" text="{0}" />
+                  <Text layoutX="373.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Grupo 2" />
                   <Text layoutX="14.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ranking" />
                   <TableView fx:id="tblViewGrupo" layoutX="14.0" layoutY="151.0" prefHeight="420.0" prefWidth="379.0">
                     <columns>
@@ -73,7 +72,7 @@
                   </TableView>
                   <Pane layoutX="449.0" layoutY="151.0" prefHeight="420.0" prefWidth="340.0" style="-fx-border-color: black;">
                      <children>
-                        <Label fx:id="labelLog" layoutX="163.0" layoutY="202.0" text="{0}" />
+                        <Label fx:id="labelLog" layoutX="163.0" layoutY="202.0" text="        " />
                      </children>
                   </Pane>
                   <Text layoutX="449.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Logs" />

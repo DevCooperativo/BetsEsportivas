@@ -1,4 +1,4 @@
-package com.betsesportivas.Runnable;
+package sockets.thread;
 
 import java.io.Serializable;
 
