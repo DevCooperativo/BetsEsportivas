@@ -27,6 +27,7 @@ public class DashboardGruposController implements Initializable {
 
     private final int idGrupo = 2;
     private final String ipDestino = "127.0.0.1";
+    // private final String ipDestino = "34.41.27.130";
     private final int portaDestino = 12345;
 
     @FXML
@@ -76,18 +77,16 @@ public class DashboardGruposController implements Initializable {
     public void initialize(URL arg0, ResourceBundle arg1) {
         try {
             Socket socket = new Socket(ipDestino, portaDestino);
-            RunnableClient runnable = new RunnableClient(socket, idGrupo, observableContadorGrupos);
+            RunnableClient runnable = new RunnableClient(socket, idGrupo, tblViewGrupo, labelLog);
+            initializeTableView();
             Thread thread = new Thread(runnable);
             thread.start();
             
             // espera a thread terminar
-            thread.join();
+            // thread.join();
             // observableContadorGrupos = FXCollections.observableArrayList(runnable.getContadorGrupos());
-            initializeTableView();
 
         } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
         setEvents();
