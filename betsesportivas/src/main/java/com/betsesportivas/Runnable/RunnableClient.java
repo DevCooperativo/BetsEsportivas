@@ -4,44 +4,67 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.LinkedList;
 import java.util.List;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import sockets.thread.ContadorGrupo;
+import sockets.thread.LogGrupo;
 
 public class RunnableClient implements Runnable {
     private Socket socket;
     private int idGrupo;
+    private List<ContadorGrupo> contadorGrupos;
+    private TableView<ContadorGrupo> tableView;
+    private List<LogGrupo> logGrupos;
+    private Label label;
 
-    public RunnableClient(Socket socket, int idGrupo) {
+    public List<ContadorGrupo> getContadorGrupos() {
+        return contadorGrupos;
+    }
+
+    public List<LogGrupo> getLogGrupos() {
+        return logGrupos;
+    }
+
+    public RunnableClient(Socket socket, int idGrupo, TableView<ContadorGrupo> tblViewGrupo, Label label) {
         this.socket = socket;
         this.idGrupo = idGrupo;
+        this.tableView = tblViewGrupo;
+        this.label = label;
     }
 
     @Override
     public void run() {
         try {
+
+            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+            outputStream.writeObject(idGrupo);
+            outputStream.flush();
+            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+            contadorGrupos = (List<ContadorGrupo>) inputStream.readObject();
+            logGrupos = (List<LogGrupo>) inputStream.readObject();
+            inputStream.close();
+
+            // IMPORTANTE:
+            // envia o método rodando em uma thread separada para a thread principal do java fx
+            Platform.runLater(() -> tableView.setItems(FXCollections.observableArrayList(contadorGrupos)));
+            socket.close();
+
             while (true) {
-                Thread.sleep(1000);
-                ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-                outputStream.writeObject(idGrupo);
-                outputStream.flush();
-                ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-                List<ContadorGrupo> resposta1 = new LinkedList<ContadorGrupo>();
-                System.out.println(inputStream.readObject());
-                resposta1.add((ContadorGrupo) inputStream.readObject());
-                List<LogGrupo> resposta2 = new LinkedList<LogGrupo>();
-                resposta2.add((LogGrupo) inputStream.readObject());
-                System.out.println(resposta1.toString());
-                System.out.println(resposta2.toString());
-                inputStream.close();
-                socket.close();
+                for (LogGrupo log : logGrupos) {
+
+                    Platform.runLater(() -> label.setText(log.toString()));
+                    Thread.sleep(2000);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

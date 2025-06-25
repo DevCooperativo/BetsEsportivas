@@ -1,4 +1,4 @@
-package com.betsesportivas.Runnable;
+package sockets.thread;
 
 import java.io.Serializable;
 
@@ -32,9 +32,6 @@ public class LogGrupo implements Serializable {
 
     @Override
     public String toString() {
-        return "LogGrupo{" +
-                "idGrupo=" + idGrupo +
-                ", timestamp='" + timestamp + '\'' +
-                '}';
+        return timestamp;
     }
 } 
